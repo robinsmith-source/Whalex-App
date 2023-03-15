@@ -1,0 +1,27 @@
+# Ignores all IDEA Client specific files e.g plugin files
+.idea/
+# Ignores all created files by IntelliJ IDEA
+*.iml
+*.xml
+
+# Default ignored files by IDEA
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+#Maven .gitignore Template by GitLab
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+/.run/SD1_Project_Yahtzee [package].run.xml
