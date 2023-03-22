@@ -1,4 +1,5 @@
 .idea
+WhalexApp.iml
 /target/
 /.settings/
 .classpath
