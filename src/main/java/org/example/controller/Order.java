@@ -1,6 +1,6 @@
 package org.example.controller;
 
-public enum Order {
+ enum Order {
     ORDERED,
     SHUFFLED;
 }
