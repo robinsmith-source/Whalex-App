@@ -1,9 +1,8 @@
 package org.example.media.extentions;
 
-
 import org.example.media.interfaces.ISound;
 
-import java.io.File;
+import javafx.scene.media.Media;
 
 public class Database implements ISound {
     /**
@@ -18,7 +17,7 @@ public class Database implements ISound {
      * @return Filepath to the sound
      */
     @Override
-    public File filePath() {
+    public Media mediaPath() {
         return null;
     }
 

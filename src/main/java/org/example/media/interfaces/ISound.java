@@ -1,6 +1,6 @@
 package org.example.media.interfaces;
 
-import java.io.File;
+import javafx.scene.media.Media;
 
 public interface ISound {
 
@@ -12,7 +12,7 @@ public interface ISound {
     /**
      * @return Filepath to the sound
      */
-    public File filePath();
+    public Media mediaPath();
 
     /**
      * @return Duration of the sound in seconds

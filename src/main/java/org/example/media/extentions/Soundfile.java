@@ -3,8 +3,7 @@ package org.example.media.extentions;
 import org.example.media.interfaces.ISound;
 import org.example.profile.User;
 
-import java.io.File;
-
+import javafx.scene.media.Media;
 
 /**
  * Extention for ISound Interface
@@ -29,7 +28,7 @@ public class Soundfile implements ISound {
      * @return Filepath to the sound
      */
     @Override
-    public File filePath() {
+    public Media mediaPath() {
         return null;
     }
 
