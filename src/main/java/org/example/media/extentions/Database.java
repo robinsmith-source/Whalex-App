@@ -1,10 +1,13 @@
 package org.example.media.extentions;
 
+import javafx.scene.media.Media;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.media.interfaces.ISound;
 
-import javafx.scene.media.Media;
-
 public class Database implements ISound {
+    private static final Logger log = LogManager.getLogger(Database.class);
+
     /**
      * @return Title of the sound
      */
@@ -19,13 +22,5 @@ public class Database implements ISound {
     @Override
     public Media mediaPath() {
         return null;
-    }
-
-    /**
-     * @return Duration of the sound in seconds
-     */
-    @Override
-    public int getDuration() {
-        return 0;
     }
 }

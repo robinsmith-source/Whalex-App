@@ -1,8 +1,5 @@
 package org.example;
 
-import org.example.GuiHelper.Dialog;
-import org.example.GuiHelper.NumberField;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,6 +14,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.GuiHelper.Dialog;
+import org.example.GuiHelper.NumberField;
 
 public class GuiDriver extends Application {
 

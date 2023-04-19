@@ -1,9 +1,15 @@
 package org.example.playlist;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class PlaylistManager {
+    private static final Logger log = LogManager.getLogger(PlaylistManager.class);
+
+    // Map of all existing playlists
     private final Map<String, Playlist> playlists;
 
     /**

@@ -1,8 +1,12 @@
 package org.example.profile;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 
 public class User {
+    private static final Logger log = LogManager.getLogger(User.class);
 
     //Profile picture of the user
     private File profilePicture;

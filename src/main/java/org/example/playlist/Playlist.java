@@ -1,5 +1,7 @@
 package org.example.playlist;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.media.interfaces.ISound;
 import org.example.profile.User;
 
@@ -7,6 +9,7 @@ import java.util.Date;
 import java.util.Set;
 
 public class Playlist {
+    private static final Logger log = LogManager.getLogger(Playlist.class);
 
     //Name of the playlist
     private String name;

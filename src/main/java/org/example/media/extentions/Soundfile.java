@@ -1,15 +1,17 @@
 package org.example.media.extentions;
 
+import javafx.scene.media.Media;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.media.interfaces.ISound;
 import org.example.profile.User;
-
-import javafx.scene.media.Media;
 
 /**
  * Extention for ISound Interface
  * Thought as uploadable soundfile from a user
  */
 public class Soundfile implements ISound {
+    private static final Logger log = LogManager.getLogger(Soundfile.class);
 
     /**
      * @return User who uploaded the sound
@@ -30,13 +32,5 @@ public class Soundfile implements ISound {
     @Override
     public Media mediaPath() {
         return null;
-    }
-
-    /**
-     * @return Duration of the sound in seconds
-     */
-    @Override
-    public int getDuration() {
-        return 0;
     }
 }

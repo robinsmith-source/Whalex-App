@@ -1,8 +1,12 @@
 package org.example.controller;
 
+import javafx.scene.media.MediaPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.media.interfaces.ISound;
 
 public class Player {
+    private static final Logger log = LogManager.getLogger(Player.class);
 
     //true : playing | false : paused
     private boolean isPlaying;
@@ -31,6 +35,13 @@ public class Player {
     //SoundQueue of sounds to play
     private final SoundQueue soundQueue;
 
+    //SoundHistory of sounds that have been played
+    private final SoundHistory soundHistory;
+
+    //MediaPlayer Object from JavaFX Media Library
+    //TODO : Connect with MediaPlayer
+    private MediaPlayer mediaPlayer;
+
     /**
      * Constructor of the Player
      * TODO : Connect with SoundQueue
@@ -45,6 +56,7 @@ public class Player {
         this.previousSound = null;
         this.nextSound = null;
         this.soundQueue = new SoundQueue();
+        this.soundHistory = new SoundHistory();
     }
 
     /**

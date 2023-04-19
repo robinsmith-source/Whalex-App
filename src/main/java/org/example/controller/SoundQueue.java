@@ -1,21 +1,20 @@
 package org.example.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.media.interfaces.ISound;
 import org.example.playlist.Playlist;
 
+import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
 
 public class SoundQueue {
+    private static final Logger log = LogManager.getLogger(SoundQueue.class);
 
-    //TODO : Implement soundQueue as LinkedList (Last in First Out)
+    //TODO : Implement soundQueue as ArrayDeque (Last in First Out)
     //soundQueue of Sounds to be played
-    private final Queue<ISound> soundQueue;
+    private final Deque<ISound> soundQueue;
 
-    //TODO : Implement soundHistory as Stack (First in First Out)
-    //soundHistory of Sounds that have been played
-    private final Stack<ISound> soundHistory;
 
     //Order of the soundQueue : ORDERED, SHUFFLED
     private Order order;
@@ -27,7 +26,6 @@ public class SoundQueue {
      */
     public SoundQueue() {
         this.soundQueue = new LinkedList<>();
-        this.soundHistory = new Stack<>();
         this.order = Order.ORDERED;
     }
 
@@ -45,6 +43,19 @@ public class SoundQueue {
         return this.order;
     }
 
+    /**
+     * @return Current sound in the soundQueue
+     */
+    public ISound getCurrentSound() {
+        return null;
+    }
+
+    /**
+     * @return Next sound in the soundQueue
+     */
+    public ISound getNextSound() {
+        return null;
+    }
 
     /**
      * @param sound Sound to be added to the soundQueue
