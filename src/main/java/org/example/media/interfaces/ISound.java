@@ -1,6 +1,7 @@
 package org.example.media.interfaces;
 
 import javafx.scene.media.Media;
+import org.example.profile.User;
 
 public interface ISound {
     /**
@@ -11,5 +12,10 @@ public interface ISound {
     /**
      * @return Filepath to the sound
      */
-    Media mediaPath();
+    Media getMedia();
+
+    /**
+     * @return User who uploaded the sound
+     */
+    User uploadedBy();
 }

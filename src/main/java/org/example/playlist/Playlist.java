@@ -5,13 +5,16 @@ import org.apache.logging.log4j.Logger;
 import org.example.media.interfaces.ISound;
 import org.example.profile.User;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Playlist class displays the playlist with its ID, name, list of songs, number of songs, user who created the playlist and date when the playlist was created.
+ *
  * @link ISound (1 to many relation : Each playlist can have many sounds)
- * @link User (1 to 1 relation : Each playlist is created by one user)
+ * @link User (1 to 1 relation : Each playlist is created by one user via their PlaylistManager)
  * TODO: Write tests for the Playlist
  */
 public class Playlist {
@@ -34,6 +37,7 @@ public class Playlist {
 
     /**
      * List of songs in the playlist
+     *
      * @link ISound
      */
     Set<ISound> sounds;
@@ -46,21 +50,21 @@ public class Playlist {
     /**
      * User who created the playlist
      */
-    private User createdBy;
+    private final User createdBy;
 
     /**
      * Date when the playlist was created
      */
-    private Date createdAt;
+    private final Date createdAt;
 
 
     /**
      * @param name Name of the playlist
      */
-    public Playlist(String name, Set<ISound> sounds, User createdBy) {
+    public Playlist(String name, User createdBy) {
         this.playlistID = counterID++;
         this.name = name;
-        this.sounds = sounds;
+        this.sounds = new HashSet<>();
         this.createdBy = createdBy;
         this.createdAt = new Date();
     }
@@ -95,6 +99,13 @@ public class Playlist {
     }
 
     /**
+     * @return List of sounds in the playlist
+     */
+    public ArrayList<ISound> getSounds() {
+        return new ArrayList<>(sounds);
+    }
+
+    /**
      * @return Number of sounds in the playlist
      */
     public int getNumberOfSounds() {
@@ -114,4 +125,33 @@ public class Playlist {
     public Date getCreatedAt() {
         return createdAt;
     }
+
+    /**
+     * @param sound Sound to be added to the playlist
+     * @return true if the sound was added successfully, false if not
+     */
+    public boolean addSound(ISound sound) {
+        if (sound == null) {
+            log.error("Sound cannot be null");
+            return false;
+        }
+        this.sounds.add(sound);
+        log.info("Sound " + sound.getTitle() + " has been added to playlist " + this.name);
+        return true;
+    }
+
+    /**
+     * @param sound Sound to be removed from the playlist
+     * @return true if the sound was removed successfully, false if not
+     */
+    public boolean removeSound(ISound sound) {
+        if (sound == null) {
+            log.error("Sound cannot be null");
+            return false;
+        }
+        this.sounds.remove(sound);
+        log.info("Sound " + sound.getTitle() + " has been removed from playlist " + this.name);
+        return true;
+    }
+
 }

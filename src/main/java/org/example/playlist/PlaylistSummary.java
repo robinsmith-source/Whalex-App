@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  * Class to get all playlists from all users and summarize them
- * @see PlaylistManager only manages playlists of the user who owns the playlist manager
+ * @link PlaylistManager only manages playlists of the user who owns the playlist manager
  * TODO : Optionally add other methods to summarize ALL playlists e.g. search for a playlist by name
  */
 public class PlaylistSummary {

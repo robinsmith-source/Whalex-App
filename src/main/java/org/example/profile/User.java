@@ -2,7 +2,6 @@ package org.example.profile;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.playlist.PlaylistManager;
 
 import java.io.File;
 
@@ -46,6 +45,12 @@ public class User {
     private final PlaylistManager playlistManager;
 
     /**
+     * Sound manager of the user
+     * @link SoundManager
+     */
+    private final SoundManager soundManager;
+
+    /**
      * @param username Username of the user
      * @param password Password of the user
      */
@@ -54,6 +59,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.playlistManager = new PlaylistManager(this);
+        this.soundManager = new SoundManager(this);
     }
 
     /**
@@ -75,6 +81,13 @@ public class User {
      */
     public PlaylistManager getPlaylistManager() {
         return playlistManager;
+    }
+
+    /**
+     * @return SoundManager of the user
+     */
+    public SoundManager getSoundManager() {
+        return soundManager;
     }
 
     /**

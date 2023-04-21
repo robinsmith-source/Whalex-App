@@ -1,14 +1,12 @@
-package org.example.playlist;
+package org.example.profile;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.media.interfaces.ISound;
-import org.example.profile.User;
+import org.example.playlist.Playlist;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * PlaylistManager manages all playlists of the user and provides methods to e.g. create, delete and get playlists with a given ID or name.
@@ -41,12 +39,11 @@ public class PlaylistManager {
 
     /**
      * @param playlistName Name of the playlist to be returned
-     * @param sounds       Set of sounds to be added to the playlist
      * @return true if the playlist has been created, false if not
      * DONE : Connect with User (Playlists are created by different Users and are displayed in/with the Users Profile)
      */
-    public boolean createPlaylist(String playlistName, Set<ISound> sounds) {
-        this.playlists.put(playlistName, new Playlist(playlistName, sounds, createdBy));
+    public boolean createPlaylist(String playlistName) {
+        this.playlists.put(playlistName, new Playlist(playlistName, createdBy));
         return playlists.containsKey(playlistName);
     }
 
