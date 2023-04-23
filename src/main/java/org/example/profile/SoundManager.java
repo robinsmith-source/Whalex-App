@@ -12,8 +12,8 @@ import java.util.Map;
 
 /**
  * SoundManager manages all sounds of the user and provides methods to e.g. create, delete and get sounds with a given ID or name.
- * @link User (1 to 1 relation : Sounds are uploaded by different Users via their SoundManager and are displayed in/with the Users Profile)
- * @link ISound (1 to n relation : The SoundManager manages many playlists)
+ * @link User (1 to 1 relation : Each Soundmanager is owned by a User)
+ * @link ISound (1 to n relation : Each Soundmanager manages many sounds)
  * TODO: Write tests for the PlaylistManager
  * TODO: Implement more methods to get Sounds like in
  */
@@ -40,8 +40,10 @@ public class SoundManager {
     }
 
     /**
+     * Method to add a sound to the SoundManager
      * @param title Title of the sound
      * @param path  Path to the soundfile
+     * @param uploadedBy User who uploaded the sound
      * @return True if sound was added successfully, false if not
      * TODO: Check if Exception handling is correct
      */
@@ -56,6 +58,7 @@ public class SoundManager {
     }
 
     /**
+     * Method to remove a sound from the SoundManager
      * @param title Title of the sound
      * @return True if sound was removed successfully, false if not
      */
@@ -69,9 +72,10 @@ public class SoundManager {
     }
 
     /**
+     * Method to get all sounds of the user
      * @return ArrayList of all sounds of the user
      */
     public ArrayList<ISound> getSoundsByUser() {
-        return new ArrayList<>(sounds.values());
+        return new ArrayList<>(this.sounds.values());
     }
 }

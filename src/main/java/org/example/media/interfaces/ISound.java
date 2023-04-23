@@ -10,7 +10,7 @@ public interface ISound {
     String getTitle();
 
     /**
-     * @return Filepath to the sound
+     * @return Media object of the sound
      */
     Media getMedia();
 

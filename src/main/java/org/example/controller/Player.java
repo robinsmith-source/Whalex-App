@@ -5,120 +5,168 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.media.interfaces.ISound;
 
+/**
+ * Player class is used to handle all media player actions
+ *
+ * @link SoundQueue (1 to 1 : Each Player can only have one SoundQueue)
+ * @link SoundHistory (1 to 1 : Each Player can only have one SoundHistory)
+ * TODO : Write tests for the Player
+ * @see MediaPlayer
+ * @see ISound
+ */
 public class Player {
     private static final Logger log = LogManager.getLogger(Player.class);
 
-    //true : playing | false : paused
+    /**
+     * isPlaying is true if the player is playing, false if it is paused
+     */
     private boolean isPlaying;
 
-    //true : shuffle | false : no shuffle
+    /**
+     * isShuffle is true if the player is shuffling, false if it is not
+     */
     private boolean isShuffle;
 
-    //true : repeat | false : no repeat
+    /**
+     * isRepeat is true if the player is repeating, false if it is not
+     */
     private boolean isRepeat;
 
-    //true : mute | false : no mute
+    /**
+     * isMute is true if the player is muted, false if it is not
+     */
     private boolean isMute;
 
-    //volume value between 0 and 1
-    private float volume;
+    /**
+     * volume of the player (between 0 and 1)
+     */
+    private double volume;
 
-    //CurrentSound playing
+
+    /**
+     * current Sound playing
+     */
     private ISound currentSound;
 
-    //PreviousSound played
+    /**
+     * previous Sound played
+     */
     private ISound previousSound;
 
-    //NextSound to play
+
+    /**
+     * next Sound to play
+     */
     private ISound nextSound;
 
-    //SoundQueue of sounds to play
+
+    /**
+     * SoundQueue of the player
+     *
+     * @link SoundQueue
+     */
     private final SoundQueue soundQueue;
 
-    //SoundHistory of sounds that have been played
+    /**
+     * SoundHistory of the player
+     *
+     * @link SoundHistory
+     */
     private final SoundHistory soundHistory;
 
-    //MediaPlayer Object from JavaFX Media Library
-    //TODO : Connect with MediaPlayer
+    /**
+     * MediaPlayer object from JavaFX Media Library
+     * TODO : Connect with MediaPlayer
+     * @see MediaPlayer
+     */
     private MediaPlayer mediaPlayer;
 
     /**
      * Constructor of the Player
-     * TODO : Connect with SoundQueue
      */
     public Player() {
+        this.soundQueue = new SoundQueue();
+        this.soundHistory = new SoundHistory();
+        this.mediaPlayer = new MediaPlayer(soundQueue.getCurrentSound().getMedia());
         this.isPlaying = false;
-        this.isShuffle = false;
+        this.isShuffle = soundQueue.getOrder() == Order.SHUFFLED;
         this.isRepeat = false;
         this.isMute = false;
         this.volume = 0.5f;
         this.currentSound = null;
         this.previousSound = null;
         this.nextSound = null;
-        this.soundQueue = new SoundQueue();
-        this.soundHistory = new SoundHistory();
     }
 
     /**
-     * @return true if the player is playing, false if it is paused
+     * @return true if the player is playing, false if it is not
      */
     public boolean isPlaying() {
-        return isPlaying;
+        return this.isPlaying;
     }
 
     /**
      * @return true if the player is in shuffle mode, false if it is not
      */
     public boolean isShuffle() {
-        return isShuffle;
+        return this.isShuffle;
     }
 
     /**
      * @return true if the player is in repeat mode, false if it is not
      */
     public boolean isRepeat() {
-        return isRepeat;
+        return this.isRepeat;
     }
 
     /**
      * @return true if the player is muted, false if it is not
      */
     public boolean isMute() {
-        return isMute;
+        return this.isMute;
     }
 
     /**
      * @return volume value between 0 and 1
      */
-    public float getVolume() {
-        return volume;
+    public double getVolume() {
+        return this.volume;
     }
 
     /**
      * @return current sound playing
      */
     public ISound getCurrentSound() {
-        return currentSound;
+        return this.currentSound;
     }
 
     /**
      * @return previous sound played
      */
     public ISound getPreviousSound() {
-        return previousSound;
+        return this.previousSound;
     }
 
     /**
      * @return next sound to play
      */
     public ISound getNextSound() {
-        return nextSound;
+        return this.nextSound;
     }
 
     //Todo : Implement methods to play, pause, next, previous, seekTo
-    public void play() {}
-    public void pause() {}
-    public void next() {}
-    public void previous() {}
-    public void seekTo(float time) {}
+    public void play() {
+    }
+
+    public void pause() {
+    }
+
+    public void next() {
+    }
+
+    public void previous() {
+    }
+
+    public void seekTo(float time) {
+    }
 }

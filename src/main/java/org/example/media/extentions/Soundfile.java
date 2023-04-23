@@ -10,8 +10,10 @@ import java.io.File;
 
 
 /**
- * Extention for ISound Interface
- * Thought as uploadable soundfile from a user
+ * Extension for ISound Interface
+ * @apiNote Thought as uploadable soundfile from a user
+ * @link User (n to 1 : Many sounds can be uploaded by one user)
+ * @see Media
  */
 public class Soundfile implements ISound {
     private static final Logger log = LogManager.getLogger(Soundfile.class);
@@ -57,6 +59,7 @@ public class Soundfile implements ISound {
     }
 
     /**
+     * Method to get the title of the sound
      * @return Title of the sound
      */
     @Override
@@ -65,6 +68,7 @@ public class Soundfile implements ISound {
     }
 
     /**
+     * Method to get the Media object of the soundfile
      * @return Filepath to the sound
      */
     @Override
@@ -73,9 +77,10 @@ public class Soundfile implements ISound {
     }
 
     /**
+     * Method to get the user who uploaded the sound
      * @return User who uploaded the sound
      */
     public User uploadedBy() {
-        return uploadedBy;
+        return this.uploadedBy;
     }
 }

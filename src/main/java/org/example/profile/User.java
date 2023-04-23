@@ -6,9 +6,11 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 
 /**
- * User class displays the user's profile with his/her username, password, profile picture and playlist manager.
- * @link PlaylistManager (1 to 1 relation : Each user has one PlaylistManager to manage his/her playlists)
- * TODO: Write tests for the User
+ * User class displays the user's profile with his/her username, password, profile picture, PlaylistManager and SoundManager.
+ * @link SoundManager (1 to 1 relation : Each User has one SoundManager to manage his/her sounds)
+ * @link PlaylistManager (1 to 1 relation : Each User has one PlaylistManager to manage his/her playlists)
+ * TODO : Write tests for the User
+ * @see File
  */
 public class User {
     private static final Logger log = LogManager.getLogger(User.class);
@@ -39,18 +41,19 @@ public class User {
     private String password;
 
     /**
-     * Playlist manager of the user
+     * PlaylistManager of the user
      * @link PlaylistManager
      */
     private final PlaylistManager playlistManager;
 
     /**
-     * Sound manager of the user
+     * SoundManager of the user
      * @link SoundManager
      */
     private final SoundManager soundManager;
 
     /**
+     * Constructor of the User class
      * @param username Username of the user
      * @param password Password of the user
      */
@@ -63,6 +66,7 @@ public class User {
     }
 
     /**
+     * Method to get the ID of the user
      * @return userID of the user
      */
     public int getUserID() {
@@ -70,6 +74,7 @@ public class User {
     }
 
     /**
+     * Method to get the username of the user
      * @return username of the user
      */
     public String getUsername() {
@@ -77,6 +82,7 @@ public class User {
     }
 
     /**
+     * Method to get the PlaylistManager of the user
      * @return PlaylistManager of the user
      */
     public PlaylistManager getPlaylistManager() {
@@ -84,6 +90,7 @@ public class User {
     }
 
     /**
+     * Method to get the SoundManager of the user
      * @return SoundManager of the user
      */
     public SoundManager getSoundManager() {
@@ -91,6 +98,7 @@ public class User {
     }
 
     /**
+     * Method to set the profile picture of the user
      * @param profilePicture Profile picture of the user
      * @return true if the profile picture is set, false if not
      */
@@ -104,6 +112,7 @@ public class User {
     }
 
     /**
+     * Method to change the password of the user
      * @param oldPassword Old password of the user
      * @param newPassword New password of the user
      * @return true if the password is changed, false if not
@@ -118,5 +127,13 @@ public class User {
         }
         this.password = newPassword;
         return true;
+    }
+
+    /**
+     * Method to get the profile picture of the user
+     * @return profilePicture of the user
+     */
+    public File getProfilePicture() {
+        return this.profilePicture;
     }
 }

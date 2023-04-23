@@ -10,10 +10,9 @@ import java.util.Map;
 
 /**
  * PlaylistManager manages all playlists of the user and provides methods to e.g. create, delete and get playlists with a given ID or name.
- *
- * @link User (1 to 1 relation : Playlists are created by different Users via their PlaylistManager and are displayed in/with the Users Profile)
- * @link Playlist (1 to n relation : The PlaylistManager manages many playlists)
- * TODO: Write tests for the PlaylistManager
+ * @link User (1 to 1 relation : Each PlaylistManager is created by one User and is displayed in/with the User's Profile)
+ * @link Playlist (1 to n relation : Each PlaylistManager manages many playlists)
+ * TODO : Write tests for the PlaylistManager
  */
 public class PlaylistManager {
     private static final Logger log = LogManager.getLogger(PlaylistManager.class);
@@ -21,7 +20,6 @@ public class PlaylistManager {
     /**
      * Map of all playlists of the user (key = playlistName, value = playlist)
      */
-
     private final Map<String, Playlist> playlists;
 
     /**
@@ -38,9 +36,11 @@ public class PlaylistManager {
     }
 
     /**
+     * Method to create a new playlist with a given name
      * @param playlistName Name of the playlist to be returned
      * @return true if the playlist has been created, false if not
      * DONE : Connect with User (Playlists are created by different Users and are displayed in/with the Users Profile)
+     * @see PlaylistManager
      */
     public boolean createPlaylist(String playlistName) {
         this.playlists.put(playlistName, new Playlist(playlistName, createdBy));
@@ -48,6 +48,7 @@ public class PlaylistManager {
     }
 
     /**
+     * Method to delete a playlist by its ID
      * @param playlistID ID of the playlist to be removed from the PlaylistManager
      * @return true if the playlist has been deleted, false if not
      * TODO: Check if this method is necessary
@@ -62,6 +63,7 @@ public class PlaylistManager {
     }
 
     /**
+     * Method to delete a playlist by its name
      * @param playlistName Name of the playlist to be removed from the PlaylistManager
      * @return true if the playlist has been deleted, false if not
      * TODO: Check if this method is necessary
@@ -76,6 +78,7 @@ public class PlaylistManager {
     }
 
     /**
+     * Method to get a playlist by its ID
      * @param playlistID ID of the playlist to be returned
      * @return Playlist with the given ID or null if no playlist with the given ID exists
      * TODO: Check if this method is necessary
@@ -90,6 +93,7 @@ public class PlaylistManager {
     }
 
     /**
+     * Method to get a playlist by its name
      * @param playlistName Name of the playlist to be returned
      * @return Playlist with the given name
      * TODO: Check if this method is necessary
@@ -99,6 +103,7 @@ public class PlaylistManager {
     }
 
     /**
+     * Method to get all playlists created by the user
      * @return ArrayList of all playlists created by the user
      */
     public ArrayList<Playlist> getPlaylistsByUser() {
