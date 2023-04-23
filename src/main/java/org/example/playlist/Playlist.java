@@ -40,7 +40,7 @@ public class Playlist {
      *
      * @link ISound
      */
-    Set<ISound> sounds;
+    private Set<ISound> sounds;
 
     /**
      * Number of songs in the playlist
