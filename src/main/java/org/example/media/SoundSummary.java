@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 /**
  * Class to get all sounds from all users and summarize them
+ *
  * @link UserManager (1 to 1 relation : Each SoundSummary has one UserManager to iterate through all users)
  * @link SoundManager (1 to n relation : Each SoundSummary has many SoundManagers to iterate through all sounds created by a user)
  * TODO : Optionally add other methods to summarize ALL sounds e.g. search for a sound by name

@@ -33,7 +33,7 @@ public class API implements ISound {
      * @return User who uploaded the sound
      */
     @Override
-    public User uploadedBy() {
+    public User getUploadedBy() {
         return null;
     }
 }

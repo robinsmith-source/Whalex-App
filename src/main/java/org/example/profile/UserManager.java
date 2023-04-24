@@ -9,13 +9,14 @@ import java.util.Map;
 
 /**
  * Class to manage all users
+ *
  * @link User (1 to n relation : Many users are managed by the UserManager)
  */
 public class UserManager {
 
     private static final Logger log = LogManager.getLogger(UserManager.class);
 
-     /**
+    /**
      * counter of the userID
      */
     private static int counterID = 20000;
@@ -23,10 +24,11 @@ public class UserManager {
     /**
      * Map of all users (key = username, value = user)
      */
-    private static Map<String, User> users = new HashMap<>();
+    private final static Map<String, User> users = new HashMap<>();
 
     /**
      * Method to create a user by its username and password
+     *
      * @param username Username of the user
      * @param password Password of the user
      * @return true if the user has been created, false if the user already exists
@@ -43,6 +45,7 @@ public class UserManager {
 
     /**
      * Method to delete a user by its username
+     *
      * @param username Username of the user
      * @return true if the user has been deleted, false if the user does not exist
      * TODO: Check if the log state is correct
@@ -59,6 +62,7 @@ public class UserManager {
 
     /**
      * Method to get a user by its username
+     *
      * @param username Username of the user
      * @return User with the given username
      */
@@ -68,6 +72,7 @@ public class UserManager {
 
     /**
      * Method to get all users
+     *
      * @return ArrayList of all users
      */
     public static ArrayList<User> getAllUsers() {

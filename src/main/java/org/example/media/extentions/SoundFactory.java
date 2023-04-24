@@ -7,6 +7,7 @@ import org.example.profile.User;
 
 /**
  * Factory for Soundfile class
+ *
  * @link ISound (creates a Soundfile driven by a users SoundManager)
  */
 public class SoundFactory {
@@ -14,18 +15,19 @@ public class SoundFactory {
 
     /**
      * Creates an implementation of the ISound interface. Included in this project is the Soundfile class.
-     * @see Soundfile
+     *
      * @param title Title of the sound
-     * @param path Path to the soundfile
+     * @param path  Path to the soundfile
+     * @param uploadedBy User who uploaded the sound
      * @return Soundfile
-     * TODO: Check if Exception handling is correct.
+     * @see Soundfile
      */
-    public static ISound createSound(String title, String path, User uploadedBy) throws NullPointerException {
+    /* TODO: Check if Exception handling is correct. --> Should be done */
+    public static ISound createSound(String title, String path, User uploadedBy) {
         try {
             return new Soundfile(title, path, uploadedBy);
         } catch (Exception e) {
-            log.error("Error creating Soundfile", e);
-            throw new NullPointerException("Soundfile could not be created");
+            return null;
         }
     }
 }
