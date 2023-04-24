@@ -18,6 +18,11 @@ public class PlaylistManager {
     private static final Logger log = LogManager.getLogger(PlaylistManager.class);
 
     /**
+     * counter of the playlistID
+     */
+    private static int counterID = 10000;
+
+    /**
      * Map of all playlists of the user (key = playlistName, value = playlist)
      */
     private final Map<String, Playlist> playlists;
@@ -40,10 +45,9 @@ public class PlaylistManager {
      * @param playlistName Name of the playlist to be returned
      * @return true if the playlist has been created, false if not
      * DONE : Connect with User (Playlists are created by different Users and are displayed in/with the Users Profile)
-     * @see PlaylistManager
      */
     public boolean createPlaylist(String playlistName) {
-        this.playlists.put(playlistName, new Playlist(playlistName, createdBy));
+        this.playlists.put(playlistName, new Playlist(++counterID, playlistName, createdBy));
         return playlists.containsKey(playlistName);
     }
 

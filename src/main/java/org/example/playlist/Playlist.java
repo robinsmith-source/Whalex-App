@@ -20,11 +20,6 @@ public class Playlist {
     private static final Logger log = LogManager.getLogger(Playlist.class);
 
     /**
-     * counter of the playlistID
-     */
-    private static int counterID = 10000;
-
-    /**
      * ID of the playlist
      */
     private final int playlistID;
@@ -63,8 +58,8 @@ public class Playlist {
      * @param name Name of the playlist
      * @param createdBy User who created the playlist
      */
-    public Playlist(String name, User createdBy) {
-        this.playlistID = counterID++;
+    public Playlist(int playlistID, String name, User createdBy) {
+        this.playlistID = playlistID;
         this.name = name;
         this.sounds = new HashSet<>();
         this.createdBy = createdBy;

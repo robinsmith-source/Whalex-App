@@ -16,11 +16,6 @@ public class User {
     private static final Logger log = LogManager.getLogger(User.class);
 
     /**
-     * counter of the userID
-     */
-    private static int counterID = 20000;
-
-    /**
      * ID of the user
      */
     private final int userID;
@@ -57,8 +52,8 @@ public class User {
      * @param username Username of the user
      * @param password Password of the user
      */
-    public User(String username, String password) {
-        this.userID = counterID++;
+    public User(int userID, String username, String password) {
+        this.userID = userID;
         this.username = username;
         this.password = password;
         this.playlistManager = new PlaylistManager(this);

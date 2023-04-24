@@ -43,11 +43,10 @@ public class SoundManager {
      * Method to add a sound to the SoundManager
      * @param title Title of the sound
      * @param path  Path to the soundfile
-     * @param uploadedBy User who uploaded the sound
      * @return True if sound was added successfully, false if not
      * TODO: Check if Exception handling is correct
      */
-    public boolean addSound(String title, String path, User uploadedBy) {
+    public boolean addSound(String title, String path) {
         try {
             this.sounds.put(title, SoundFactory.createSound(title, path, uploadedBy));
         } catch (NullPointerException e) {
