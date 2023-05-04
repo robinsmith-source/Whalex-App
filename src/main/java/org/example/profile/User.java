@@ -83,6 +83,15 @@ public class User {
     }
 
     /**
+     * Method to get the password of the user
+     *
+     * @return password of the user
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
      * Method to get the PlaylistManager of the user
      *
      * @return PlaylistManager of the user

@@ -1,8 +1,14 @@
 package org.example.profile;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +30,7 @@ public class UserManager {
     /**
      * Map of all users (key = username, value = user)
      */
-    private final static Map<String, User> users = new HashMap<>();
+    private static Map<String, User> users = new HashMap<>();
 
     /**
      * Method to create a user by its username and password
@@ -79,4 +85,46 @@ public class UserManager {
         return new ArrayList<>(users.values());
     }
 
+    /**
+     * Method to write to a JSON file via Gson
+     *
+     * @link UserTypeAdapter
+     * @see Gson
+     * @see GsonBuilder
+     */
+    public static void usersToJSON() {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(User.class, new UserTypeAdapter())
+                .setPrettyPrinting()
+                .create();
+        try (FileWriter fileWriter = new FileWriter("src/main/resources/data/users.json")) {
+            gson.toJson(users, fileWriter);
+            log.info("Users have been saved to JSON.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.fatal("Users have not been saved to JSON.");
+        }
+    }
+
+    /**
+     * Method to read a JSON file via Gson
+     *
+     * @link UserTypeAdapter
+     * @see Gson
+     * @see GsonBuilder
+     */
+    public static void usersFromJSON() {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(User.class, new UserTypeAdapter())
+                .setPrettyPrinting()
+                .create();
+        try (FileReader fileReader = new FileReader("src/main/resources/data/users.json")) {
+            users = gson.fromJson(fileReader, new TypeToken<Map<String, User>>(){}.getType());
+            log.info("Users have been loaded from JSON.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.fatal("Users have not been loaded from JSON.");
+        }
+        System.out.println(users);
+    }
 }
