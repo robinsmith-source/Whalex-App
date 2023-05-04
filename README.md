@@ -22,5 +22,8 @@ We welcome contributions to the Whalex audio library. If you have high-quality r
 
 If you have any feedback, please reach out to us at [our HdM Mail](mailto:rs141@hdm-stuttgart.de)
 
+## Credits 
 
+The audio recordings used in this app are from the
+[Watkins Marine Mammal Sound Database](https://whoicf2.whoi.edu/science/B/whalesounds/index.cfm), Woods Hole Oceanographic Institution and the New Bedford Whaling Museum.
 
