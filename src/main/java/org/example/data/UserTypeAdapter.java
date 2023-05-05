@@ -66,6 +66,37 @@ public class UserTypeAdapter extends TypeAdapter<User> {
                     }
                     reader.endArray();
                     break;
+                case "playlists":
+                    reader.beginArray();
+                    while (reader.hasNext()) {
+                        reader.beginObject();
+                        String playlistKey = reader.nextName();
+                        if (user != null) user.getPlaylistManager().createPlaylist(playlistKey);
+                        reader.beginArray();
+                        while (reader.hasNext()) {
+                            reader.beginObject();
+                            String title = null;
+                            File path = null;
+                            while (reader.hasNext()) {
+                                String soundkey = reader.nextName();
+                                if (soundkey.equals("title")) {
+                                    title = reader.nextString();
+                                } else if (soundkey.equals("path")) {
+                                    path = new File(reader.nextString());
+                                } else {
+                                    reader.skipValue();
+                                }
+                            }
+                            reader.endObject();
+                            if (user != null) {
+                                user.getSoundManager().addSound(title, path);
+                            }
+                        }
+                        reader.endArray();
+                        reader.endObject();
+                    }
+                    reader.endArray();
+                    break;
                 default:
                     reader.skipValue();
                     break;
@@ -109,7 +140,7 @@ public class UserTypeAdapter extends TypeAdapter<User> {
                 writer.beginObject();
                 String absolutePath = user.getSoundManager().getAllSoundsByUser().get(soundKey).getMedia().getSource();
                 writer.name("title").value(user.getSoundManager().getAllSoundsByUser().get(soundKey).getTitle());
-                writer.name(soundKey).value("src/main/resources/sounds" + absolutePath.substring(absolutePath.lastIndexOf('/')));
+                writer.name("path").value("src/main/resources/sounds" + absolutePath.substring(absolutePath.lastIndexOf('/')));
                 writer.endObject();
             }
             writer.endArray();
