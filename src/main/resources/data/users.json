@@ -1,17 +1,40 @@
 {
   "test2": {
-    "userID": 20002,
+    "userID": "a126efa3-7d4a-4420-b9a6-6cb218b2ac1f",
+    "profilePicture": "src\\main\\resources\\images\\default\\profilePicture\\whale01.jpg",
     "username": "test2",
-    "password": "test2"
+    "password": "test2",
+    "soundfiles": [
+      {
+        "title": "d",
+        "path": "src/main/resources/sounds/89405023.wav"
+      }
+    ],
+    "playlists": []
   },
   "test3": {
-    "userID": 20003,
+    "userID": "d37ae504-6c75-4b90-9789-09fc1207ea80",
+    "profilePicture": "src\\main\\resources\\images\\default\\profilePicture\\whale01.jpg",
     "username": "test3",
-    "password": "test3"
+    "password": "test3",
+    "soundfiles": [],
+    "playlists": [
+      {
+        "test": []
+      }
+    ]
   },
   "test": {
-    "userID": 20001,
+    "userID": "531daacb-f4f7-47de-abf6-590ad96e956c",
+    "profilePicture": "src\\main\\resources\\images\\default\\profilePicture\\whale01.jpg",
     "username": "test",
-    "password": "test"
+    "password": "test",
+    "soundfiles": [
+      {
+        "title": "d",
+        "path": "src/main/resources/sounds/9750300N.wav"
+      }
+    ],
+    "playlists": []
   }
 }

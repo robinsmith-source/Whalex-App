@@ -5,13 +5,17 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.data.UserTypeAdapter;
+import org.example.exceptions.LoadDataException;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Class to manage all users
@@ -23,6 +27,19 @@ public class UserManager {
     private static final Logger log = LogManager.getLogger(UserManager.class);
 
     /**
+     * Gson object to convert JSON to Java and Java to JSON
+     *
+     * @link usersToJSON() (Method to convert Java to JSON)
+     * @link usersFromJSON() (Method to convert JSON to Java)
+     * @see Gson
+     * @see UserTypeAdapter
+     */
+    private static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(User.class, new UserTypeAdapter())
+            .setPrettyPrinting()
+            .create();
+
+    /**
      * counter of the userID
      */
     private static int counterID = 20000;
@@ -30,7 +47,9 @@ public class UserManager {
     /**
      * Map of all users (key = username, value = user)
      */
-    private static Map<String, User> users = new HashMap<>();
+    private final static Map<String, User> users = new HashMap<>();
+
+    private static final File defaultProfilePicture = new File("src/main/resources/images/default/profilePicture/whale01.jpg");
 
     /**
      * Method to create a user by its username and password
@@ -44,7 +63,7 @@ public class UserManager {
             log.error("User " + username + " already exists.");
             return false;
         }
-        users.put(username, new User(++counterID, username, password));
+        users.put(username, new User(UUID.randomUUID().toString(), defaultProfilePicture, username, password));
         log.info("User " + username + " has been created.");
         return true;
     }
@@ -92,17 +111,16 @@ public class UserManager {
      * @see Gson
      * @see GsonBuilder
      */
-    public static void usersToJSON() {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(User.class, new UserTypeAdapter())
-                .setPrettyPrinting()
-                .create();
-        try (FileWriter fileWriter = new FileWriter("src/main/resources/data/users.json")) {
+    //Todo: Check if the log state is correct
+    public static void userToJSON() throws LoadDataException {
+        try {
+            FileWriter fileWriter = new FileWriter("src/main/resources/data/users.json");
             gson.toJson(users, fileWriter);
             log.info("Users have been saved to JSON.");
+            fileWriter.close();
         } catch (IOException e) {
-            e.printStackTrace();
             log.fatal("Users have not been saved to JSON.");
+            throw new LoadDataException("Error while saving users to JSON.");
         }
     }
 
@@ -113,18 +131,17 @@ public class UserManager {
      * @see Gson
      * @see GsonBuilder
      */
-    public static void usersFromJSON() {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(User.class, new UserTypeAdapter())
-                .setPrettyPrinting()
-                .create();
-        try (FileReader fileReader = new FileReader("src/main/resources/data/users.json")) {
-            users = gson.fromJson(fileReader, new TypeToken<Map<String, User>>(){}.getType());
+    //Todo: Check if the log state is correct
+    public static void userFromJSON() throws LoadDataException {
+        try {
+            FileReader fileReader = new FileReader("src/main/resources/data/users.json");
+            users.putAll(gson.fromJson(fileReader, new TypeToken<Map<String, User>>() {
+            }.getType()));
             log.info("Users have been loaded from JSON.");
+            fileReader.close();
         } catch (IOException e) {
-            e.printStackTrace();
             log.fatal("Users have not been loaded from JSON.");
+            throw new LoadDataException("Error while loading users from JSON.");
         }
-        System.out.println(users);
     }
 }

@@ -43,7 +43,7 @@ public class Soundfile implements ISound {
      * @param uploadedBy User who uploaded the sound
      */
     /* TODO: Check if Exception handling is correct. --> Should be done */
-    public Soundfile(String title, String path, User uploadedBy) throws Exception {
+    public Soundfile(String title, File path, User uploadedBy) throws Exception {
         if (title == null || title.isEmpty()) {
             log.error("Title cannot be null or empty");
             throw new IllegalArgumentException("Title cannot be null or empty");
@@ -55,7 +55,7 @@ public class Soundfile implements ISound {
         }
 
         try {
-            media = new Media(new File(path).toURI().toString());
+            media = new Media(path.toURI().toString());
         } catch (Exception e) {
             log.error("Soundfile could not be created: " + e.getMessage());
             throw new Exception("Soundfile could not be created");

@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.example.media.interfaces.ISound;
 import org.example.profile.User;
 
+import java.io.File;
+
 /**
  * Factory for Soundfile class
  *
@@ -23,7 +25,7 @@ public class SoundFactory {
      * @see Soundfile
      */
     /* TODO: Check if Exception handling is correct. --> Should be done */
-    public static ISound createSound(String title, String path, User uploadedBy) {
+    public static ISound createSound(String title, File path, User uploadedBy) {
         try {
             return new Soundfile(title, path, uploadedBy);
         } catch (Exception e) {

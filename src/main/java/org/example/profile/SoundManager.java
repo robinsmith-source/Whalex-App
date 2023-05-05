@@ -1,11 +1,14 @@
 package org.example.profile;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.data.UserTypeAdapter;
 import org.example.media.extentions.SoundFactory;
 import org.example.media.interfaces.ISound;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +23,19 @@ import java.util.Map;
  */
 public class SoundManager {
     private static final Logger log = LogManager.getLogger(SoundManager.class);
+
+    /**
+     * Gson object to convert JSON to Java and Java to JSON
+     *
+     * @link usersToJSON() (Method to convert Java to JSON)
+     * @link usersFromJSON() (Method to convert JSON to Java)
+     * @see Gson
+     * @see UserTypeAdapter
+     */
+    private static final Gson gson = new GsonBuilder()
+            //.registerTypeAdapter(User.class, new UserTypeAdapter())
+            .setPrettyPrinting()
+            .create();
 
     /**
      * Map of all sounds of the user (key = title, value = sound)
@@ -49,7 +65,7 @@ public class SoundManager {
      * @return True if sound was added successfully, false if not
      * TODO: Check if Exception handling is correct
      */
-    public boolean addSound(String title, String path) {
+    public boolean addSound(String title, File path) {
         try {
             this.sounds.put(title, SoundFactory.createSound(title, path, uploadedBy));
         } catch (Exception e) {
@@ -79,7 +95,7 @@ public class SoundManager {
      *
      * @return ArrayList of all sounds of the user
      */
-    public ArrayList<ISound> getSoundsByUser() {
-        return new ArrayList<>(this.sounds.values());
+    public Map<String, ISound> getAllSoundsByUser() {
+        return this.sounds;
     }
 }
