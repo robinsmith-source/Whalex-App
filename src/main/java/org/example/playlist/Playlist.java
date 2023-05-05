@@ -5,10 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.example.media.interfaces.ISound;
 import org.example.profile.User;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Playlist class displays the playlist with its ID, name, list of songs, number of songs, user who created the playlist and date when the playlist was created.
@@ -99,12 +96,16 @@ public class Playlist {
     }
 
     /**
-     * Method to get the list of sounds in the playlist
-     * @return List of sounds in the playlist
+     * Method to get the map of sounds in the playlist
+     * @return Map of sounds in the playlist (key = title, value = sound)
      * @see ISound
      */
-    public ArrayList<ISound> getSounds() {
-        return new ArrayList<>(this.sounds);
+    public Map<String, ISound> getSounds() {
+        Map<String, ISound> soundMap = new HashMap<>();
+        for (ISound sound : this.sounds) {
+            soundMap.put(sound.getTitle(), sound);
+        }
+        return soundMap;
     }
 
     /**

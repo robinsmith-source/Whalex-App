@@ -5,7 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.example.profile.User;
 import org.example.profile.UserManager;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class to get all playlists from all users and summarize them
@@ -20,10 +21,10 @@ public class PlaylistSummary {
     /**
      * @return ArrayList of all playlists existing from all users
      */
-    public static ArrayList<Playlist> getAllPlaylists() {
-        ArrayList<Playlist> allPlaylists = new ArrayList<>();
+    public static Map<String, Playlist> getAllPlaylists() {
+        Map<String, Playlist> allPlaylists = new HashMap<>();
         for (User user : UserManager.getAllUsers()) {
-            allPlaylists.addAll(user.getPlaylistManager().getPlaylistsByUser());
+            allPlaylists.putAll(user.getPlaylistManager().getAllPlaylistsByUser());
         }
         return allPlaylists;
     }

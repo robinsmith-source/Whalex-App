@@ -19,7 +19,7 @@ public class User {
     /**
      * ID of the user
      */
-    private final int userID;
+    private final String userID;
 
     /**
      * Profile picture of the user
@@ -56,10 +56,11 @@ public class User {
      * @param username Username of the user
      * @param password Password of the user
      */
-    public User(int userID, String username, String password) {
+    public User(String userID, File profilePicture, String username, String password) {
         this.userID = userID;
         this.username = username;
         this.password = password;
+        this.profilePicture = profilePicture;
         this.playlistManager = new PlaylistManager(this);
         this.soundManager = new SoundManager(this);
     }
@@ -69,7 +70,7 @@ public class User {
      *
      * @return userID of the user
      */
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 

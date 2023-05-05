@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.playlist.Playlist;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,7 +108,7 @@ public class PlaylistManager {
      * TODO: Check if this method is necessary
      */
     public Playlist getPlaylistByName(String playlistName) {
-        return playlists.get(playlistName) != null ? playlists.get(playlistName) : null;
+        return playlists.get(playlistName);
     }
 
     /**
@@ -117,7 +116,7 @@ public class PlaylistManager {
      *
      * @return ArrayList of all playlists created by the user
      */
-    public ArrayList<Playlist> getPlaylistsByUser() {
-        return new ArrayList<>(playlists.values());
+    public Map<String, Playlist> getAllPlaylistsByUser() {
+        return playlists;
     }
 }

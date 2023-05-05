@@ -6,7 +6,8 @@ import org.example.media.interfaces.ISound;
 import org.example.profile.User;
 import org.example.profile.UserManager;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class to get all sounds from all users and summarize them
@@ -21,10 +22,10 @@ public class SoundSummary {
     /**
      * @return ArrayList of all sounds existing from all users
      */
-    public static ArrayList<ISound> getAllSounds() {
-        ArrayList<ISound> allSounds = new ArrayList<>();
+    public static Map<String, ISound> getAllSounds() {
+        Map<String, ISound> allSounds = new HashMap<>();
         for (User user : UserManager.getAllUsers()) {
-            allSounds.addAll(user.getSoundManager().getSoundsByUser());
+            allSounds.putAll(user.getSoundManager().getAllSoundsByUser());
         }
         return allSounds;
     }
