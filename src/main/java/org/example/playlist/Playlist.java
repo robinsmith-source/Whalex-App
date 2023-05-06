@@ -19,7 +19,7 @@ public class Playlist {
     /**
      * ID of the playlist
      */
-    private final int playlistID;
+    private final String playlistID;
 
     /**
      * Name of the playlist
@@ -52,15 +52,17 @@ public class Playlist {
 
     /**
      * Constructor of the playlist
+     * @param playlistID ID of the playlist
      * @param name Name of the playlist
      * @param createdBy User who created the playlist
+     * @param createdAt Date when the playlist was created
      */
-    public Playlist(int playlistID, String name, User createdBy) {
+    public Playlist(String playlistID, String name, User createdBy, Date createdAt) {
         this.playlistID = playlistID;
         this.name = name;
         this.sounds = new HashSet<>();
         this.createdBy = createdBy;
-        this.createdAt = new Date();
+        this.createdAt = createdAt;
     }
 
     /**
@@ -82,7 +84,7 @@ public class Playlist {
      * @return ID of the playlist
      * TODO: Check if this method is necessary (Maybe it is better to use a second map to iterate through playlists via the ID)
      */
-    public int getPlaylistID() {
+    public String getPlaylistID() {
         return this.playlistID;
     }
 
@@ -136,18 +138,17 @@ public class Playlist {
 
     /**
      * Method to add a sound to the playlist
+     *
      * @param sound Sound to be added to the playlist
-     * @return true if the sound was added successfully, false if not
      * @see ISound
      */
-    public boolean addSound(ISound sound) {
+    public void addSound(ISound sound) {
         if (sound == null) {
             log.error("Sound cannot be null");
-            return false;
+            return;
         }
         this.sounds.add(sound);
         log.info("Sound " + sound.getTitle() + " has been added to playlist " + this.name);
-        return true;
     }
 
 

@@ -5,6 +5,13 @@ import org.example.profile.User;
 
 public interface ISound {
     /**
+     * Method to get the soundID of the sound
+     *
+     * @return soundID of the sound
+     */
+    String getSoundID();
+
+    /**
      * Method to get the title of the sound
      *
      * @return Title of the sound

@@ -1,4 +1,4 @@
-package org.example.media.extentions;
+package org.example.media.extensions;
 
 import javafx.scene.media.Media;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +18,11 @@ import java.io.File;
  */
 public class Soundfile implements ISound {
     private static final Logger log = LogManager.getLogger(Soundfile.class);
+
+    /**
+     * ID of the sound
+     */
+    private final String soundID;
 
     /**
      * title of the sound
@@ -43,7 +48,12 @@ public class Soundfile implements ISound {
      * @param uploadedBy User who uploaded the sound
      */
     /* TODO: Check if Exception handling is correct. --> Should be done */
-    public Soundfile(String title, File path, User uploadedBy) throws Exception {
+    public Soundfile(String soundID, String title, File path, User uploadedBy) throws Exception {
+        if (soundID == null || soundID.isEmpty()) {
+            log.error("SoundID cannot be null or empty");
+            throw new IllegalArgumentException("SoundID cannot be null or empty");
+        }
+
         if (title == null || title.isEmpty()) {
             log.error("Title cannot be null or empty");
             throw new IllegalArgumentException("Title cannot be null or empty");
@@ -61,9 +71,21 @@ public class Soundfile implements ISound {
             throw new Exception("Soundfile could not be created");
         }
 
+        this.soundID = soundID;
         this.title = title;
         this.uploadedBy = uploadedBy;
-        log.info("Soundfile created");
+        log.info("Soundfile " + title + " created by " + uploadedBy.getUsername());
+    }
+
+
+    /**
+     * Method to get the soundID of the sound
+     *
+     * @return soundID of the sound
+     */
+    @Override
+    public String getSoundID() {
+        return this.soundID;
     }
 
     /**

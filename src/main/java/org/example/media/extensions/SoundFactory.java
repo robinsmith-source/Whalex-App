@@ -1,4 +1,4 @@
-package org.example.media.extentions;
+package org.example.media.extensions;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,10 +25,12 @@ public class SoundFactory {
      * @see Soundfile
      */
     /* TODO: Check if Exception handling is correct. --> Should be done */
-    public static ISound createSound(String title, File path, User uploadedBy) {
+    public static ISound createSound(String soundID, String title, File path, User uploadedBy) {
         try {
-            return new Soundfile(title, path, uploadedBy);
+            log.debug("Sound {} created by user {} with path {}", soundID, uploadedBy.getUsername(), path);
+            return new Soundfile(soundID, title, path, uploadedBy);
         } catch (Exception e) {
+            log.error("Sound {} could not be created by user {} with path {}", soundID, uploadedBy.getUsername(), path);
             return null;
         }
     }
