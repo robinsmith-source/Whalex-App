@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.player;
 
 import javafx.scene.media.MediaPlayer;
 import org.apache.logging.log4j.LogManager;

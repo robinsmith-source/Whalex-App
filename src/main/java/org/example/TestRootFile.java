@@ -17,7 +17,6 @@ public class TestRootFile {
     private static final Logger log = LogManager.getLogger(TestRootFile.class);
 
     public static void main(String[] args) throws ReadDataException, WriteDataException, IOException {
-        writeUser1();
         readUser1();
 
     /*

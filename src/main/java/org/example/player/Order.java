@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.player;
 
 /**
  * Enum for queue order

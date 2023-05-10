@@ -23,3 +23,7 @@
     -fx-background-radius: 40px;
     -fx-background-size: 20px;
 }
+
+.scroll-pane {
+    -fx-background-color: #121212;
+}

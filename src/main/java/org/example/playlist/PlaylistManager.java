@@ -21,7 +21,6 @@ import java.util.*;
 //TODO: Write tests for the PlaylistManager
 public class PlaylistManager {
     private static final Logger log = LogManager.getLogger(PlaylistManager.class);
-
     /**
      * Gson object to convert JSON to Java and Java to JSON
      *
