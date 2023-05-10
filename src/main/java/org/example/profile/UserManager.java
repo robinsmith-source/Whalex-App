@@ -59,6 +59,20 @@ public class UserManager {
     private static User currentUser = null;
 
     /**
+     * Constructor for UserManager
+     */
+    private UserManager() {
+    }
+
+    /**
+     * Method to get the UserManager instance
+     * @return UserManager instance
+     */
+    public static UserManager getInstance() {
+        return INSTANCE;
+    }
+
+    /**
      * Method to create a user by its username and password
      *
      * @param username Username of the user
