@@ -48,7 +48,7 @@ public class TestRootFile {
         //User 1 - root
         UserManager.createUser("root", "hallo1234");
         User user = UserManager.getUserByName("root");
-        PlaylistManager playlistManager1 = new PlaylistManager(user);
+        PlaylistManager playlistManager1 = PlaylistManager.getInstance();
         SoundManager soundManager1 = new SoundManager(user);
 
         soundManager1.addSound("Walsound 1", new File("src/main/resources/data/sounds/9750300N.wav"));
@@ -64,9 +64,9 @@ public class TestRootFile {
 
     public static void writeUser2() throws WriteDataException {
         //User 1 - root
-        UserManager.createUser("robin", "hallo1234");
-        User user = UserManager.getUserByName("robin");
-        PlaylistManager playlistManager2 = new PlaylistManager(user);
+        UserManager.getInstance().createUser("robin", "hallo1234");
+        User user = UserManager.getInstance().getUserByName("robin");
+        PlaylistManager playlistManager2 = PlaylistManager.getInstance();
         SoundManager soundManager2 = new SoundManager(user);
 
         soundManager2.addSound("Walsound 3", new File("src/main/resources/data/sounds/72021005.wav"));

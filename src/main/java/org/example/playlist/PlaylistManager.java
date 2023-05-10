@@ -21,6 +21,8 @@ import java.util.*;
 //TODO: Write tests for the PlaylistManager
 public class PlaylistManager {
     private static final Logger log = LogManager.getLogger(PlaylistManager.class);
+
+    private static final PlaylistManager INSTANCE = new PlaylistManager();
     /**
      * Gson object to convert JSON to Java and Java to JSON
      *
@@ -43,20 +45,12 @@ public class PlaylistManager {
      */
     private static final Map<String, Playlist> playlists = new HashMap<>();
 
-    /**
-     * User who currently uses the playlistManager
-     */
-    private final User currentUser;
-
-    /**
-     * Constructor for the PlaylistManager
-     *
-     * @param currentUser User who currently uses the playlistManager
-     */
-    public PlaylistManager(User currentUser) {
-        this.currentUser = currentUser;
+    private PlaylistManager() {
     }
 
+    public static PlaylistManager getInstance() {
+        return INSTANCE;
+    }
     /**
      * Method to get a playlist by its ID
      *
@@ -121,8 +115,8 @@ public class PlaylistManager {
      * @return true if the playlist has been created, false if not
      */
     //Todo: Exception handling
-    public boolean createPlaylist(String playlistName) {
-        playlists.put(playlistName, new Playlist(UUID.randomUUID().toString(), playlistName, currentUser, new Date()));
+    public boolean createPlaylist(User currentuser, String playlistName) {
+        playlists.put(playlistName, new Playlist(UUID.randomUUID().toString(), playlistName, currentuser, new Date()));
         return playlists.containsKey(playlistName);
     }
 
@@ -132,7 +126,7 @@ public class PlaylistManager {
      * @param playlistID ID of the playlist to be removed from the PlaylistManager
      * @return true if the playlist has been deleted, false if not
      */
-    public boolean deletePlaylistByID(String playlistID) {
+    public boolean deletePlaylistByID(User currentUser, String playlistID) {
         if (!playlists.containsValue(getPlaylistByID(playlistID))) {
             log.error("Playlist " + playlistID + " could not be found.");
             return false;
@@ -151,7 +145,7 @@ public class PlaylistManager {
      * @param playlistName Name of the playlist to be removed from the PlaylistManager
      * @return true if the playlist has been deleted, false if not
      */
-    public boolean deletePlaylistByName(String playlistName) {
+    public boolean deletePlaylistByName(User currentUser, String playlistName) {
         if (!playlists.containsKey(playlistName)) {
             log.error("Playlist " + playlistName + " could not be found.");
             return false;

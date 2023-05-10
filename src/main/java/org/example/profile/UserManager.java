@@ -26,6 +26,11 @@ public class UserManager {
     private static final Logger log = LogManager.getLogger(UserManager.class);
 
     /**
+     * UserManager instance
+     */
+    private static final UserManager INSTANCE = new UserManager();
+
+    /**
      * Gson object to convert JSON to Java and Java to JSON
      *
      * @link usersToJSON() (Method to convert Java to JSON)
@@ -40,21 +45,20 @@ public class UserManager {
     /**
      * Path to the file where all user data is stored
      */
-    private static final File SAVE_FILE = new File("src/main/resources/data/saves/users.json");
+    private final File SAVE_FILE = new File("src/main/resources/data/saves/users.json");
 
     /**
      * Path to the file where the default profile picture is stored
      */
-    private static final File defaultProfilePicture = new File("src/main/resources/data/users/default/profilePicture/whale01.png");
+    private final File defaultProfilePicture = new File("src/main/resources/data/users/default/profilePicture/whale01.png");
 
     /**
      * Map of all users (key = username, value = user)
      */
-    private static final Map<String, User> users = new HashMap<>();
-
+    private final Map<String, User> users = new HashMap<>();
 
     /**
-     *
+     * User who currently uses specific methods of the UserManager
      */
     private static User currentUser = null;
 
@@ -79,7 +83,7 @@ public class UserManager {
      * @param password Password of the user
      * @return true if the user has been created, false if the user already exists
      */
-    public static boolean createUser(String username, String password) {
+    public boolean createUser(String username, String password) {
         if (users.containsKey(username)) {
             log.error("User {} already exists.", username);
             return false;
@@ -97,7 +101,7 @@ public class UserManager {
      * @param password       Password of the user
      * @return true if the user has been created, false if the user already exists
      */
-    public static boolean createUser(File profilePicture, String username, String password) {
+    public boolean createUser(File profilePicture, String username, String password) {
         if (users.containsKey(username)) {
             log.error("User {} already exists.", username);
             return false;
@@ -115,7 +119,7 @@ public class UserManager {
      */
     //TODO: Check if the log states are correct -> Should be
     //Todo: Add Custom Exception + Exception handling
-    public static boolean deleteUser(String username, String password, String passwordConfirmation) {
+    public boolean deleteUser(String username, String password, String passwordConfirmation) {
         if (!users.containsKey(username)) {
             log.error("User " + username + " does not exist.");
             return false;
@@ -138,7 +142,7 @@ public class UserManager {
      * @param password Password of the user
      * @return true if the user has been logged in, false if the user does not exist or the password is incorrect
      */
-    public static boolean login(String username, String password) {
+    public boolean login(String username, String password) {
         if (!users.containsKey(username)) {
             log.error("User {} does not exist.", username);
             return false;
@@ -155,7 +159,7 @@ public class UserManager {
      * Method to get the current user
      * @return Current user
      */
-    public static User getCurrentUser() {
+    public User getCurrentUser() {
         if (currentUser == null) {
             log.error("No user is logged in.");
             throw new IllegalArgumentException("No user is logged in.");
@@ -172,7 +176,7 @@ public class UserManager {
      * @return User object with the given username
      * @throws IllegalArgumentException if the username is null, empty or could not be found
      */
-    public static User getUserByName(String username) throws IllegalArgumentException {
+    public User getUserByName(String username) throws IllegalArgumentException {
         if (username == null || username.isEmpty()) {
             log.warn("Username is null or empty.");
             throw new IllegalArgumentException("Username cannot be null or empty.");
@@ -191,7 +195,7 @@ public class UserManager {
      * @return User object with the given ID
      * @throws IllegalArgumentException if the userID is null, empty or could not be found
      */
-    public static User getUserById(String userID) throws IllegalArgumentException {
+    public User getUserById(String userID) throws IllegalArgumentException {
         if (userID == null || userID.isEmpty()) {
             log.warn("User ID is null or empty.");
             throw new IllegalArgumentException("User ID cannot be null or empty.");
@@ -211,7 +215,7 @@ public class UserManager {
      *
      * @return Map of all users objects (key = username, value = user object)
      */
-    public static Map<String, User> getAllUsers() {
+    public Map<String, User> getAllUsers() {
         return users;
     }
 
@@ -225,7 +229,7 @@ public class UserManager {
      */
     //Todo: Check if the log states are correct -> Should be
     //Todo: Check if exception handling is correct
-    public static void userToJSON() throws WriteDataException {
+    public void userToJSON() throws WriteDataException {
         try {
             FileWriter fileWriter = new FileWriter(SAVE_FILE);
             gson.toJson(users, fileWriter);
@@ -247,7 +251,7 @@ public class UserManager {
      */
     //Todo: Check if the log states are correct -> Should be
     //Todo: Check if exception handling is correct
-    public static void usersFromJSON() throws ReadDataException {
+    public void usersFromJSON() throws ReadDataException {
         try {
             FileReader fileReader = new FileReader(SAVE_FILE);
             users.putAll(gson.fromJson(fileReader, new TypeToken<Map<String, User>>() {
