@@ -15,7 +15,7 @@
    <bottom>
       <HBox id="player-section" alignment="CENTER" prefHeight="80.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="166.0">
+            <VBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="160.0">
                <children>
                   <Label text="Sound_title" textFill="WHITE" wrapText="true">
                      <font>
