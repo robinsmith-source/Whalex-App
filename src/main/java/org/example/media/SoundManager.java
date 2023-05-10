@@ -28,6 +28,7 @@ import java.util.UUID;
 public class SoundManager {
     private static final Logger log = LogManager.getLogger(SoundManager.class);
 
+    private static final SoundManager INSTANCE = new SoundManager();
     /**
      * Gson object to convert JSON to Java and Java to JSON
      *
@@ -43,30 +44,31 @@ public class SoundManager {
     /**
      * Path to the folder where all sound files are stored
      */
-    private static final File SOUNDS_PATH = new File("src/main/resources/data/sounds/");
+    private final File SOUNDS_PATH = new File("src/main/resources/data/sounds/");
 
     /**
      * Path to the file where all sound data is stored
      */
-    private static final File SAVE_FILE = new File("src/main/resources/data/saves/sounds.json");
+    private final File SAVE_FILE = new File("src/main/resources/data/saves/sounds.json");
 
     /**
      * Map of all sounds (key = title, value = sound object)
      */
-    private static final Map<String, ISound> sounds = new HashMap<>();
+    private final Map<String, ISound> sounds = new HashMap<>();
 
     /**
-     * User who currently uses this object
+     * Constructor of the SoundManager
      */
-    private final User activeUser;
+    private SoundManager() {
+    }
 
     /**
-     * Constructor for the SoundManager
+     * Method to get the SoundManager instance
      *
-     * @param activeUser User who currently uses this object
+     * @return SoundManager instance
      */
-    public SoundManager(User activeUser) {
-        this.activeUser = activeUser;
+    public static SoundManager getInstance() {
+        return INSTANCE;
     }
 
     /**
@@ -76,12 +78,12 @@ public class SoundManager {
      * @return sound with the given ID
      */
     //Todo: Check if log states are correct -> Should be
-    public static ISound getSoundByID(String soundID) throws IllegalArgumentException {
+    public ISound getSoundByID(String soundID) throws IllegalArgumentException {
         if (soundID == null || soundID.isEmpty()) {
             log.warn("soundID is null or empty");
             throw new IllegalArgumentException("soundID cannot be null or empty");
         }
-        for (ISound sound : sounds.values()) {
+        for (ISound sound : this.sounds.values()) {
             if (sound.getSoundID().equals(soundID)) {
                 log.debug("Sound with ID {} has been found.", soundID);
                 return sound;
@@ -97,9 +99,9 @@ public class SoundManager {
      * @param user User whose sounds should be returned
      * @return ArrayList of all sounds of the user
      */
-    public static ArrayList<ISound> getAllSoundsByUser(User user) {
+    public ArrayList<ISound> getAllSoundsByUser(User user) {
         ArrayList<ISound> soundList = new ArrayList<>();
-        for (ISound sound : sounds.values()) {
+        for (ISound sound : this.sounds.values()) {
             if (sound.getUploadedBy().equals(user)) {
                 soundList.add(sound);
                 log.debug("{} Sounds have been found for user {}.", soundList.size(), user.getUsername());
@@ -113,8 +115,8 @@ public class SoundManager {
      *
      * @return Map of all sounds (key = title, value = sound object)
      */
-    public static Map<String, ISound> getAllSounds() {
-        return sounds;
+    public Map<String, ISound> getAllSounds() {
+        return this.sounds;
     }
 
     /**
@@ -122,38 +124,85 @@ public class SoundManager {
      *
      * @param title Title of the sound
      * @param path  Path to the soundfile
-     * @return True if sound was added successfully, false if not
-     * TODO: Check if Exception handling is correct
+     * @throws IllegalArgumentException if title is null or empty, if path is null, if sound with the same title already exists, if path does not exist, if path is not a file, if path cannot be read
+     *                                                                   TODO: Check if Exception handling is correct
      */
-    public boolean addSound(String title, File path) {
-
+    public void addSound(User currentUser, String title, File path) throws IllegalArgumentException {
+        if (title == null || title.isEmpty()) {
+            log.warn("Title is null or empty");
+            throw new IllegalArgumentException("Title cannot be null or empty");
+        } else if (path == null) {
+            log.warn("Path is null");
+            throw new IllegalArgumentException("Path cannot be null");
+        } else if (sounds.containsKey(title)) {
+            log.warn("Sound {} already exists.", title);
+            throw new IllegalArgumentException("Sound " + title + " already exists.");
+        } else if (!path.exists()) {
+            log.error("Path {} does not exist.", path);
+            throw new IllegalArgumentException("Path " + path + " does not exist.");
+        } else if (!path.isFile()) {
+            log.error("Path {} is not a file.", path);
+            throw new IllegalArgumentException("Path " + path + " is not a file.");
+        } else if (!path.canRead()) {
+            log.error("Path {} cannot be read.", path);
+            throw new IllegalArgumentException("Path " + path + " cannot be read.");
+        }
         try {
-            sounds.put(title, SoundFactory.createSound(UUID.randomUUID().toString(), title, path, activeUser));
+            sounds.put(title, SoundFactory.getInstance().createSound(UUID.randomUUID().toString(), title, path, currentUser));
             log.debug("Sound {} has been added.", title);
         } catch (Exception e) {
             log.error("Sound could not be added", e);
-            return false;
+            throw new IllegalArgumentException("Sound " + title + " not be added", e);
         }
-        return sounds.containsKey(title);
+    }
+
+    /**
+     * Method to remove a sound by its title
+     *
+     * @param currentUser User who wants to remove the sound
+     * @param soundID     ID of the sound
+     * @throws IllegalArgumentException if soundID is null or empty, sound with the given ID does not exist or sound was not uploaded by the active user
+     */
+    public void removeSoundByID(User currentUser, String soundID) throws IllegalArgumentException {
+        if (soundID == null || soundID.isEmpty()) {
+            log.warn("SoundID is null or empty");
+            throw new IllegalArgumentException("SoundID cannot be null or empty");
+        } else if (currentUser == null) {
+            log.warn("User is null");
+            throw new IllegalArgumentException("User cannot be null");
+        } else if (!sounds.containsKey(soundID)) {
+            log.error("Sound {} is not in the SoundManager.", soundID);
+            throw new IllegalArgumentException("Sound " + soundID + " could not be found.");
+        } else if (!sounds.get(soundID).getUploadedBy().equals(currentUser)) {
+            log.error("Sound {} wasn't uploaded by the active user.", soundID);
+            throw new IllegalArgumentException("Sound " + soundID + " could not be deleted because it was not uploaded by the activeUser");
+        }
+        sounds.remove(soundID);
+        log.debug("Sound {} has been removed.", soundID);
     }
 
     /**
      * Method to remove a sound by its title from the SoundManager
      *
      * @param title Title of the sound
-     * @return True if sound was removed successfully, false if not
+     * @throws IllegalArgumentException if title is null or empty, if sound with the given title does not exist, if sound was not uploaded by the active user
      */
-    public boolean removeSoundByTitle(String title) {
-        if (!sounds.containsKey(title)) {
-            log.error("Playlist {} could not be found.", title);
-            return false;
-        } else if (!sounds.get(title).getUploadedBy().equals(activeUser)) {
-            log.error("Playlist {} could not be deleted because it was uploaded by {}, active user was {}.", title, sounds.get(title).getUploadedBy(), activeUser);
-            return false;
+    public void removeSoundByTitle(User currentUser, String title) throws IllegalArgumentException {
+        if (title == null || title.isEmpty()) {
+            log.warn("Title is null or empty");
+            throw new IllegalArgumentException("Title cannot be null or empty");
+        } else if (currentUser == null) {
+            log.warn("User is null");
+            throw new IllegalArgumentException("User cannot be null");
+        } else if (!sounds.containsKey(title)) {
+            log.error("Sound {} is not in the SoundManager.", title);
+            throw new IllegalArgumentException("Playlist " + title + " could not be found.");
+        } else if (!sounds.get(title).getUploadedBy().equals(currentUser)) {
+            log.error("Sound {} wasn't uploaded by the active user.", title);
+            throw new IllegalArgumentException("Playlist " + title + " could not be deleted because it was not uploaded by the activeUser");
         }
         sounds.remove(title);
-        log.info("Playlist {} has been deleted by {}.", title, sounds.get(title).getUploadedBy());
-        return true;
+        log.debug("Sound {} has been deleted by user {}.", title, currentUser.getUsername());
     }
 
     /**
@@ -163,17 +212,18 @@ public class SoundManager {
      * @see FileWriter
      * @see Gson
      * @see GsonBuilder
+     * @throws WriteDataException if the sounds could not be saved to the JSON file
      */
     //Todo: Check if the log states are correct -> Should be
     //Todo: Check if exception handling is correct
-    public static void soundsToJSON() throws WriteDataException {
+    public void soundsToJSON() throws WriteDataException {
         try {
-            FileWriter fileWriter = new FileWriter(SAVE_FILE);
-            gson.toJson(sounds, fileWriter);
-            log.debug("{} Sounds have been saved to JSON file {}.", sounds.size(), SAVE_FILE);
+            FileWriter fileWriter = new FileWriter(this.SAVE_FILE);
+            gson.toJson(this.sounds, fileWriter);
+            log.debug("{} Sounds have been saved to JSON file {}.", this.sounds.size(), this.SAVE_FILE);
             fileWriter.close();
         } catch (Exception e) {
-            log.fatal("Sounds have not been saved to JSON file {}.", SAVE_FILE);
+            log.fatal("Sounds have not been saved to JSON file {}.", this.SAVE_FILE);
             throw new WriteDataException("Error while saving users to JSON." + e.getMessage());
         }
     }
@@ -185,18 +235,19 @@ public class SoundManager {
      * @see FileReader
      * @see Gson
      * @see GsonBuilder
+     * @throws ReadDataException if the sounds could not be loaded from the JSON file
      */
     //Todo: Check if the log states are correct -> Should be
     //Todo: Check if exception handling is correct
-    public static void soundsFromJSON() throws ReadDataException {
+    public void soundsFromJSON() throws ReadDataException {
         try {
-            FileReader fileReader = new FileReader(SAVE_FILE);
-            sounds.putAll(gson.fromJson(fileReader, new TypeToken<Map<String, ISound>>() {
+            FileReader fileReader = new FileReader(this.SAVE_FILE);
+            this.sounds.putAll(gson.fromJson(fileReader, new TypeToken<Map<String, ISound>>() {
             }.getType()));
-            log.debug("{} Sounds have been loaded from JSON file {}.", sounds.size(), SAVE_FILE);
+            log.debug("{} Sounds have been loaded from JSON file {}.", this.sounds.size(), this.SAVE_FILE);
             fileReader.close();
         } catch (Exception e) {
-            log.fatal("Sounds have not been loaded from JSON file {}.", SAVE_FILE);
+            log.fatal("Sounds have not been loaded from JSON file {}.", this.SAVE_FILE);
             throw new ReadDataException("Error while loading Sounds from JSON." + e.getMessage());
         }
     }

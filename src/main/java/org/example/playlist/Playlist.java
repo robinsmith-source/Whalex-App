@@ -151,7 +151,14 @@ public class Playlist {
         log.info("Sound " + sound.getTitle() + " has been added to playlist " + this.name);
     }
 
-
+    public void addAllSounds(List<ISound> sounds) {
+        if (sounds == null) {
+            log.error("Sounds cannot be null");
+            return;
+        }
+        this.sounds.addAll(sounds);
+        log.info("{} Sounds have been added to playlist {}.",sounds.size(), this.name);
+    }
 
     /**
      * Method to remove a sound from the playlist

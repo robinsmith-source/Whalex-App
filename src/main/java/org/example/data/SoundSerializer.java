@@ -28,8 +28,8 @@ public class SoundSerializer implements JsonSerializer<ISound>, JsonDeserializer
         String soundID = jsonObject.get("soundID").getAsString();
         String title = jsonObject.get("title").getAsString();
         File path = new File(jsonObject.get("path").getAsString());
-        User uploadedBy = UserManager.getUserById(jsonObject.get("uploadedBy").getAsString());
-        return SoundFactory.createSound(soundID, title, path, uploadedBy);
+        User uploadedBy = UserManager.getInstance().getUserById(jsonObject.get("uploadedBy").getAsString());
+        return SoundFactory.getInstance().createSound(soundID, title, path, uploadedBy);
     }
 }
 

@@ -1,14 +1,26 @@
 {
-  "Walsound 2": {
-    "soundID": "3b251d92-79cc-45a2-ade5-76c3d501694b",
-    "title": "Walsound 2",
-    "path": "src/main/resources/data/sounds/89405023.wav",
-    "uploadedBy": "ab5ab88b-bd32-4db3-8bdd-b33e4687e9a1"
+  "Blauwal Ballade": {
+    "soundID": "6f08d86a-92ea-451e-b86e-6cc586941afd",
+    "title": "Blauwal Ballade",
+    "path": "src/main/resources/data/sounds/72021005.wav",
+    "uploadedBy": "95a2d1a3-8ad9-43c8-8e19-54f0f48700ed"
   },
-  "Walsound 1": {
-    "soundID": "ab3113ad-eb91-4f3d-892e-2417746e874e",
-    "title": "Walsound 1",
+  "Pottwal Pop": {
+    "soundID": "234c6f6e-7021-40ea-9362-acf9413633e1",
+    "title": "Pottwal Pop",
     "path": "src/main/resources/data/sounds/9750300N.wav",
-    "uploadedBy": "ab5ab88b-bd32-4db3-8bdd-b33e4687e9a1"
+    "uploadedBy": "39b2a268-47b0-4311-b564-3da949ba58fe"
+  },
+  "Rauzahldelfin Rap": {
+    "soundID": "be64cb03-b014-4c33-b13c-553fa9411756",
+    "title": "Rauzahldelfin Rap",
+    "path": "src/main/resources/data/sounds/78018003.wav",
+    "uploadedBy": "95a2d1a3-8ad9-43c8-8e19-54f0f48700ed"
+  },
+  "Glattschweinswal Gesang": {
+    "soundID": "d2781c21-4520-421f-90fa-5c0d7277aa6d",
+    "title": "Glattschweinswal Gesang",
+    "path": "src/main/resources/data/sounds/89405023.wav",
+    "uploadedBy": "39b2a268-47b0-4311-b564-3da949ba58fe"
   }
 }

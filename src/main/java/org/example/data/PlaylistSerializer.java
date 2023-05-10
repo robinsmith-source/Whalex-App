@@ -15,11 +15,6 @@ import java.util.Date;
 public class PlaylistSerializer implements JsonSerializer<Playlist>, JsonDeserializer<Playlist> {
     private static final Logger log = LogManager.getLogger(PlaylistSerializer.class);
 
-    private static final Gson gson = new GsonBuilder()
-            .registerTypeHierarchyAdapter(ISound.class, new SoundSerializer())
-            .setPrettyPrinting()
-            .create();
-
     @Override
     public JsonElement serialize(Playlist src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
@@ -43,7 +38,7 @@ public class PlaylistSerializer implements JsonSerializer<Playlist>, JsonDeseria
         JsonObject jsonObject = json.getAsJsonObject();
         String playlistID = jsonObject.get("playlistID").getAsString();
         String name = jsonObject.get("name").getAsString();
-        User createdBy = UserManager.getUserById(jsonObject.get("createdBy").getAsString());
+        User createdBy = UserManager.getInstance().getUserById(jsonObject.get("createdBy").getAsString());
         Date createdAt = new Date(jsonObject.get("createdAt").getAsLong());
 
         Playlist playlist = new Playlist(playlistID, name, createdBy, createdAt);
@@ -58,7 +53,7 @@ public class PlaylistSerializer implements JsonSerializer<Playlist>, JsonDeseria
             File path = new File(soundJsonObject.get("path").getAsString());
             User uploadedBy = UserManager.getUserById(soundJsonObject.get("uploadedBy").getAsString());
             */
-            playlist.addSound(SoundManager.getSoundByID(soundID));
+            playlist.addSound(SoundManager.getInstance().getSoundByID(soundID));
         }
         return playlist;
     }
