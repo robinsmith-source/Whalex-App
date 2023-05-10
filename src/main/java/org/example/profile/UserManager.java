@@ -40,17 +40,23 @@ public class UserManager {
     /**
      * Path to the file where all user data is stored
      */
-    private static final File SAVE_FILE = new File("src/main/resources/data/users.json");
+    private static final File SAVE_FILE = new File("src/main/resources/data/saves/users.json");
 
     /**
      * Path to the file where the default profile picture is stored
      */
-    private static final File defaultProfilePicture = new File("src/main/resources/images/default/profilePicture/whale01.jpg");
+    private static final File defaultProfilePicture = new File("src/main/resources/data/users/default/profilePicture/whale01.png");
 
     /**
      * Map of all users (key = username, value = user)
      */
     private static final Map<String, User> users = new HashMap<>();
+
+
+    /**
+     *
+     */
+    private static User currentUser = null;
 
     /**
      * Method to create a user by its username and password
@@ -112,6 +118,40 @@ public class UserManager {
     }
 
     /**
+     * Method to log in a user by its username and password
+     *
+     * @param username Username of the user
+     * @param password Password of the user
+     * @return true if the user has been logged in, false if the user does not exist or the password is incorrect
+     */
+    public static boolean login(String username, String password) {
+        if (!users.containsKey(username)) {
+            log.error("User {} does not exist.", username);
+            return false;
+        } else if (!users.get(username).getPassword().equals(password)) {
+            log.error("Password is incorrect.");
+            return false;
+        }
+        log.info("User {} has been logged in.", username);
+        currentUser = users.get(username);
+        return true;
+    }
+
+    /**
+     * Method to get the current user
+     * @return Current user
+     */
+    public static User getCurrentUser() {
+        if (currentUser == null) {
+            log.error("No user is logged in.");
+            throw new IllegalArgumentException("No user is logged in.");
+        } else {
+            log.info("Current user is {}.", currentUser.getUsername());
+            return currentUser;
+        }
+    }
+
+    /**
      * Method to get a user by its username
      *
      * @param username Username of the user
@@ -132,6 +172,7 @@ public class UserManager {
 
     /**
      * Method to get a user by its ID
+     *
      * @param userID ID of the user
      * @return User object with the given ID
      * @throws IllegalArgumentException if the userID is null, empty or could not be found
@@ -201,7 +242,7 @@ public class UserManager {
             fileReader.close();
         } catch (IOException e) {
             log.fatal("Users have not been loaded from JSON file {}.", SAVE_FILE);
-            throw new ReadDataException("Error while loading users from JSON." + e.getMessage());
+            throw new ReadDataException("Error while loading users from JSON file." + e.getMessage());
         }
     }
 }

@@ -37,7 +37,7 @@ public class PlaylistManager {
     /**
      * Path to the file where all playlist data is stored
      */
-    private static final File SAVE_FILE = new File("src/main/resources/data/playlists.json");
+    private static final File SAVE_FILE = new File("src/main/resources/data/saves/playlists.json");
 
     /**
      * Map of all playlists of the user (key = playlistName, value = playlist)
@@ -47,15 +47,15 @@ public class PlaylistManager {
     /**
      * User who currently uses the playlistManager
      */
-    private final User activeUser;
+    private final User currentUser;
 
     /**
      * Constructor for the PlaylistManager
      *
-     * @param activeUser User who currently uses the playlistManager
+     * @param currentUser User who currently uses the playlistManager
      */
-    public PlaylistManager(User activeUser) {
-        this.activeUser = activeUser;
+    public PlaylistManager(User currentUser) {
+        this.currentUser = currentUser;
     }
 
     /**
@@ -123,7 +123,7 @@ public class PlaylistManager {
      */
     //Todo: Exception handling
     public boolean createPlaylist(String playlistName) {
-        playlists.put(playlistName, new Playlist(UUID.randomUUID().toString(), playlistName, activeUser, new Date()));
+        playlists.put(playlistName, new Playlist(UUID.randomUUID().toString(), playlistName, currentUser, new Date()));
         return playlists.containsKey(playlistName);
     }
 
@@ -137,7 +137,7 @@ public class PlaylistManager {
         if (!playlists.containsValue(getPlaylistByID(playlistID))) {
             log.error("Playlist " + playlistID + " could not be found.");
             return false;
-        } else if (!getPlaylistByID(playlistID).getCreatedBy().equals(activeUser)) {
+        } else if (!getPlaylistByID(playlistID).getCreatedBy().equals(currentUser)) {
             log.error("Playlist " + playlistID + " could not be deleted because it was not created by the active user.");
             return false;
         }
@@ -156,7 +156,7 @@ public class PlaylistManager {
         if (!playlists.containsKey(playlistName)) {
             log.error("Playlist " + playlistName + " could not be found.");
             return false;
-        } else if (!getPlaylistByName(playlistName).getCreatedBy().equals(activeUser)) {
+        } else if (!getPlaylistByName(playlistName).getCreatedBy().equals(currentUser)) {
             log.error("Playlist " + playlistName + " could not be deleted because it was not created by the active user.");
             return false;
         }

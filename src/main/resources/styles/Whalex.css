@@ -8,12 +8,18 @@
     -fx-text-fill: #b3b3b3;
 }
 
+.scroll-pane{
+    -fx-background-color: #121212;
+}
+
 .button:hover {
     -fx-font-weight: bold;
     -fx-background-color: #2d2d2d;
     -fx-text-fill: #ffffff;
+    -fx-focus-traversable: false;
 }
 
 #player-section .button{
     -fx-background-radius: 40px;
+    -fx-background-size: 20px;
 }

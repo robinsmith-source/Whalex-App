@@ -43,12 +43,12 @@ public class SoundManager {
     /**
      * Path to the folder where all sound files are stored
      */
-    private static final File SOUNDS_PATH = new File("src/main/resources/sounds/");
+    private static final File SOUNDS_PATH = new File("src/main/resources/data/sounds/");
 
     /**
      * Path to the file where all sound data is stored
      */
-    private static final File SAVE_FILE = new File("src/main/resources/data/sounds.json");
+    private static final File SAVE_FILE = new File("src/main/resources/data/saves/sounds.json");
 
     /**
      * Map of all sounds (key = title, value = sound object)
@@ -126,6 +126,7 @@ public class SoundManager {
      * TODO: Check if Exception handling is correct
      */
     public boolean addSound(String title, File path) {
+
         try {
             sounds.put(title, SoundFactory.createSound(UUID.randomUUID().toString(), title, path, activeUser));
             log.debug("Sound {} has been added.", title);

@@ -1,0 +1,14 @@
+{
+  "Walsound 2": {
+    "soundID": "3b251d92-79cc-45a2-ade5-76c3d501694b",
+    "title": "Walsound 2",
+    "path": "src/main/resources/data/sounds/89405023.wav",
+    "uploadedBy": "ab5ab88b-bd32-4db3-8bdd-b33e4687e9a1"
+  },
+  "Walsound 1": {
+    "soundID": "ab3113ad-eb91-4f3d-892e-2417746e874e",
+    "title": "Walsound 1",
+    "path": "src/main/resources/data/sounds/9750300N.wav",
+    "uploadedBy": "ab5ab88b-bd32-4db3-8bdd-b33e4687e9a1"
+  }
+}
