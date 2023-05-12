@@ -231,7 +231,7 @@ public class PlaylistManager {
         try {
             FileWriter fileWriter = new FileWriter(this.SAVE_FILE);
             gson.toJson(this.playlists, fileWriter);
-            log.debug("{} Playlists have been saved to JSON file {}.", this.playlists.size(), this.SAVE_FILE);
+            log.info("{} Playlists have been saved to JSON file {}.", this.playlists.size(), this.SAVE_FILE);
             fileWriter.close();
         } catch (Exception e) {
             log.fatal("Playlists have not been saved to JSON file {}.", this.SAVE_FILE);
@@ -256,7 +256,7 @@ public class PlaylistManager {
             FileReader fileReader = new FileReader(this.SAVE_FILE);
             this.playlists.putAll(gson.fromJson(fileReader, new TypeToken<Map<String, Playlist>>() {
             }.getType()));
-            log.debug("{} Playlists have been loaded from JSON file {}.", this.playlists.size(), this.SAVE_FILE);
+            log.info("{} Playlists have been loaded from JSON file {}.", this.playlists.size(), this.SAVE_FILE);
             fileReader.close();
         } catch (Exception e) {
             log.fatal("Playlists have not been loaded from JSON file {}.", this.SAVE_FILE);

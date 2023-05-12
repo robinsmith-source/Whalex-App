@@ -81,13 +81,16 @@ public class UserManager {
      * @param password Password of the user
      * @throws IllegalArgumentException if the username is null or empty or the password is null or empty or the user already exists
      */
-    public void createUser(String username, String password) throws IllegalArgumentException {
+    public void createUser(String username, String password, String passwordConfirmation) throws IllegalArgumentException {
         if (username == null || username.isEmpty()) {
             log.error("Username is null or empty.");
             throw new IllegalArgumentException("Username cannot be null or empty.");
         } else if (password == null || password.isEmpty()) {
             log.error("Password is null or empty.");
             throw new IllegalArgumentException("Password cannot be null or empty.");
+        } else if (!password.equals(passwordConfirmation)) {
+            log.error("Password confirmation is incorrect.");
+            throw new IllegalArgumentException("Password confirmation is incorrect.");
         } else if (users.containsKey(username)) {
             log.error("User {} already exists.", username);
             throw new IllegalArgumentException("User already exists.");
@@ -104,7 +107,7 @@ public class UserManager {
      * @param password       Password of the user
      * @throws IllegalArgumentException if the profile picture is null, the username is null or empty or the password is null or empty or the user already exists
      */
-    public void createUser(File profilePicture, String username, String password) throws IllegalArgumentException {
+    public void createUser(File profilePicture, String username, String password, String passwordConfirmation) throws IllegalArgumentException {
         if (profilePicture == null) {
             log.error("Profile picture is null.");
             throw new IllegalArgumentException("Profile picture cannot be null.");
@@ -114,6 +117,9 @@ public class UserManager {
         } else if (password == null || password.isEmpty()) {
             log.error("Password is null or empty.");
             throw new IllegalArgumentException("Password cannot be null or empty.");
+        } else if (!password.equals(passwordConfirmation)) {
+            log.error("Password confirmation is incorrect.");
+            throw new IllegalArgumentException("Password confirmation is incorrect.");
         } else if (users.containsKey(username)) {
             log.error("User {} already exists with ID {}.", username, users.get(username).getUserID());
             throw new IllegalArgumentException("User already exists.");
@@ -253,7 +259,7 @@ public class UserManager {
         try {
             FileWriter fileWriter = new FileWriter(SAVE_FILE);
             gson.toJson(users, fileWriter);
-            log.debug("{} Users have been saved to JSON file {}.", users.size(), SAVE_FILE);
+            log.info("{} Users have been saved to JSON file {}.", users.size(), SAVE_FILE);
             fileWriter.close();
         } catch (Exception e) {
             log.fatal("Users have not been saved to JSON file {}.", SAVE_FILE);
@@ -277,7 +283,7 @@ public class UserManager {
             FileReader fileReader = new FileReader(SAVE_FILE);
             users.putAll(gson.fromJson(fileReader, new TypeToken<Map<String, User>>() {
             }.getType()));
-            log.debug("{} Users have been loaded from JSON file {}.", users.size(), SAVE_FILE);
+            log.info("{} Users have been loaded from JSON file {}.", users.size(), SAVE_FILE);
             fileReader.close();
         } catch (IOException e) {
             log.fatal("Users have not been loaded from JSON file {}.", SAVE_FILE);
