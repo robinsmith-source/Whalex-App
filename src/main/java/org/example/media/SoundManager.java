@@ -220,7 +220,7 @@ public class SoundManager {
         try {
             FileWriter fileWriter = new FileWriter(this.SAVE_FILE);
             gson.toJson(this.sounds, fileWriter);
-            log.debug("{} Sounds have been saved to JSON file {}.", this.sounds.size(), this.SAVE_FILE);
+            log.info("{} Sounds have been saved to JSON file {}.", this.sounds.size(), this.SAVE_FILE);
             fileWriter.close();
         } catch (Exception e) {
             log.fatal("Sounds have not been saved to JSON file {}.", this.SAVE_FILE);
@@ -244,7 +244,7 @@ public class SoundManager {
             FileReader fileReader = new FileReader(this.SAVE_FILE);
             this.sounds.putAll(gson.fromJson(fileReader, new TypeToken<Map<String, ISound>>() {
             }.getType()));
-            log.debug("{} Sounds have been loaded from JSON file {}.", this.sounds.size(), this.SAVE_FILE);
+            log.info("{} Sounds have been loaded from JSON file {}.", this.sounds.size(), this.SAVE_FILE);
             fileReader.close();
         } catch (Exception e) {
             log.fatal("Sounds have not been loaded from JSON file {}.", this.SAVE_FILE);
