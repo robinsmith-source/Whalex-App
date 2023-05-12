@@ -27,7 +27,7 @@ public class TestRootFile {
 
     public static void writeMarvin() throws WriteDataException {
         //User 1 - Marvin
-        um.createUser("Marvin", "hallo1234");
+        um.createUser("Marvin", "hallo1234", "hallo1234");
         User rootUser = um.getUserByName("Marvin");
 
         sm.addSound(rootUser, "Pottwal Pop", new File("src/main/resources/data/sounds/9750300N.wav"));
@@ -42,7 +42,7 @@ public class TestRootFile {
 
     public static void writeRobin() throws WriteDataException {
         //User 1 - Robin
-        um.createUser("Robin", "test4321");
+        um.createUser("Robin", "test4321", "test4321");
         User rootUser = um.getUserByName("Robin");
 
         sm.addSound(rootUser, "Blauwal Ballade", new File("src/main/resources/data/sounds/72021005.wav"));

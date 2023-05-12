@@ -3,13 +3,16 @@ package org.example.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.media.SoundManager;
+import org.example.media.interfaces.ISound;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class viewController implements Initializable {
@@ -17,17 +20,29 @@ public class viewController implements Initializable {
     private static final Logger log = LogManager.getLogger(viewController.class);
 
     @FXML
-    private ScrollPane pane1;
-
+    private HBox soundPane;
+    @FXML
+    private HBox playlistPane;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Node node;
-        try {
-            node = FXMLLoader.load(getClass().getResource("/fxml/sounds.fxml"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+
+        ArrayList<ISound> sounds = new ArrayList<>(SoundManager.getInstance().getAllSounds().values());
+        for (int i = 0; i < 50; i++) {
+
+            for (ISound sound : sounds) {
+                VBox soundBox;
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/sounds.fxml"));
+                    soundBox = loader.load();
+                    SoundController controller = loader.getController();
+                    controller.setData(sound);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                soundPane.getChildren().add(soundBox);
+            }
         }
-        pane1.setContent(node);
     }
 }
