@@ -13,7 +13,7 @@ public enum SceneManager {
 
     LOGIN("/fxml/login.fxml"),
     LOADING("/fxml/loading.fxml"),
-    MAIN("/fxml/whalex.fxml");
+    MAIN("/fxml/mainScene.fxml");
     private static final Logger log = LogManager.getLogger(SceneManager.class);
 
     private final String fxmlPath;
