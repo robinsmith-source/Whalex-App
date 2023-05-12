@@ -48,7 +48,7 @@
                               <MaterialIconView fill="WHITE" glyphName="SKIP_PREVIOUS" size="30" />
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false">
+                        <Button fx:id="playButton" mnemonicParsing="false">
                            <graphic>
                               <MaterialIconView fill="WHITE" glyphName="PLAY_CIRCLE_OUTLINE" size="30" />
                            </graphic>

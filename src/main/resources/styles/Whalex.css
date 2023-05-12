@@ -1,17 +1,17 @@
 .root {
-    -fx-background-color: #121212;
+    -fx-background-color: #210733;
 }
 
 .button {
-    -fx-background-color: #121212;
+    -fx-background-color: #210733;
     -fx-font-weight: bold;
-    -fx-text-fill: #b3b3b3;
+    -fx-text-fill: white;
 }
 
 .button:hover {
     -fx-font-weight: bold;
-    -fx-background-color: #2d2d2d;
-    -fx-text-fill: #ffffff;
+    -fx-background-color: #370B54;
+    -fx-text-fill: #217133;
     -fx-focus-traversable: false;
 }
 
@@ -19,3 +19,10 @@
     -fx-background-radius: 40px;
     -fx-background-size: 20px;
 }
+
+#playButton {
+    -fx-background-size: 20px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
