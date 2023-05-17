@@ -6,9 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.media.SoundManager;
 import org.example.media.interfaces.ISound;
-
-import java.util.Objects;
 
 public class SoundController {
 
@@ -27,6 +26,6 @@ public class SoundController {
         if (sound.getMedia().getMetadata().get("image") != null) {
             cover.setImage((Image) sound.getMedia().getMetadata().get("image"));
         }
-        cover.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fxml/assets/WhalexLogo.jpg"))));
+        cover.setImage(new Image(SoundManager.getInstance().getDEFAULT_COVER().toURI().toString()));
     }
 }

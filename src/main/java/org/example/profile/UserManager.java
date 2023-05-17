@@ -46,7 +46,7 @@ public class UserManager {
     /**
      * Path to the file where the default profile picture is stored
      */
-    private final File defaultProfilePicture = new File("src/main/resources/data/users/default/profilePicture/whale01.png");
+    private final File DEFAULT_PICTURE = new File("src/main/resources/data/defaultImages/users/defaultUserProfilePicture.jpg");
 
     /**
      * Map of all users (key = username, value = user)
@@ -97,7 +97,7 @@ public class UserManager {
             throw new IllegalArgumentException("User already exists.");
         } else if (profilePicture == null) {
             log.warn("Profile picture is null.");
-            users.put(username, new User(UUID.randomUUID().toString(), defaultProfilePicture, username, password));
+            users.put(username, new User(UUID.randomUUID().toString(), DEFAULT_PICTURE, username, password));
         } else {
             users.put(username, new User(UUID.randomUUID().toString(), profilePicture, username, password));
         }

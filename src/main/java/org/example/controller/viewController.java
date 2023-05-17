@@ -3,7 +3,6 @@ package org.example.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,15 +21,24 @@ public class viewController implements Initializable {
     private static final Logger log = LogManager.getLogger(viewController.class);
 
     @FXML
-    private HBox soundPane;
+    private VBox soundPane1;
     @FXML
-    private HBox playlistPane;
+    private VBox soundPane2;
+
+    @FXML
+    private VBox playlistPane1;
+    @FXML
+    private VBox playlistPane2;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         ArrayList<ISound> sounds = new ArrayList<>(SoundManager.getInstance().getAllSounds().values());
         ArrayList<Playlist> playlists = new ArrayList<>(PlaylistManager.getInstance().getAllPlaylists().values());
+        sounds.sort((o1, o2) -> o1.getTitle().compareToIgnoreCase(o2.getTitle()));
+        playlists.sort((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
+        int modCount = 0;
         for (int i = 0; i < 50; i++) {
 
             for (ISound sound : sounds) {
@@ -43,20 +51,30 @@ public class viewController implements Initializable {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                soundPane.getChildren().add(soundBox);
+                if (modCount % 2 == 0) {
+                    soundPane1.getChildren().add(soundBox);
+                } else {
+                    soundPane2.getChildren().add(soundBox);
+                }
+                modCount++;
             }
-        }
-        for (Playlist playlist : playlists) {
-            VBox playlistBox;
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/playlists.fxml"));
-                playlistBox = loader.load();
-                PlaylistController controller = loader.getController();
-                controller.setData(playlist);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            for (Playlist playlist : playlists) {
+                VBox playlistBox;
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/playlists.fxml"));
+                    playlistBox = loader.load();
+                    PlaylistController controller = loader.getController();
+                    controller.setData(playlist);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                if (modCount % 2 == 0) {
+                    playlistPane1.getChildren().add(playlistBox);
+                } else {
+                    playlistPane2.getChildren().add(playlistBox);
+                }
+                modCount++;
             }
-            playlistPane.getChildren().add(playlistBox);
         }
     }
 }

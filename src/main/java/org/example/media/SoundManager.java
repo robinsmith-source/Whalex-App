@@ -52,6 +52,11 @@ public class SoundManager {
     private final File SAVE_FILE = new File("src/main/resources/data/saves/sounds.json");
 
     /**
+     * Path to the file where the default sound cover is stored
+     */
+    private final File DEFAULT_COVER = new File("src/main/resources/data/defaultImages/sounds/defaultSoundCover.jpg");
+
+    /**
      * Map of all sounds (key = title, value = sound object)
      */
     private final Map<String, ISound> sounds = new HashMap<>();
@@ -117,6 +122,14 @@ public class SoundManager {
      */
     public Map<String, ISound> getAllSounds() {
         return this.sounds;
+    }
+
+    /**
+     * Method to get the default sound cover
+     * @return File of the default sound cover
+     */
+    public File getDEFAULT_COVER() {
+        return DEFAULT_COVER;
     }
 
     /**

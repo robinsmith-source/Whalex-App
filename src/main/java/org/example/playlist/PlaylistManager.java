@@ -46,7 +46,7 @@ public class PlaylistManager {
     /**
      * Default playlist cover
      */
-    private final File defaultPlaylistCover = new File("src/main/resources/data/playlists/default.playlistCover/whale03.jpg");
+    private final File DEFAULT_COVER = new File("src/main/resources/data/defaultImages/playlists/defaultPlaylistCover.jpg");
 
     /**
      * Map of all playlists of the user (key = playlistName, value = playlist)
@@ -146,7 +146,7 @@ public class PlaylistManager {
             throw new IllegalArgumentException("Playlist " + playlistName + " already exists.");
         } else if (playlistCover == null) {
             log.warn("PlaylistCover is null");
-            this.playlists.put(playlistName, new Playlist(UUID.randomUUID().toString(), defaultPlaylistCover, playlistName, currentUser, new Date()));
+            this.playlists.put(playlistName, new Playlist(UUID.randomUUID().toString(), DEFAULT_COVER, playlistName, currentUser, new Date()));
         } else {
             this.playlists.put(playlistName, new Playlist(UUID.randomUUID().toString(), playlistCover, playlistName, currentUser, new Date()));
         }

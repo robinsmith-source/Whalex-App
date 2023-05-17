@@ -4,12 +4,10 @@
 
 .button {
     -fx-background-color: #210733;
-    -fx-font-weight: bold;
     -fx-text-fill: white;
 }
 
 .button:hover {
-    -fx-font-weight: bold;
     -fx-background-color: #370B54;
     -fx-text-fill: #217133;
     -fx-focus-traversable: false;
