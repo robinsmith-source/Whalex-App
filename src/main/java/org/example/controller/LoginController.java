@@ -43,7 +43,6 @@ public class LoginController implements Initializable {
 
     private final FileChooser fileChooser = new FileChooser();
     private File profilePicture;
-    private boolean isFileChosen = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -86,25 +85,14 @@ public class LoginController implements Initializable {
 
     @FXML
     public void register() {
-        log.debug("Register button pressed with username {}. - ProfilePicture: {}", usernameField.getText(), isFileChosen);
-        if (!isFileChosen) {
-            try {
-                UserManager.getInstance().createUser(usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
-                SceneManager.LOADING.changeScene();
-            } catch (IllegalArgumentException e) {
-                errorMessageLabel.setText(e.getMessage());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                UserManager.getInstance().createUser(profilePicture, usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
-                SceneManager.LOADING.changeScene();
-            } catch (IllegalArgumentException e) {
-                errorMessageLabel.setText(e.getMessage());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        log.debug("Register button pressed with username {}. - ProfilePicture: {}", usernameField.getText(), profilePicture.getPath());
+        try {
+            UserManager.getInstance().createUser(profilePicture, usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
+            SceneManager.LOADING.changeScene();
+        } catch (IllegalArgumentException e) {
+            errorMessageLabel.setText(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -115,6 +103,5 @@ public class LoginController implements Initializable {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
         profilePicture = fileChooser.showOpenDialog(fileChooserWindow);
-        isFileChosen = profilePicture != null;
     }
 }

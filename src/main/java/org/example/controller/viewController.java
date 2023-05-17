@@ -9,6 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.media.SoundManager;
 import org.example.media.interfaces.ISound;
+import org.example.playlist.Playlist;
+import org.example.playlist.PlaylistManager;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +30,7 @@ public class viewController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         ArrayList<ISound> sounds = new ArrayList<>(SoundManager.getInstance().getAllSounds().values());
+        ArrayList<Playlist> playlists = new ArrayList<>(PlaylistManager.getInstance().getAllPlaylists().values());
         for (int i = 0; i < 50; i++) {
 
             for (ISound sound : sounds) {
@@ -40,9 +43,20 @@ public class viewController implements Initializable {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-
                 soundPane.getChildren().add(soundBox);
             }
+        }
+        for (Playlist playlist : playlists) {
+            VBox playlistBox;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/playlists.fxml"));
+                playlistBox = loader.load();
+                PlaylistController controller = loader.getController();
+                controller.setData(playlist);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            playlistPane.getChildren().add(playlistBox);
         }
     }
 }

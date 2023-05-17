@@ -12,4 +12,6 @@ module gui {
     exports org.example.controller;
     exports org.example.exceptions;
     exports org.example.media.interfaces;
+    exports org.example.playlist;
+    exports org.example.profile;
 }

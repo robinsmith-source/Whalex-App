@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.example.media.interfaces.ISound;
 import org.example.profile.User;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -20,6 +21,11 @@ public class Playlist {
      * ID of the playlist
      */
     private final String playlistID;
+
+    /**
+     * Cover of the playlist
+     */
+    private File playlistCover;
 
     /**
      * Name of the playlist
@@ -53,12 +59,14 @@ public class Playlist {
     /**
      * Constructor of the playlist
      * @param playlistID ID of the playlist
+     * @param playlistCover Cover of the playlist
      * @param name Name of the playlist
      * @param createdBy User who created the playlist
      * @param createdAt Date when the playlist was created
      */
-    public Playlist(String playlistID, String name, User createdBy, Date createdAt) {
+    public Playlist(String playlistID, File playlistCover, String name, User createdBy, Date createdAt) {
         this.playlistID = playlistID;
+        this.playlistCover = playlistCover;
         this.name = name;
         this.sounds = new HashSet<>();
         this.createdBy = createdBy;
@@ -86,6 +94,15 @@ public class Playlist {
      */
     public String getPlaylistID() {
         return this.playlistID;
+    }
+
+
+    /**
+     * Method to get the cover of the playlist
+     * @return Cover of the playlist
+     */
+    public File getPlaylistCover() {
+        return this.playlistCover;
     }
 
     /**

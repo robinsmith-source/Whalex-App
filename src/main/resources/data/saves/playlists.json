@@ -1,29 +1,31 @@
 {
   "Ocean Groove": {
-    "playlistID": "980ea201-8e39-49ea-9043-88c529bb6a16",
+    "playlistID": "a0a82292-ae1b-40f2-9ffc-ac7398435924",
+    "playlistCover": "src\\main\\resources\\data\\playlists\\default.playlistCover\\whale03.jpg",
     "name": "Ocean Groove",
-    "createdBy": "39b2a268-47b0-4311-b564-3da949ba58fe",
-    "createdAt": 1683746027487,
+    "createdBy": "9727781e-bb22-460b-b4fb-d71cbcd9366f",
+    "createdAt": 1684323690680,
     "sounds": [
       {
-        "soundID": "234c6f6e-7021-40ea-9362-acf9413633e1"
+        "soundID": "c640e366-53e3-410b-9328-f09f73246794"
       },
       {
-        "soundID": "d2781c21-4520-421f-90fa-5c0d7277aa6d"
+        "soundID": "658f327b-cc5e-4701-8a34-50070e5e31ec"
       }
     ]
   },
   "Deepsea Dive": {
-    "playlistID": "4cb5603f-3364-4043-a1a3-ae311d4e84c1",
+    "playlistID": "104d4165-8cb4-470b-b401-be78fbdad0ae",
+    "playlistCover": "src\\main\\resources\\data\\playlists\\default.playlistCover\\whale03.jpg",
     "name": "Deepsea Dive",
-    "createdBy": "95a2d1a3-8ad9-43c8-8e19-54f0f48700ed",
-    "createdAt": 1683746027466,
+    "createdBy": "aba56075-b5ba-499c-9fff-ae607aae666c",
+    "createdAt": 1684323690708,
     "sounds": [
       {
-        "soundID": "6f08d86a-92ea-451e-b86e-6cc586941afd"
+        "soundID": "a28fa4b3-a160-4bcd-b5e9-beb7dbe72b31"
       },
       {
-        "soundID": "be64cb03-b014-4c33-b13c-553fa9411756"
+        "soundID": "b3aeb9e3-e32f-442d-b832-84f328816fa4"
       }
     ]
   }

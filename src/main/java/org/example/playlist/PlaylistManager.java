@@ -44,6 +44,11 @@ public class PlaylistManager {
     private final File SAVE_FILE = new File("src/main/resources/data/saves/playlists.json");
 
     /**
+     * Default playlist cover
+     */
+    private final File defaultPlaylistCover = new File("src/main/resources/data/playlists/default.playlistCover/whale03.jpg");
+
+    /**
      * Map of all playlists of the user (key = playlistName, value = playlist)
      */
     private final Map<String, Playlist> playlists = new HashMap<>();
@@ -129,7 +134,7 @@ public class PlaylistManager {
      * @throws IllegalArgumentException if the playlistName is null or empty or if a playlist with the given name already exists
      */
     //Todo: Exception handling
-    public void createPlaylist(User currentUser, String playlistName) throws IllegalArgumentException {
+    public void createPlaylist(User currentUser, File playlistCover, String playlistName) throws IllegalArgumentException {
         if (playlistName == null || playlistName.isEmpty()) {
             log.warn("PlaylistName is null or empty");
             throw new IllegalArgumentException("PlaylistName cannot be null or empty");
@@ -139,8 +144,12 @@ public class PlaylistManager {
         } else if (this.playlists.containsKey(playlistName)) {
             log.error("Playlist {} already exists.", playlistName);
             throw new IllegalArgumentException("Playlist " + playlistName + " already exists.");
+        } else if (playlistCover == null) {
+            log.warn("PlaylistCover is null");
+            this.playlists.put(playlistName, new Playlist(UUID.randomUUID().toString(), defaultPlaylistCover, playlistName, currentUser, new Date()));
+        } else {
+            this.playlists.put(playlistName, new Playlist(UUID.randomUUID().toString(), playlistCover, playlistName, currentUser, new Date()));
         }
-        this.playlists.put(playlistName, new Playlist(UUID.randomUUID().toString(), playlistName, currentUser, new Date()));
         log.debug("Playlist {} has been created.", playlistName);
     }
 

@@ -75,31 +75,6 @@ public class UserManager {
     }
 
     /**
-     * Method to create a user by its username and password
-     *
-     * @param username Username of the user
-     * @param password Password of the user
-     * @throws IllegalArgumentException if the username is null or empty or the password is null or empty or the user already exists
-     */
-    public void createUser(String username, String password, String passwordConfirmation) throws IllegalArgumentException {
-        if (username == null || username.isEmpty()) {
-            log.error("Username is null or empty.");
-            throw new IllegalArgumentException("Username cannot be null or empty.");
-        } else if (password == null || password.isEmpty()) {
-            log.error("Password is null or empty.");
-            throw new IllegalArgumentException("Password cannot be null or empty.");
-        } else if (!password.equals(passwordConfirmation)) {
-            log.error("Password confirmation is incorrect.");
-            throw new IllegalArgumentException("Password confirmation is incorrect.");
-        } else if (users.containsKey(username)) {
-            log.error("User {} already exists.", username);
-            throw new IllegalArgumentException("User already exists.");
-        }
-        users.put(username, new User(UUID.randomUUID().toString(), defaultProfilePicture, username, password));
-        log.info("User {} has been created.", username);
-    }
-
-    /**
      * Method to create a user by its profilePicture, username and password
      *
      * @param profilePicture Profile picture of the user
@@ -108,10 +83,7 @@ public class UserManager {
      * @throws IllegalArgumentException if the profile picture is null, the username is null or empty or the password is null or empty or the user already exists
      */
     public void createUser(File profilePicture, String username, String password, String passwordConfirmation) throws IllegalArgumentException {
-        if (profilePicture == null) {
-            log.error("Profile picture is null.");
-            throw new IllegalArgumentException("Profile picture cannot be null.");
-        } else if (username == null || username.isEmpty()) {
+        if (username == null || username.isEmpty()) {
             log.error("Username is null or empty.");
             throw new IllegalArgumentException("Username cannot be null or empty.");
         } else if (password == null || password.isEmpty()) {
@@ -123,8 +95,12 @@ public class UserManager {
         } else if (users.containsKey(username)) {
             log.error("User {} already exists with ID {}.", username, users.get(username).getUserID());
             throw new IllegalArgumentException("User already exists.");
+        } else if (profilePicture == null) {
+            log.warn("Profile picture is null.");
+            users.put(username, new User(UUID.randomUUID().toString(), defaultProfilePicture, username, password));
+        } else {
+            users.put(username, new User(UUID.randomUUID().toString(), profilePicture, username, password));
         }
-        users.put(username, new User(UUID.randomUUID().toString(), profilePicture, username, password));
         log.info("User {} has been created.", username);
     }
 

@@ -20,19 +20,23 @@ public class TestRootFile {
     private static final SoundManager sm = SoundManager.getInstance();
 
     public static void main(String[] args) throws ReadDataException, WriteDataException, IOException {
-        loadAll();
+        /*loadAll();
         readUser("Robin");
         readUser("Marvin");
+
+         */
+        writeMarvin();
+        writeRobin();
     }
 
     public static void writeMarvin() throws WriteDataException {
         //User 1 - Marvin
-        um.createUser("Marvin", "hallo1234", "hallo1234");
+        um.createUser(null, "Marvin", "hallo1234", "hallo1234");
         User rootUser = um.getUserByName("Marvin");
 
         sm.addSound(rootUser, "Pottwal Pop", new File("src/main/resources/data/sounds/9750300N.wav"));
         sm.addSound(rootUser, "Glattschweinswal Gesang", new File("src/main/resources/data/sounds/89405023.wav"));
-        pm.createPlaylist(rootUser, "Ocean Groove");
+        pm.createPlaylist(rootUser, null,"Ocean Groove");
         pm.getPlaylistByName("Ocean Groove").addAllSounds(sm.getAllSoundsByUser(rootUser));
 
         um.userToJSON();
@@ -42,12 +46,12 @@ public class TestRootFile {
 
     public static void writeRobin() throws WriteDataException {
         //User 1 - Robin
-        um.createUser("Robin", "test4321", "test4321");
+        um.createUser(null, "Robin", "test4321", "test4321");
         User rootUser = um.getUserByName("Robin");
 
         sm.addSound(rootUser, "Blauwal Ballade", new File("src/main/resources/data/sounds/72021005.wav"));
         sm.addSound(rootUser, "Rauzahldelfin Rap", new File("src/main/resources/data/sounds/78018003.wav"));
-        pm.createPlaylist(rootUser, "Deepsea Dive");
+        pm.createPlaylist(rootUser, null, "Deepsea Dive");
         pm.getPlaylistByName("Deepsea Dive").addAllSounds(sm.getAllSoundsByUser(rootUser));
 
         um.userToJSON();

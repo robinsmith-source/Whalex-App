@@ -9,6 +9,7 @@ import org.example.playlist.Playlist;
 import org.example.profile.User;
 import org.example.profile.UserManager;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.Date;
 
@@ -19,6 +20,7 @@ public class PlaylistSerializer implements JsonSerializer<Playlist>, JsonDeseria
     public JsonElement serialize(Playlist src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("playlistID", src.getPlaylistID());
+        jsonObject.addProperty("playlistCover", src.getPlaylistCover().getPath());
         jsonObject.addProperty("name", src.getName());
         jsonObject.addProperty("createdBy", src.getCreatedBy().getUserID());
         jsonObject.addProperty("createdAt", src.getCreatedAt().getTime());
@@ -37,11 +39,12 @@ public class PlaylistSerializer implements JsonSerializer<Playlist>, JsonDeseria
     public Playlist deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
         String playlistID = jsonObject.get("playlistID").getAsString();
+        File playlistCover = new File(jsonObject.get("playlistCover").getAsString());
         String name = jsonObject.get("name").getAsString();
         User createdBy = UserManager.getInstance().getUserById(jsonObject.get("createdBy").getAsString());
         Date createdAt = new Date(jsonObject.get("createdAt").getAsLong());
 
-        Playlist playlist = new Playlist(playlistID, name, createdBy, createdAt);
+        Playlist playlist = new Playlist(playlistID, playlistCover, name, createdBy, createdAt);
 
         JsonArray soundsArray = jsonObject.getAsJsonArray("sounds");
 
