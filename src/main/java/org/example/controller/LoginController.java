@@ -85,7 +85,7 @@ public class LoginController implements Initializable {
 
     @FXML
     public void register() {
-        log.debug("Register button pressed with username {}. - ProfilePicture: {}", usernameField.getText(), profilePicture.getPath());
+        log.info("Register button pressed with username {}. - ProfilePicture: {}", usernameField.getText(), profilePicture);
         try {
             UserManager.getInstance().createUser(profilePicture, usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
             SceneManager.LOADING.changeScene();
