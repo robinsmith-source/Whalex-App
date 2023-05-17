@@ -1,13 +1,13 @@
 {
   "Marvin": {
-    "userID": "9727781e-bb22-460b-b4fb-d71cbcd9366f",
-    "profilePicture": "src\\main\\resources\\data\\users\\default\\profilePicture\\whale01.png",
+    "userID": "b0bc783b-7cb2-4e22-916f-edc054bee634",
+    "profilePicture": "src\\main\\resources\\data\\defaultImages\\users\\defaultUserProfilePicture.jpg",
     "username": "Marvin",
     "password": "hallo1234"
   },
   "Robin": {
-    "userID": "aba56075-b5ba-499c-9fff-ae607aae666c",
-    "profilePicture": "src\\main\\resources\\data\\users\\default\\profilePicture\\whale01.png",
+    "userID": "4e12e553-1f16-43a6-bb23-bfe70e7bc4e1",
+    "profilePicture": "src\\main\\resources\\data\\defaultImages\\users\\defaultUserProfilePicture.jpg",
     "username": "Robin",
     "password": "test4321"
   }
