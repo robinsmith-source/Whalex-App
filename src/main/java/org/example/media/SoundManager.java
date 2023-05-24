@@ -118,10 +118,10 @@ public class SoundManager {
     /**
      * Method to get all sounds
      *
-     * @return Map of all sounds (key = title, value = sound object)
+     * @return Arraylist of all sounds
      */
-    public Map<String, ISound> getAllSounds() {
-        return this.sounds;
+    public ArrayList<ISound> getAllSounds() {
+        return new ArrayList<>(this.sounds.values());
     }
 
     /**

@@ -120,10 +120,10 @@ public class PlaylistManager {
     /**
      * Method to get all playlists
      *
-     * @return Map of all playlists (key = playlistName, value = playlist)
+     * @return Arraylist of all playlists
      */
-    public Map<String, Playlist> getAllPlaylists() {
-        return this.playlists;
+    public ArrayList<Playlist> getAllPlaylists() {
+        return new ArrayList<>(this.playlists.values());
     }
 
     /**

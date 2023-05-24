@@ -28,12 +28,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class viewController implements Initializable {
+public class ViewController implements Initializable {
 
-    private static final Logger log = LogManager.getLogger(viewController.class);
+    private static final Logger log = LogManager.getLogger(ViewController.class);
 
     @FXML
-    private TableView soundTable;
+    private TableView<ISound> soundTable;
 
     @FXML
     private TableColumn<ISound, ImageView> soundCover;
@@ -45,7 +45,7 @@ public class viewController implements Initializable {
 
 
     @FXML
-    private TableView playlistTable;
+    private TableView<Playlist> playlistTable;
 
     @FXML
     private TableColumn<Playlist, ImageView> playlistCover;
@@ -55,15 +55,11 @@ public class viewController implements Initializable {
     @FXML
     private TableColumn<Playlist, User> playlistCreatedBy;
 
+    private final ObservableList<Playlist> playlistObjectList = FXCollections.observableArrayList();
+    private final ObservableList<ISound> soundObjectList = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        ArrayList<ISound> sounds = new ArrayList<>(SoundManager.getInstance().getAllSounds().values());
-        ArrayList<Playlist> playlists = new ArrayList<>(PlaylistManager.getInstance().getAllPlaylists().values());
-        sounds.sort((o1, o2) -> o1.getTitle().compareToIgnoreCase(o2.getTitle()));
-        playlists.sort((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
-
-
         // soundCover.setCellValueFactory(new PropertyValueFactory<>("Media"));
 
         soundCover.setCellValueFactory(cellData -> {
@@ -89,7 +85,7 @@ public class viewController implements Initializable {
             HBox hBox = new HBox();
             hBox.setSpacing(10);
             hBox.setAlignment(javafx.geometry.Pos.CENTER);
-            hBox.getChildren().addAll(label,imageView);
+            hBox.getChildren().addAll(label, imageView);
             return new ReadOnlyObjectWrapper<>(hBox);
         });
 
@@ -116,60 +112,56 @@ public class viewController implements Initializable {
 
         soundTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        initializeSoundContent();
-        initializePlaylistContent();
+        initializeSoundContent(SoundManager.getInstance().getAllSounds());
+        initializePlaylistContent(PlaylistManager.getInstance().getAllPlaylists());
     }
 
-    private void initializeSoundContent() {
-        ObservableList<ISound> objectList = FXCollections.observableArrayList();
-        ArrayList<ISound> soundsList = new ArrayList<>(SoundManager.getInstance().getAllSounds().values());
-        soundsList.sort((o1, o2) -> o1.getTitle().compareToIgnoreCase(o2.getTitle()));
-        objectList.addAll(soundsList);
-        soundTable.setItems(objectList);
+    void initializeSoundContent(ArrayList<ISound> sounds) {
+        soundObjectList.clear();
+        sounds.sort((o1, o2) -> o1.getTitle().compareToIgnoreCase(o2.getTitle()));
+        soundObjectList.addAll(sounds);
+        soundTable.setItems(soundObjectList);
         soundTable.refresh();
     }
 
-    private void initializePlaylistContent() {
-        ObservableList<Playlist> objectList = FXCollections.observableArrayList();
-        ArrayList<Playlist> playlistList = new ArrayList<>(PlaylistManager.getInstance().getAllPlaylists().values());
-        playlistList.sort((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
-        objectList.addAll(playlistList);
-        playlistTable.setItems(objectList);
+    void initializePlaylistContent(ArrayList<Playlist> playlists) {
+        playlistObjectList.clear();
+        playlists.sort((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
+        playlistObjectList.addAll(playlists);
+        playlistTable.setItems(playlistObjectList);
         playlistTable.refresh();
     }
 
     @FXML
     public void selectRow(MouseEvent event) {
         if (event.getClickCount() == 2) {
-            ISound sound = (ISound) soundTable.getSelectionModel().getSelectedItem();
+            ISound sound = soundTable.getSelectionModel().getSelectedItem();
             System.out.println(sound.getTitle());
         }
     }
 
     @FXML
     public void deleteSound() {
-        ObservableList<ISound> selectedSounds = soundTable.getSelectionModel().getSelectedItems();
-        for (ISound sound : selectedSounds) {
-            try {
-
-                SoundManager.getInstance().removeSoundByID(UserManager.getInstance().getCurrentUser(), sound.getSoundID());
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
+        ISound sound = soundTable.getSelectionModel().getSelectedItem();
+        SoundManager.getInstance().removeSoundByID(UserManager.getInstance().getCurrentUser(), sound.getSoundID());
+        for (Playlist playlist : PlaylistManager.getInstance().getAllPlaylists()) {
+            playlist.removeSound(sound);
         }
-        initializeSoundContent();
+        soundObjectList.remove(sound);
+        soundTable.refresh();
     }
 
     @FXML
     public void deletePlaylist() {
-        Playlist playlist = (Playlist) playlistTable.getSelectionModel().getSelectedItem();
+        Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
         PlaylistManager.getInstance().deletePlaylistByID(UserManager.getInstance().getCurrentUser(), playlist.getPlaylistID());
-        initializePlaylistContent();
+        playlistObjectList.remove(playlist);
+        playlistTable.refresh();
     }
 
     public void addToPlaylist(ActionEvent actionEvent) {
-        ISound sound = (ISound) soundTable.getSelectionModel().getSelectedItem();
-        Playlist playlist = (Playlist) playlistTable.getSelectionModel().getSelectedItem();
+        ISound sound = soundTable.getSelectionModel().getSelectedItem();
+        Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
         playlist.addSound(sound);
     }
 }

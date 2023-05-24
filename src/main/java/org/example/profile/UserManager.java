@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -214,10 +215,10 @@ public class UserManager {
     /**
      * Method to get all users
      *
-     * @return Map of all users objects (key = username, value = user object)
+     * @return Arraylist of all users objects
      */
-    public Map<String, User> getAllUsers() {
-        return users;
+    public ArrayList<User> getAllUsers() {
+        return new ArrayList<>(users.values());
     }
 
     /**

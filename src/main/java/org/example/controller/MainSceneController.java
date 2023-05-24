@@ -9,6 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.media.SoundManager;
+import org.example.playlist.PlaylistManager;
 import org.example.profile.UserManager;
 
 import java.io.IOException;
@@ -20,13 +22,15 @@ public class MainSceneController implements Initializable {
     private static final Logger log = LogManager.getLogger(MainSceneController.class);
 
     @FXML
-    BorderPane border;
+    private BorderPane border;
 
     @FXML
-    Label username;
+    private Label username;
 
     @FXML
-    ImageView userProfilePicture;
+    private ImageView userProfilePicture;
+
+    private ViewController viewController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -34,10 +38,29 @@ public class MainSceneController implements Initializable {
         Image image = new Image(UserManager.getInstance().getCurrentUser().getProfilePicture().toURI().toString());
         userProfilePicture.setImage(image);
         try {
-            border.setCenter(FXMLLoader.load(getClass().getResource("/fxml/view.fxml")));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/view.fxml"));
+            loader.load();
+            this.viewController = loader.getController();
+            this.border.setCenter(loader.getRoot());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        log.debug("MainSceneController initialized");
+    }
 
+    /**
+     * Method to show all content by the current user
+     */
+    public void showAllContentByUser() {
+        viewController.initializeSoundContent(SoundManager.getInstance().getAllSoundsByUser(UserManager.getInstance().getCurrentUser()));
+        viewController.initializePlaylistContent(PlaylistManager.getInstance().getPlaylistsByUser(UserManager.getInstance().getCurrentUser()));
+    }
+
+    /**
+     * Method to show all content
+     */
+    public void showAllContent() {
+        viewController.initializeSoundContent(SoundManager.getInstance().getAllSounds());
+        viewController.initializePlaylistContent(PlaylistManager.getInstance().getAllPlaylists());
     }
 }
