@@ -31,7 +31,7 @@ public class TestRootFile {
 
     public static void writeMarvin() throws WriteDataException {
         //User 1 - Marvin
-        um.createUser(null, "Marvin", "hallo1234", "hallo1234");
+        um.createUser(null, "Marvin", "123", "123");
         User rootUser = um.getUserByName("Marvin");
 
         sm.addSound(rootUser, "Pottwal Pop", new File("src/main/resources/data/sounds/9750300N.wav"));
