@@ -183,15 +183,15 @@ public class SoundManager {
         } else if (currentUser == null) {
             log.warn("User is null");
             throw new IllegalArgumentException("User cannot be null");
-        } else if (!sounds.containsKey(soundID)) {
+        } else if (!this.sounds.containsValue(getSoundByID(soundID))) {
             log.error("Sound {} is not in the SoundManager.", soundID);
             throw new IllegalArgumentException("Sound " + soundID + " could not be found.");
-        } else if (!sounds.get(soundID).getUploadedBy().equals(currentUser)) {
+        } else if (!getSoundByID(soundID).getUploadedBy().equals(currentUser)) {
             log.error("Sound {} wasn't uploaded by the active user.", soundID);
             throw new IllegalArgumentException("Sound " + soundID + " could not be deleted because it was not uploaded by the activeUser");
         }
-        sounds.remove(soundID);
-        log.debug("Sound {} has been removed.", soundID);
+        sounds.remove(getSoundByID(soundID).getTitle());
+        log.info("Sound {} has been removed.", soundID);
     }
 
     /**
@@ -215,7 +215,7 @@ public class SoundManager {
             throw new IllegalArgumentException("Playlist " + title + " could not be deleted because it was not uploaded by the activeUser");
         }
         sounds.remove(title);
-        log.debug("Sound {} has been deleted by user {}.", title, currentUser.getUsername());
+        log.info("Sound {} has been deleted by user {}.", title, currentUser.getUsername());
     }
 
     /**

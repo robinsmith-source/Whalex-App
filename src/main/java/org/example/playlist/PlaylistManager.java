@@ -200,7 +200,7 @@ public class PlaylistManager {
             throw new IllegalArgumentException("Playlist " + playlistName + " could not be deleted because it was not created by the active user.");
         }
         this.playlists.remove(playlistName);
-        log.debug("Playlist {} has been deleted by user {}.", playlistName, currentUser.getUsername());
+        log.info("Playlist {} has been deleted by user {}.", playlistName, currentUser.getUsername());
     }
 
     /**
@@ -221,7 +221,7 @@ public class PlaylistManager {
                 playlistCounter++;
             }
         }
-        log.debug("{} Playlists of user {} have been deleted.", playlistCounter, currentUser.getUsername());
+        log.info("{} Playlists of user {} have been deleted.", playlistCounter, currentUser.getUsername());
     }
 
     /**

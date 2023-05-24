@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 <?import java.net.URL?>
-<AnchorPane prefHeight="600.0" prefWidth="1920.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.viewController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.viewController">
    <children>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox>
+            <HBox fx:id="outerBox">
                <children>
-                  <VBox maxWidth="800.0" prefWidth="300.0" HBox.hgrow="ALWAYS">
+                  <VBox prefWidth="300.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label text="Sounds" textFill="WHITE">
                            <font>
@@ -22,20 +28,27 @@
                               <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <ScrollPane hbarPolicy="NEVER" prefWidth="760.0">
-                           <content>
-                              <HBox prefHeight="400.0" prefWidth="760.0">
-                                 <children>
-                                    <VBox fx:id="soundPane1" HBox.hgrow="ALWAYS" />
-                                    <VBox fx:id="soundPane2" HBox.hgrow="ALWAYS" />
-                                 </children></HBox>
-                           </content>
+                        <TableView onMouseClicked="#selectRow" fx:id="soundTable">
+                           <columns>
+                              <TableColumn fx:id="soundCover" prefWidth="75.0" resizable="false" />
+                              <TableColumn fx:id="soundTitle" prefWidth="75.0" resizable="false" text="Title" />
+                              <TableColumn fx:id="soundUploadedBy" prefWidth="50.0" resizable="false" text="Uploaded By" />
+                           </columns>
                            <VBox.margin>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                           </VBox.margin></ScrollPane>
+                           </VBox.margin>
+                           <contextMenu>
+                              <ContextMenu>
+                                 <items>
+                                    <MenuItem onAction="#deleteSound" mnemonicParsing="false" text="Delete" />
+                                    <MenuItem onAction="#addToPlaylist" mnemonicParsing="false" text="Add to selected Playlist" />
+                                 </items>
+                              </ContextMenu>
+                           </contextMenu>
+                        </TableView>
                      </children>
                   </VBox>
-                  <VBox maxWidth="800.0" prefWidth="300.0" HBox.hgrow="ALWAYS">
+                  <VBox prefWidth="300.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label text="Playlists" textFill="WHITE">
                            <font>
@@ -45,19 +58,23 @@
                               <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <ScrollPane hbarPolicy="NEVER">
+                        <TableView fx:id="playlistTable">
+                           <columns>
+                              <TableColumn fx:id="playlistCover" prefWidth="75.0" resizable="false" />
+                              <TableColumn fx:id="playlistName" prefWidth="75.0" resizable="false" text="Name" />
+                              <TableColumn fx:id="playlistCreatedBy" prefWidth="50.0" resizable="false" text="CreatedBy" />
+                           </columns>
                            <VBox.margin>
-                              <Insets left="20.0" right="20.0" top="20.0" />
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </VBox.margin>
-                           <content>
-                              <HBox prefHeight="400.0" prefWidth="760.0">
-                                 <children>
-                                    <VBox fx:id="playlistPane1" HBox.hgrow="ALWAYS" />
-                                    <VBox fx:id="playlistPane2" HBox.hgrow="ALWAYS" />
-                                 </children>
-                              </HBox>
-                           </content>
-                        </ScrollPane>
+                           <contextMenu>
+                              <ContextMenu>
+                                <items>
+                                  <MenuItem mnemonicParsing="false" onAction="#deletePlaylist" text="Delete" />
+                                </items>
+                              </ContextMenu>
+                           </contextMenu>
+                        </TableView>
                      </children>
                   </VBox>
                </children>

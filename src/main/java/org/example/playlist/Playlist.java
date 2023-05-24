@@ -128,6 +128,14 @@ public class Playlist {
     }
 
     /**
+     * Method to get the list of sounds in the playlist
+     * @return List of sounds in the playlist
+     */
+    public ArrayList<ISound> getSoundsList() {
+        return new ArrayList<>(this.sounds);
+    }
+
+    /**
      * Method to get the number of sounds in the playlist
      * @return Number of sounds in the playlist
      */
