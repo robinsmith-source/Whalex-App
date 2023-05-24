@@ -14,76 +14,93 @@
 
 <AnchorPane style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.viewController">
    <children>
-      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox fx:id="outerBox" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
          <children>
-            <HBox fx:id="outerBox">
+            <VBox prefWidth="300.0" HBox.hgrow="ALWAYS">
                <children>
-                  <VBox prefWidth="300.0" HBox.hgrow="ALWAYS">
-                     <children>
-                        <Label text="Sounds" textFill="WHITE">
-                           <font>
-                              <Font size="22.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-                           </VBox.margin>
-                        </Label>
-                        <TableView onMouseClicked="#selectRow" fx:id="soundTable">
-                           <columns>
-                              <TableColumn fx:id="soundCover" prefWidth="75.0" resizable="false" />
-                              <TableColumn fx:id="soundTitle" prefWidth="75.0" resizable="false" text="Title" />
-                              <TableColumn fx:id="soundUploadedBy" prefWidth="50.0" resizable="false" text="Uploaded By" />
-                           </columns>
-                           <VBox.margin>
-                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                           </VBox.margin>
-                           <contextMenu>
-                              <ContextMenu>
-                                 <items>
-                                    <MenuItem onAction="#deleteSound" mnemonicParsing="false" text="Delete" />
-                                    <MenuItem onAction="#addToPlaylist" mnemonicParsing="false" text="Add to selected Playlist" />
-                                 </items>
-                              </ContextMenu>
-                           </contextMenu>
-                        </TableView>
-                     </children>
-                  </VBox>
-                  <VBox prefWidth="300.0" HBox.hgrow="ALWAYS">
-                     <children>
-                        <Label text="Playlists" textFill="WHITE">
-                           <font>
-                              <Font size="22.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-                           </VBox.margin>
-                        </Label>
-                        <TableView fx:id="playlistTable">
-                           <columns>
-                              <TableColumn fx:id="playlistCover" prefWidth="75.0" resizable="false" />
-                              <TableColumn fx:id="playlistName" prefWidth="75.0" resizable="false" text="Name" />
-                              <TableColumn fx:id="playlistCreatedBy" prefWidth="50.0" resizable="false" text="CreatedBy" />
-                           </columns>
-                           <VBox.margin>
-                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                           </VBox.margin>
-                           <contextMenu>
-                              <ContextMenu>
-                                <items>
-                                  <MenuItem mnemonicParsing="false" onAction="#deletePlaylist" text="Delete" />
-                                </items>
-                              </ContextMenu>
-                           </contextMenu>
-                        </TableView>
-                     </children>
-                  </VBox>
+                  <Label text="Sounds" textFill="WHITE">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TableView fx:id="soundTable" onMouseClicked="#selectRow">
+                     <columns>
+                        <TableColumn fx:id="soundCover" prefWidth="75.0" resizable="false" />
+                        <TableColumn fx:id="soundTitle" prefWidth="75.0" resizable="false" text="Title" />
+                        <TableColumn fx:id="soundUploadedBy" prefWidth="50.0" resizable="false" text="Uploaded By" />
+                     </columns>
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </VBox.margin>
+                     <contextMenu>
+                        <ContextMenu>
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#deleteSound" text="Delete" />
+                              <MenuItem mnemonicParsing="false" onAction="#addToPlaylist" text="Add to selected Playlist" />
+                           </items>
+                        </ContextMenu>
+                     </contextMenu>
+                  </TableView>
                </children>
-            </HBox>
+            </VBox>
+            <VBox prefWidth="300.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label text="Playlists" textFill="WHITE">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TableView fx:id="playlistTable">
+                     <columns>
+                        <TableColumn fx:id="playlistCover" prefWidth="75.0" resizable="false" />
+                        <TableColumn fx:id="playlistName" prefWidth="75.0" resizable="false" text="Name" />
+                        <TableColumn fx:id="playlistCreatedBy" prefWidth="50.0" resizable="false" text="CreatedBy" />
+                     </columns>
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </VBox.margin>
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#deletePlaylist" text="Delete" />
+                          </items>
+                        </ContextMenu>
+                     </contextMenu>
+                  </TableView>
+               </children>
+            </VBox>
+            <VBox prefWidth="300.0">
+               <children>
+                  <Label text="Queue" textFill="WHITE">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TableView fx:id="soundTable1" onMouseClicked="#selectRow">
+                     <columns>
+                        <TableColumn fx:id="soundCover1" prefWidth="75.0" resizable="false" />
+                        <TableColumn fx:id="soundTitle1" prefWidth="75.0" resizable="false" text="Title" />
+                     </columns>
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </VBox.margin>
+                     <contextMenu>
+                        <ContextMenu />
+                     </contextMenu>
+                  </TableView>
+               </children>
+            </VBox>
          </children>
-         <padding>
-            <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-         </padding>
-      </VBox>
+      </HBox>
    </children>
    <stylesheets>
       <URL value="@../styles/view.css" />
