@@ -1,3 +1,7 @@
+#anchor {
+    -fx-background-color: #210733;
+}
+
 #soundCover #playlistCover{
     -fx-padding: 20;
 }
@@ -12,11 +16,11 @@
 
 .table-row-cell:selected {
     -fx-border-color: white;
-    -fx-background-color: linear-gradient(#370B54 0%,#370B54 100%) opacity 0.5;
+    -fx-background-color: linear-gradient(#370B54 30%,#370B54 70%) opacity 0.5;
 }
 
 #outerBox {
-    -fx-background-color: purple;
+    -fx-background-color: #210733;
     -fx-background-radius: 40px ;
 }
 
@@ -31,4 +35,6 @@
 .table-view .scroll-bar:vertical .thumb {
     -fx-background-color: linear-gradient(#370B54 0%,#370B54 100%);
 }
+
+
 
