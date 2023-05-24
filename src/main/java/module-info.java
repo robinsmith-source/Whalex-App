@@ -8,6 +8,7 @@ module gui {
 
     opens org.example to javafx.fxml;
     opens org.example.controller to javafx.fxml;
+    opens org.example.media.extensions to javafx.base;
     exports org.example;
     exports org.example.controller;
     exports org.example.exceptions;
