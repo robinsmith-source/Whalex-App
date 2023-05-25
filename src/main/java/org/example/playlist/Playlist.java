@@ -112,23 +112,10 @@ public class Playlist {
     }
 
     /**
-     * Method to get the map of sounds in the playlist
-     * @return Map of sounds in the playlist (key = title, value = sound)
-     * @see ISound
+     * Method to get the Arraylist of sounds in the playlist
+     * @return Arraylist of sounds in the playlist
      */
-    public Map<String, ISound> getSounds() {
-        Map<String, ISound> soundMap = new HashMap<>();
-        for (ISound sound : this.sounds) {
-            soundMap.put(sound.getTitle(), sound);
-        }
-        return soundMap;
-    }
-
-    /**
-     * Method to get the list of sounds in the playlist
-     * @return List of sounds in the playlist
-     */
-    public ArrayList<ISound> getSoundsList() {
+    public ArrayList<ISound> getSounds() {
         return new ArrayList<>(this.sounds);
     }
 

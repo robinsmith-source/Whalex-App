@@ -25,7 +25,7 @@ public class PlaylistSerializer implements JsonSerializer<Playlist>, JsonDeseria
         jsonObject.addProperty("createdBy", src.getCreatedBy().getUserID());
         jsonObject.addProperty("createdAt", src.getCreatedAt().getTime());
         JsonArray soundsArray = new JsonArray();
-        for (ISound sound : src.getSounds().values()) {
+        for (ISound sound : src.getSounds()) {
             JsonObject soundJson = new JsonObject();
             soundJson.addProperty("soundID", sound.getSoundID());
             soundsArray.add(soundJson);
