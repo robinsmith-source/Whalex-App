@@ -13,6 +13,8 @@ import java.util.*;
  * @link ISound (1 to n relation : Each playlist can have many sounds)
  * @link User (1 to 1 relation : Each playlist is created by one user via their PlaylistManager)
  * TODO: Write tests for the Playlist
+ * TODO: Write JavaDoc for the Playlist
+ * TODO: Add Exception handling + logging
  */
 public class Playlist {
     private static final Logger log = LogManager.getLogger(Playlist.class);
@@ -25,7 +27,7 @@ public class Playlist {
     /**
      * Cover of the playlist
      */
-    private File playlistCover;
+    private final File playlistCover;
 
     /**
      * Name of the playlist
@@ -41,7 +43,7 @@ public class Playlist {
     /**
      * Number of songs in the playlist
      */
-    private int numberOfSongs;
+    private int numberOfSounds;
 
     /**
      * User who created the playlist
@@ -167,19 +169,31 @@ public class Playlist {
      * @param sound Sound to be added to the playlist
      * @see ISound
      */
-    public void addSound(ISound sound) {
+    public void addSound(User activeUser, ISound sound) {
         if (sound == null) {
             log.error("Sound cannot be null");
-            return;
+            throw new IllegalArgumentException("Sound cannot be null");
+        } else if (activeUser == null) {
+            log.error("Active user cannot be null");
+            throw new IllegalArgumentException("Active user cannot be null");
+        } else if (!activeUser.equals(this.createdBy)) {
+            log.error("Active user is not the creator of the playlist");
+            throw new IllegalArgumentException("Active user is not the creator of the playlist");
         }
         this.sounds.add(sound);
         log.info("Sound " + sound.getTitle() + " has been added to playlist " + this.name);
     }
 
-    public void addAllSounds(List<ISound> sounds) {
+    public void addAllSounds(User activeUser, List<ISound> sounds) {
         if (sounds == null) {
             log.error("Sounds cannot be null");
-            return;
+            throw new IllegalArgumentException("Sounds cannot be null");
+        } else if (activeUser == null) {
+            log.error("Active user cannot be null");
+            throw new IllegalArgumentException("Active user cannot be null");
+        } else if (!activeUser.equals(this.createdBy)) {
+            log.error("Active user is not the creator of the playlist");
+            throw new IllegalArgumentException("Active user is not the creator of the playlist");
         }
         this.sounds.addAll(sounds);
         log.info("{} Sounds have been added to playlist {}.",sounds.size(), this.name);

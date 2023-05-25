@@ -56,7 +56,7 @@ public class PlaylistSerializer implements JsonSerializer<Playlist>, JsonDeseria
             File path = new File(soundJsonObject.get("path").getAsString());
             User uploadedBy = UserManager.getUserById(soundJsonObject.get("uploadedBy").getAsString());
             */
-            playlist.addSound(SoundManager.getInstance().getSoundByID(soundID));
+            playlist.addSound(createdBy, SoundManager.getInstance().getSoundByID(soundID));
         }
         return playlist;
     }

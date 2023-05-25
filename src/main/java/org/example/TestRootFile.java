@@ -37,7 +37,7 @@ public class TestRootFile {
         sm.addSound(rootUser, "Pottwal Pop", new File("src/main/resources/data/sounds/9750300N.wav"));
         sm.addSound(rootUser, "Glattschweinswal Gesang", new File("src/main/resources/data/sounds/89405023.wav"));
         pm.createPlaylist(rootUser, null,"Ocean Groove");
-        pm.getPlaylistByName("Ocean Groove").addAllSounds(sm.getAllSoundsByUser(rootUser));
+        pm.getPlaylistByName("Ocean Groove").addAllSounds(rootUser, sm.getAllSoundsByUser(rootUser));
 
         um.userToJSON();
         sm.soundsToJSON();
@@ -52,7 +52,7 @@ public class TestRootFile {
         sm.addSound(rootUser, "Blauwal Ballade", new File("src/main/resources/data/sounds/72021005.wav"));
         sm.addSound(rootUser, "Rauzahldelfin Rap", new File("src/main/resources/data/sounds/78018003.wav"));
         pm.createPlaylist(rootUser, null, "Deepsea Dive");
-        pm.getPlaylistByName("Deepsea Dive").addAllSounds(sm.getAllSoundsByUser(rootUser));
+        pm.getPlaylistByName("Deepsea Dive").addAllSounds(rootUser, sm.getAllSoundsByUser(rootUser));
 
         um.userToJSON();
         sm.soundsToJSON();

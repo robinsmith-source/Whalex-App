@@ -103,6 +103,7 @@ public class UserManager {
             users.put(username, new User(UUID.randomUUID().toString(), profilePicture, username, password));
         }
         log.info("User {} has been created.", username);
+        currentUser = users.get(username);
     }
 
     /**

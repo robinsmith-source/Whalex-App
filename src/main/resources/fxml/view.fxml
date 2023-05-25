@@ -94,6 +94,7 @@
                      <columns>
                         <TableColumn fx:id="playlistCover" prefWidth="75.0" resizable="false" />
                         <TableColumn fx:id="playlistName" prefWidth="75.0" resizable="false" text="Name" />
+                        <TableColumn fx:id="numberOfSounds" prefWidth="75.0" resizable="false" text="numberOfSounds" />
                         <TableColumn fx:id="playlistCreatedBy" prefWidth="50.0" resizable="false" text="CreatedBy" />
                      </columns>
                      <VBox.margin>

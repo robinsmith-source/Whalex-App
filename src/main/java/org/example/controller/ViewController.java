@@ -53,6 +53,8 @@ public class ViewController implements Initializable {
     @FXML
     private TableColumn<Playlist, String> playlistName;
     @FXML
+    private TableColumn<Playlist, Integer> numberOfSounds;
+    @FXML
     private TableColumn<Playlist, User> playlistCreatedBy;
 
     private final ObservableList<Playlist> playlistObjectList = FXCollections.observableArrayList();
@@ -104,10 +106,12 @@ public class ViewController implements Initializable {
             return new ReadOnlyObjectWrapper<>(imageView);
         });
         playlistName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        numberOfSounds.setCellValueFactory(new PropertyValueFactory<>("numberOfSounds"));
         playlistCreatedBy.setCellValueFactory(new PropertyValueFactory<>("CreatedBy"));
 
         playlistCover.prefWidthProperty().bind(playlistTable.widthProperty().multiply(0.2));
-        playlistName.prefWidthProperty().bind(playlistTable.widthProperty().multiply(0.5));
+        numberOfSounds.prefWidthProperty().bind(playlistTable.widthProperty().multiply(0.2));
+        playlistName.prefWidthProperty().bind(playlistTable.widthProperty().multiply(0.3));
         playlistCreatedBy.prefWidthProperty().bind(playlistTable.widthProperty().multiply(0.3));
 
         soundTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -148,7 +152,7 @@ public class ViewController implements Initializable {
             playlist.removeSound(sound);
         }
         soundObjectList.remove(sound);
-        soundTable.refresh();
+        refreshData();
     }
 
     @FXML
@@ -156,13 +160,19 @@ public class ViewController implements Initializable {
         Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
         PlaylistManager.getInstance().deletePlaylistByID(UserManager.getInstance().getCurrentUser(), playlist.getPlaylistID());
         playlistObjectList.remove(playlist);
-        playlistTable.refresh();
+        refreshData();
     }
 
     public void addToPlaylist(ActionEvent actionEvent) {
         ISound sound = soundTable.getSelectionModel().getSelectedItem();
         Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
-        playlist.addSound(sound);
+        playlist.addSound(UserManager.getInstance().getCurrentUser(), sound);
+        refreshData();
+    }
+
+    private void refreshData() {
+        soundTable.refresh();
+        playlistTable.refresh();
     }
 }
 
