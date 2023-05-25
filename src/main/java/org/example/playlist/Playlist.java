@@ -10,8 +10,6 @@ import java.util.*;
 
 /**
  * Playlist class displays the playlist with its ID, name, list of songs, number of songs, user who created the playlist and date when the playlist was created.
- * @link ISound (1 to n relation : Each playlist can have many sounds)
- * @link User (1 to 1 relation : Each playlist is created by one user via their PlaylistManager)
  * TODO: Write tests for the Playlist
  * TODO: Write JavaDoc for the Playlist
  * TODO: Add Exception handling + logging
@@ -36,18 +34,21 @@ public class Playlist {
 
     /**
      * List of songs in the playlist
+     *
      * @see ISound
      */
-    private final Set<ISound> sounds;
+    private final Set<ISound> SOUNDS;
 
     /**
      * User who created the playlist
+     *
      * @see User
      */
     private final User createdBy;
 
     /**
      * Date when the playlist was created
+     *
      * @see Date
      */
     private final Date createdAt;
@@ -55,23 +56,25 @@ public class Playlist {
 
     /**
      * Constructor of the playlist
-     * @param playlistID ID of the playlist
+     *
+     * @param playlistID    ID of the playlist
      * @param playlistCover Cover of the playlist
-     * @param name Name of the playlist
-     * @param createdBy User who created the playlist
-     * @param createdAt Date when the playlist was created
+     * @param name          Name of the playlist
+     * @param createdBy     User who created the playlist
+     * @param createdAt     Date when the playlist was created
      */
     public Playlist(String playlistID, File playlistCover, String name, User createdBy, Date createdAt) {
         this.playlistID = playlistID;
         this.playlistCover = playlistCover;
         this.name = name;
-        this.sounds = new HashSet<>();
+        this.SOUNDS = new HashSet<>();
         this.createdBy = createdBy;
         this.createdAt = createdAt;
     }
 
     /**
      * Method to set the name of the playlist
+     *
      * @param name Name of the playlist
      * @return true if the name of the playlist was set successfully, false if not
      */
@@ -86,6 +89,7 @@ public class Playlist {
 
     /**
      * Method to get the ID of the playlist
+     *
      * @return ID of the playlist
      * TODO: Check if this method is necessary (Maybe it is better to use a second map to iterate through playlists via the ID)
      */
@@ -96,6 +100,7 @@ public class Playlist {
 
     /**
      * Method to get the cover of the playlist
+     *
      * @return Cover of the playlist
      */
     public File getPlaylistCover() {
@@ -104,8 +109,8 @@ public class Playlist {
 
     /**
      * Method to get the name of the playlist
+     *
      * @return Name of the playlist
-     * TODO: Check if this method is necessary (Maybe it is better to use the Map from the PlaylistManager to iterate through playlists via the name)
      */
     public String getName() {
         return this.name;
@@ -113,22 +118,25 @@ public class Playlist {
 
     /**
      * Method to get the Arraylist of sounds in the playlist
+     *
      * @return Arraylist of sounds in the playlist
      */
     public ArrayList<ISound> getSounds() {
-        return new ArrayList<>(this.sounds);
+        return new ArrayList<>(this.SOUNDS);
     }
 
     /**
      * Method to get the number of sounds in the playlist
+     *
      * @return Number of sounds in the playlist
      */
     public int getNumberOfSounds() {
-        return this.sounds.size();
+        return this.SOUNDS.size();
     }
 
     /**
      * Method to get the user who created the playlist
+     *
      * @return User who created the playlist
      * @see User
      */
@@ -138,9 +146,11 @@ public class Playlist {
 
     /**
      * Method to get the date when the playlist was created
+     *
      * @return Date when the playlist was created
      * @see Date
      */
+    //TODO: Check if this method is necessary)
     public Date getCreatedAt() {
         return this.createdAt;
     }
@@ -148,10 +158,11 @@ public class Playlist {
     /**
      * Method to add a sound to the playlist
      *
+     * @param activeUser User who is currently logged in
      * @param sound Sound to be added to the playlist
-     * @see ISound
+     * @throws IllegalArgumentException if the sound or the user is null or the active user is not the creator of the playlist
      */
-    public void addSound(User activeUser, ISound sound) {
+    public void addSound(User activeUser, ISound sound) throws IllegalArgumentException {
         if (sound == null) {
             log.error("Sound cannot be null");
             throw new IllegalArgumentException("Sound cannot be null");
@@ -162,11 +173,18 @@ public class Playlist {
             log.error("Active user is not the creator of the playlist");
             throw new IllegalArgumentException("Active user is not the creator of the playlist");
         }
-        this.sounds.add(sound);
+        this.SOUNDS.add(sound);
         log.info("Sound " + sound.getTitle() + " has been added to playlist " + this.name);
     }
 
-    public void addAllSounds(User activeUser, List<ISound> sounds) {
+    /**
+     * Method to add a list of sounds to the playlist
+     *
+     * @param activeUser User who is currently logged in
+     * @param sounds     List of sounds to be added to the playlist
+     * @throws IllegalArgumentException if the list of sounds or the user is null or the active user is not the creator of the playlist
+     */
+    public void addAllSounds(User activeUser, List<ISound> sounds) throws IllegalArgumentException {
         if (sounds == null) {
             log.error("Sounds cannot be null");
             throw new IllegalArgumentException("Sounds cannot be null");
@@ -177,24 +195,22 @@ public class Playlist {
             log.error("Active user is not the creator of the playlist");
             throw new IllegalArgumentException("Active user is not the creator of the playlist");
         }
-        this.sounds.addAll(sounds);
-        log.info("{} Sounds have been added to playlist {}.",sounds.size(), this.name);
+        this.SOUNDS.addAll(sounds);
+        log.info("{} Sounds have been added to playlist {}.", sounds.size(), this.name);
     }
 
     /**
      * Method to remove a sound from the playlist
+     *
      * @param sound Sound to be removed from the playlist
-     * @return true if the sound was removed successfully, false if not
-     * @see ISound
+     * @throws IllegalArgumentException if the sound is null
      */
-    public boolean removeSound(ISound sound) {
+    public void removeSound(ISound sound) throws IllegalArgumentException {
         if (sound == null) {
             log.error("Sound cannot be null");
-            return false;
+            throw new IllegalArgumentException("Sound cannot be null");
         }
-        this.sounds.remove(sound);
-        log.info("Sound " + sound.getTitle() + " has been removed from playlist " + this.name);
-        return true;
+        this.SOUNDS.remove(sound);
+        log.info("Sound {} has been removed from playlist {}.", sound.getTitle(), this.name);
     }
-
 }
