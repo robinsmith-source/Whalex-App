@@ -34,8 +34,8 @@ public class MainSceneController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        username.setText(UserManager.getInstance().getCurrentUser().getUsername());
-        Image image = new Image(UserManager.getInstance().getCurrentUser().getProfilePicture().toURI().toString());
+        username.setText(UserManager.getInstance().getActiveUser().getUsername());
+        Image image = new Image(UserManager.getInstance().getActiveUser().getProfilePicture().toURI().toString());
         userProfilePicture.setImage(image);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/view.fxml"));
@@ -52,15 +52,15 @@ public class MainSceneController implements Initializable {
      * Method to show all content by the current user
      */
     public void showAllContentByUser() {
-        viewController.initializeSoundContent(SoundManager.getInstance().getAllSoundsByUser(UserManager.getInstance().getCurrentUser()));
-        viewController.initializePlaylistContent(PlaylistManager.getInstance().getPlaylistsByUser(UserManager.getInstance().getCurrentUser()));
+        viewController.initializeSoundContent(SoundManager.getINSTANCE().getAllSoundsByUser(UserManager.getInstance().getActiveUser()));
+        viewController.initializePlaylistContent(PlaylistManager.getInstance().getPlaylistsByUser(UserManager.getInstance().getActiveUser()));
     }
 
     /**
      * Method to show all content
      */
     public void showAllContent() {
-        viewController.initializeSoundContent(SoundManager.getInstance().getAllSounds());
+        viewController.initializeSoundContent(SoundManager.getINSTANCE().getAllSounds());
         viewController.initializePlaylistContent(PlaylistManager.getInstance().getAllPlaylists());
     }
 }

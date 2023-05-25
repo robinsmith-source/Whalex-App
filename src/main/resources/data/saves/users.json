@@ -1,14 +1,14 @@
-{
-  "Marvin": {
-    "userID": "8ae9313e-dddd-4498-bc09-4b1f3d1ee5eb",
+[
+  {
+    "userID": "24b271ad-7ccc-4966-8b65-494a08a32f97",
     "profilePicture": "src\\main\\resources\\data\\defaultImages\\users\\defaultUserProfilePicture.jpg",
     "username": "Marvin",
     "password": "123"
   },
-  "Robin": {
-    "userID": "663c84c0-1b6a-468a-a64c-602013d70fd8",
+  {
+    "userID": "e0aeaf03-8206-4150-9b9d-5c11b8492c95",
     "profilePicture": "src\\main\\resources\\data\\defaultImages\\users\\defaultUserProfilePicture.jpg",
     "username": "Robin",
-    "password": "test4321"
+    "password": "123"
   }
-}
+]

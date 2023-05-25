@@ -14,14 +14,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 /**
  * UserManager class manages all users.
  */
-// TODO : Write tests for the UserManager
+//TODO : Write tests for the UserManager
 public class UserManager {
     private static final Logger log = LogManager.getLogger(UserManager.class);
 
@@ -33,11 +31,13 @@ public class UserManager {
     /**
      * Gson object to convert JSON to Java and Java to JSON
      *
-     * @link usersToJSON() (Method to convert Java to JSON)
-     * @link usersFromJSON() (Method to convert JSON to Java)
-     * @see Gson
+     * @see UserManager#usersToJSON()
+     * @see UserManager#usersFromJSON()
      */
-    private static final Gson gson = new GsonBuilder().registerTypeAdapter(User.class, new UserSerializer()).setPrettyPrinting().create();
+    private static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(User.class, new UserSerializer())
+            .setPrettyPrinting()
+            .create();
 
     /**
      * Path to the file where all user data is stored
@@ -52,18 +52,17 @@ public class UserManager {
     /**
      * Map of all users (key = username, value = user)
      */
-    private final Map<String, User> users = new HashMap<>();
+    private final ArrayList<User> USERS = new ArrayList<>();
 
     /**
      * User who is currently logged in
      */
-    private User currentUser;
+    private User activeUser;
 
     /**
      * Constructor for UserManager
      */
     private UserManager() {
-        this.currentUser = null;
     }
 
     /**
@@ -76,6 +75,60 @@ public class UserManager {
     }
 
     /**
+     * Method to get the current user
+     *
+     * @return Current user
+     * @throws IllegalArgumentException if no user is logged in
+     */
+    public User getActiveUser() throws IllegalArgumentException {
+        if (activeUser == null) {
+            log.error("No user is logged in.");
+            throw new IllegalArgumentException("No user is logged in.");
+        }
+        log.debug("Current user is {}.", activeUser.getUsername());
+        return activeUser;
+    }
+
+    /**
+     * Method to get a user by its ID
+     *
+     * @param userID ID of the user
+     * @return User object with the given ID
+     * @throws IllegalArgumentException if the user with the given ID could not be found
+     */
+    public User getUserById(String userID) throws IllegalArgumentException {
+        log.debug("Getting user with ID {}.", userID);
+        return this.USERS.stream().filter(user -> user.getUserID().equals(userID)).findFirst().orElseThrow(() -> {
+            log.error("User with ID {} could not be found.", userID);
+            return new IllegalArgumentException("User with ID " + userID + " could not be found.");
+        });
+    }
+
+    /**
+     * Method to get a user by its username
+     *
+     * @param username Username of the user
+     * @return User object with the given username
+     * @throws IllegalArgumentException if the user with the given name could not be found
+     */
+    public User getUserByName(String username) throws IllegalArgumentException {
+        log.debug("Getting user {}.", username);
+        return this.USERS.stream().filter(user -> user.getUsername().equals(username)).findFirst().orElseThrow(() -> {
+            log.error("User {} could not be found.", username);
+            return new IllegalArgumentException("User " + username + " could not be found.");
+        });
+    }
+
+    /**
+     * Method to get all users
+     *
+     * @return Arraylist of all users objects
+     */
+    public ArrayList<User> getAllUsers() {
+        return new ArrayList<>(USERS);
+    }
+
+    /**
      * Method to create a user by its profilePicture, username and password
      *
      * @param profilePicture Profile picture of the user
@@ -85,25 +138,26 @@ public class UserManager {
      */
     public void createUser(File profilePicture, String username, String password, String passwordConfirmation) throws IllegalArgumentException {
         if (username == null || username.isEmpty()) {
-            log.error("Username is null or empty.");
+            log.warn("Username is null or empty.");
             throw new IllegalArgumentException("Username cannot be null or empty.");
         } else if (password == null || password.isEmpty()) {
-            log.error("Password is null or empty.");
+            log.warn("Password is null or empty.");
             throw new IllegalArgumentException("Password cannot be null or empty.");
         } else if (!password.equals(passwordConfirmation)) {
             log.error("Password confirmation is incorrect.");
             throw new IllegalArgumentException("Password confirmation is incorrect.");
-        } else if (users.containsKey(username)) {
-            log.error("User {} already exists with ID {}.", username, users.get(username).getUserID());
+        } else if (this.USERS.stream().anyMatch(user -> user.getUsername().equals(username))) {
+            log.error("User {} already exists.", username);
             throw new IllegalArgumentException("User already exists.");
         } else if (profilePicture == null) {
             log.warn("Profile picture is null.");
-            users.put(username, new User(UUID.randomUUID().toString(), DEFAULT_PICTURE, username, password));
+            this.USERS.add(new User(UUID.randomUUID().toString(), DEFAULT_PICTURE, username, password));
         } else {
-            users.put(username, new User(UUID.randomUUID().toString(), profilePicture, username, password));
+            this.USERS.add(new User(UUID.randomUUID().toString(), profilePicture, username, password));
         }
-        log.info("User {} has been created.", username);
-        currentUser = users.get(username);
+        log.debug("User {} has been created.", username);
+        activeUser = getUserByName(username);
+        log.debug("User {} is now logged in.", username);
     }
 
     /**
@@ -117,18 +171,18 @@ public class UserManager {
     //TODO: Check if the log states are correct -> Should be
     //Todo: Add Custom Exception + Exception handling
     public void deleteUser(User currentUser, String password, String passwordConfirmation) throws IllegalArgumentException {
-        if (!this.users.containsValue(currentUser)) {
+        if (this.USERS.stream().noneMatch(user -> user.getUsername().equals(currentUser.getUsername()))) {
             log.error("User {} does not exist.", currentUser.getUsername());
             throw new IllegalArgumentException("User does not exist.");
-        } else if (!users.get(currentUser.getUsername()).getPassword().equals(password)) {
+        } else if (!currentUser.getPassword().equals(password)) {
             log.error("Password is incorrect.");
             throw new IllegalArgumentException("Password is incorrect.");
         } else if (!password.equals(passwordConfirmation)) {
             log.error("Password confirmation is incorrect.");
             throw new IllegalArgumentException("Password confirmation is incorrect.");
         }
-        users.remove(currentUser.getUsername());
-        log.info("User {} has been deleted.", currentUser.getUsername());
+        USERS.remove(currentUser);
+        log.debug("User {} has been deleted.", currentUser.getUsername());
     }
 
     /**
@@ -138,6 +192,7 @@ public class UserManager {
      * @param password Password of the user
      * @throws IllegalArgumentException if the username is null or empty or the password is null or empty or the user does not exist or the password is incorrect
      */
+    //TODO: Safe stream for password check
     public void login(String username, String password) throws IllegalArgumentException {
         if (username == null || username.isEmpty()) {
             log.warn("Username is null or empty.");
@@ -145,99 +200,38 @@ public class UserManager {
         } else if (password == null || password.isEmpty()) {
             log.warn("Password is null or empty.");
             throw new IllegalArgumentException("Password cannot be null or empty.");
-        } else if (!users.containsKey(username)) {
+        } else if (this.USERS.stream().noneMatch(user -> user.getUsername().equals(username))) {
             log.error("User {} does not exist.", username);
             throw new IllegalArgumentException("User does not exist.");
-        } else if (!users.get(username).getPassword().equals(password)) {
+        } else if (!this.USERS.stream().filter(user -> user.getUsername().equals(username)).findFirst().get().getPassword().equals(password)) {
             log.warn("Password is incorrect.");
             throw new IllegalArgumentException("Password is incorrect.");
         }
         log.info("User {} has been logged in.", username);
-        currentUser = users.get(username);
+        activeUser = getUserByName(username);
     }
 
     /**
-     * Method to get the current user
-     *
-     * @return Current user
-     * @throws IllegalArgumentException if no user is logged in
+     * Method to log out the current user
      */
-    public User getCurrentUser() throws IllegalArgumentException {
-        if (currentUser == null) {
-            log.error("No user is logged in.");
-            throw new IllegalArgumentException("No user is logged in.");
-        }
-        log.debug("Current user is {}.", currentUser.getUsername());
-        return currentUser;
-    }
-
-    /**
-     * Method to get a user by its username
-     *
-     * @param username Username of the user
-     * @return User object with the given username
-     * @throws IllegalArgumentException if the username is null, empty or could not be found
-     */
-    public User getUserByName(String username) throws IllegalArgumentException {
-        if (username == null || username.isEmpty()) {
-            log.warn("Username is null or empty.");
-            throw new IllegalArgumentException("Username cannot be null or empty.");
-        }
-        if (!users.containsKey(username)) {
-            log.error("Username {} could not be found.", username);
-            throw new IllegalArgumentException("Username " + username + " could not be found.");
-        }
-        log.debug("User with username {} has been found.", username);
-        return users.get(username);
-    }
-
-    /**
-     * Method to get a user by its ID
-     *
-     * @param userID ID of the user
-     * @return User object with the given ID
-     * @throws IllegalArgumentException if the userID is null, empty or could not be found
-     */
-    public User getUserById(String userID) throws IllegalArgumentException {
-        if (userID == null || userID.isEmpty()) {
-            log.warn("User ID is null or empty.");
-            throw new IllegalArgumentException("User ID cannot be null or empty.");
-        }
-        for (User user : users.values()) {
-            if (user.getUserID().equals(userID)) {
-                log.debug("User with ID {} has been found.", userID);
-                return user;
-            }
-        }
-        log.error("User with ID {} could not be found.", userID);
-        throw new IllegalArgumentException("Sound with ID " + userID + " could not be found.");
-    }
-
-    /**
-     * Method to get all users
-     *
-     * @return Arraylist of all users objects
-     */
-    public ArrayList<User> getAllUsers() {
-        return new ArrayList<>(users.values());
+    public void logout() {
+        log.info("User {} has been logged out.", activeUser.getUsername());
+        activeUser = null;
     }
 
     /**
      * Method to write to a JSON file via Gson
      *
-     * @throws WriteDataException if the file could not be found or the file could not be written
-     * @link UserSerializer (Custom serializer for the User class)
-     * @see FileWriter
-     * @see Gson
-     * @see GsonBuilder
+     * @throws WriteDataException if the users could not be saved from the JSON file
+     * @see UserSerializer
      */
     //Todo: Check if the log states are correct -> Should be
     //Todo: Check if exception handling is correct
-    public void userToJSON() throws WriteDataException {
+    public void usersToJSON() throws WriteDataException {
         try {
             FileWriter fileWriter = new FileWriter(SAVE_FILE);
-            gson.toJson(users, fileWriter);
-            log.info("{} Users have been saved to JSON file {}.", users.size(), SAVE_FILE);
+            gson.toJson(USERS, fileWriter);
+            log.info("{} Users have been saved to JSON file {}.", USERS.size(), SAVE_FILE);
             fileWriter.close();
         } catch (Exception e) {
             log.fatal("Users have not been saved to JSON file {}.", SAVE_FILE);
@@ -248,20 +242,17 @@ public class UserManager {
     /**
      * Method to read a JSON file via Gson
      *
-     * @throws ReadDataException if the file could not be found or the file could not be read
-     * @link UserSerializer (Custom serializer for the User class)
-     * @see FileReader
-     * @see Gson
-     * @see GsonBuilder
+     * @throws ReadDataException if the users could not be loaded from the JSON file
+     * @see UserSerializer
      */
     //Todo: Check if the log states are correct -> Should be
     //Todo: Check if exception handling is correct
     public void usersFromJSON() throws ReadDataException {
         try {
             FileReader fileReader = new FileReader(SAVE_FILE);
-            users.putAll(gson.fromJson(fileReader, new TypeToken<Map<String, User>>() {
+            USERS.addAll(gson.fromJson(fileReader, new TypeToken<ArrayList<User>>() {
             }.getType()));
-            log.info("{} Users have been loaded from JSON file {}.", users.size(), SAVE_FILE);
+            log.info("{} Users have been loaded from JSON file {}.", USERS.size(), SAVE_FILE);
             fileReader.close();
         } catch (IOException e) {
             log.fatal("Users have not been loaded from JSON file {}.", SAVE_FILE);

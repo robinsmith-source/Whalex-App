@@ -28,7 +28,6 @@ public class PlaylistSerializer implements JsonSerializer<Playlist>, JsonDeseria
         for (ISound sound : src.getSounds().values()) {
             JsonObject soundJson = new JsonObject();
             soundJson.addProperty("soundID", sound.getSoundID());
-            //JsonElement soundJson = gson.toJsonTree(sound);
             soundsArray.add(soundJson);
         }
         jsonObject.add("sounds", soundsArray);
@@ -51,12 +50,7 @@ public class PlaylistSerializer implements JsonSerializer<Playlist>, JsonDeseria
         for (JsonElement soundElement : soundsArray) {
             JsonObject soundJsonObject = soundElement.getAsJsonObject();
             String soundID = soundJsonObject.get("soundID").getAsString();
-            /* Todo: Check if information about title, path and uploadedBy are needed in the playlist.json file
-            String title = soundJsonObject.get("title").getAsString();
-            File path = new File(soundJsonObject.get("path").getAsString());
-            User uploadedBy = UserManager.getUserById(soundJsonObject.get("uploadedBy").getAsString());
-            */
-            playlist.addSound(createdBy, SoundManager.getInstance().getSoundByID(soundID));
+            playlist.addSound(createdBy, SoundManager.getINSTANCE().getSoundByID(soundID));
         }
         return playlist;
     }

@@ -41,11 +41,6 @@ public class Playlist {
     private final Set<ISound> sounds;
 
     /**
-     * Number of songs in the playlist
-     */
-    private int numberOfSounds;
-
-    /**
      * User who created the playlist
      * @see User
      */

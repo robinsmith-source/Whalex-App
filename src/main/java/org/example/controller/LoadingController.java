@@ -57,7 +57,7 @@ public class LoadingController implements Initializable {
         @Override
         public Void call() {
             try {
-                SoundManager.getInstance().soundsFromJSON();
+                SoundManager.getINSTANCE().soundsFromJSON();
                 PlaylistManager.getInstance().playlistsFromJSON();
             } catch (ReadDataException e) {
                 log.fatal("Failed to read data sound and playlist from JSON file.");

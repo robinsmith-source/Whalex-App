@@ -65,7 +65,7 @@ public class ViewController implements Initializable {
         // soundCover.setCellValueFactory(new PropertyValueFactory<>("Media"));
 
         soundCover.setCellValueFactory(cellData -> {
-            Image image = new Image(SoundManager.getInstance().getDEFAULT_COVER().toURI().toString());
+            Image image = new Image(SoundManager.getINSTANCE().getDEFAULT_COVER().toURI().toString());
             if (cellData.getValue().getMedia().getMetadata().get("image") != null) {
                 image = ((Image) cellData.getValue().getMedia().getMetadata().get("image"));
             }
@@ -116,7 +116,7 @@ public class ViewController implements Initializable {
 
         soundTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        initializeSoundContent(SoundManager.getInstance().getAllSounds());
+        initializeSoundContent(SoundManager.getINSTANCE().getAllSounds());
         initializePlaylistContent(PlaylistManager.getInstance().getAllPlaylists());
     }
 
@@ -147,7 +147,7 @@ public class ViewController implements Initializable {
     @FXML
     public void deleteSound() {
         ISound sound = soundTable.getSelectionModel().getSelectedItem();
-        SoundManager.getInstance().removeSoundByID(UserManager.getInstance().getCurrentUser(), sound.getSoundID());
+        SoundManager.getINSTANCE().deleteSoundByID(UserManager.getInstance().getActiveUser(), sound.getSoundID());
         for (Playlist playlist : PlaylistManager.getInstance().getAllPlaylists()) {
             playlist.removeSound(sound);
         }
@@ -158,15 +158,15 @@ public class ViewController implements Initializable {
     @FXML
     public void deletePlaylist() {
         Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
-        PlaylistManager.getInstance().deletePlaylistByID(UserManager.getInstance().getCurrentUser(), playlist.getPlaylistID());
+        PlaylistManager.getInstance().deletePlaylistByID(UserManager.getInstance().getActiveUser(), playlist.getPlaylistID());
         playlistObjectList.remove(playlist);
         refreshData();
     }
 
-    public void addToPlaylist(ActionEvent actionEvent) {
+    public void addToPlaylist() {
         ISound sound = soundTable.getSelectionModel().getSelectedItem();
         Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
-        playlist.addSound(UserManager.getInstance().getCurrentUser(), sound);
+        playlist.addSound(UserManager.getInstance().getActiveUser(), sound);
         refreshData();
     }
 
