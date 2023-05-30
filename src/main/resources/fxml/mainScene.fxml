@@ -110,7 +110,7 @@
          <children>
             <HBox fx:id="" alignment="CENTER_LEFT" minWidth="200.0">
                <children>
-                  <Button onAction="#showAllContent" mnemonicParsing="false" prefHeight="30.0" text="Home">
+                  <Button mnemonicParsing="false" onAction="#showAllContent" prefHeight="30.0" text="Home">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -118,7 +118,7 @@
                         <MaterialIconView fill="WHITE" glyphName="HOME" size="30" text="" wrappingWidth="30.0" />
                      </graphic>
                   </Button>
-                  <Button onAction="#showAllContentByUser" mnemonicParsing="false" prefHeight="30.0" text="Profile">
+                  <Button mnemonicParsing="false" onAction="#showAllContentByUser" prefHeight="30.0" text="Profile">
                      <font>
                         <Font size="14.0" />
                      </font>

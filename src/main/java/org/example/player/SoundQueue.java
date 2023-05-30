@@ -6,7 +6,9 @@ import org.example.media.interfaces.ISound;
 import org.example.playlist.Playlist;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.Iterator;
 
 /**
  * SoundQueue class is used to handle all soundQueue actions
@@ -15,23 +17,26 @@ import java.util.Deque;
 public class SoundQueue {
     private static final Logger log = LogManager.getLogger(SoundQueue.class);
 
+
     /**
      * soundQueue of the player
      */
-    private final Deque<ISound> soundQueue;
+    private final Deque<ISound> soundQueue = new ArrayDeque<>();
 
     /**
      * order of the soundQueue : ORDERED, SHUFFLED
      */
-    private Order order;
+    private Order order = Order.ORDERED;
 
     /**
      * Constructor of the SoundQueue
      * Default order is ORDERED
      */
-    public SoundQueue() {
-        this.soundQueue = new ArrayDeque<>();
-        this.order = Order.ORDERED;
+    SoundQueue() {
+    }
+
+    public ArrayList<ISound> getSounds() {
+        return new ArrayList<>(soundQueue);
     }
 
     /**
@@ -55,7 +60,7 @@ public class SoundQueue {
      * @return Current sound in the soundQueue
      */
     public ISound getCurrentSound() {
-        return null;
+        return soundQueue.getFirst();
     }
 
     /**
@@ -63,20 +68,26 @@ public class SoundQueue {
      * @return Next sound in the soundQueue
      */
     public ISound getNextSound() {
-        return null;
+        Iterator<ISound> iterator = soundQueue.iterator();
+        iterator.next();
+        return iterator.next();
     }
 
     /**
      * Method to add a sound to the soundQueue
      * @param sound Sound to be added to the soundQueue
      */
-    public void addSound(ISound sound) {}
+    public void addSound(ISound sound) {
+        soundQueue.add(sound);
+    }
 
     /**
      * Method to remove a sound from the soundQueue
      * @param sound Sound to be removed from the soundQueue
      */
-    public void removeSound(ISound sound) {}
+    public void removeSound(ISound sound) {
+        soundQueue.remove(sound);
+    }
 
     /**
      * Method to add a playlist to the soundQueue
@@ -94,10 +105,10 @@ public class SoundQueue {
      * Method to override the soundQueue with a playlist
      * @param playlist Playlist to override the soundQueue
      */
-    public void overrideWithPlaylist(Playlist playlist) {}
+    public void overrideWithPlaylist(Playlist playlist) {
+        soundQueue.clear();
 
-    /**
-     * Method to clear the soundQueue
-     */
-    public void clear() {}
+        soundQueue.addAll(playlist.getSounds());
+        addPlaylist(playlist);
+    }
 }

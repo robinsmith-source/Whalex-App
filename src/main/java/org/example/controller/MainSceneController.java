@@ -9,8 +9,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.media.SoundManager;
-import org.example.playlist.PlaylistManager;
 import org.example.profile.UserManager;
 
 import java.io.IOException;
@@ -52,15 +50,13 @@ public class MainSceneController implements Initializable {
      * Method to show all content by the current user
      */
     public void showAllContentByUser() {
-        viewController.initializeSoundContent(SoundManager.getINSTANCE().getAllSoundsByUser(UserManager.getInstance().getActiveUser()));
-        viewController.initializePlaylistContent(PlaylistManager.getInstance().getPlaylistsByUser(UserManager.getInstance().getActiveUser()));
+        viewController.setView(ViewType.USER);
     }
 
     /**
      * Method to show all content
      */
     public void showAllContent() {
-        viewController.initializeSoundContent(SoundManager.getINSTANCE().getAllSounds());
-        viewController.initializePlaylistContent(PlaylistManager.getInstance().getAllPlaylists());
+        viewController.setView(ViewType.ALL);
     }
 }

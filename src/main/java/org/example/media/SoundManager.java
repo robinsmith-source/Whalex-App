@@ -164,8 +164,8 @@ public class SoundManager {
     public void deleteSoundByID(User currentUser, String soundID) throws IllegalArgumentException {
         this.SOUNDS.stream().filter(sound -> sound.getSoundID().equals(soundID)).findFirst().ifPresentOrElse(sound -> {
             if (sound.getUploadedBy().equals(currentUser)) {
-                this.SOUNDS.remove(sound);
                 log.info("Sound {} has been deleted.", sound.getTitle());
+                this.SOUNDS.remove(sound);
             } else {
                 log.error("Sound {} wasn't uploaded by the active user.", sound.getTitle());
                 throw new IllegalArgumentException("Sound " + sound.getSoundID() + " could not be deleted because it was not uploaded by the activeUser");

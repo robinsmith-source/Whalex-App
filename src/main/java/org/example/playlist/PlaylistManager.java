@@ -170,8 +170,8 @@ public class PlaylistManager {
     public void deletePlaylistByID(User currentUser, String playlistID) throws IllegalArgumentException {
         this.PLAYLISTS.stream().filter(playlist -> playlist.getPlaylistID().equals(playlistID)).findFirst().ifPresentOrElse(playlist -> {
             if (playlist.getCreatedBy().equals(currentUser)) {
-                this.PLAYLISTS.remove(playlist);
                 log.debug("Playlist {} has been deleted.", playlist.getName());
+                this.PLAYLISTS.remove(playlist);
             } else {
                 log.error("Playlist {} wasn't created by the active user.", playlist.getName());
                 throw new IllegalArgumentException("Playlist " + playlist.getName() + " could not be deleted because it was not created by the active user.");

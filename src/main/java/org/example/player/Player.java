@@ -17,6 +17,8 @@ import org.example.media.interfaces.ISound;
 public class Player {
     private static final Logger log = LogManager.getLogger(Player.class);
 
+    private static final Player INSTANCE = new Player();
+
     /**
      * isPlaying is true if the player is playing, false if it is paused
      */
@@ -65,14 +67,14 @@ public class Player {
      *
      * @link SoundQueue
      */
-    private final SoundQueue soundQueue;
+    private final SoundQueue soundQueue = new SoundQueue();
 
     /**
      * SoundHistory of the player
      *
      * @link SoundHistory
      */
-    private final SoundHistory soundHistory;
+    private final SoundHistory soundHistory = new SoundHistory();
 
     /**
      * MediaPlayer object from JavaFX Media Library
@@ -84,18 +86,29 @@ public class Player {
     /**
      * Constructor of the Player
      */
-    public Player() {
-        this.soundQueue = new SoundQueue();
-        this.soundHistory = new SoundHistory();
-        this.mediaPlayer = new MediaPlayer(soundQueue.getCurrentSound().getMedia());
+    private Player() {
+       // this.mediaPlayer = new MediaPlayer(soundQueue.getCurrentSound().getMedia());
         this.isPlaying = false;
         this.isShuffle = soundQueue.getOrder() == Order.SHUFFLED;
         this.isRepeat = false;
         this.isMute = false;
         this.volume = 0.5f;
-        this.currentSound = null;
-        this.previousSound = null;
-        this.nextSound = null;
+       /*
+        this.currentSound = soundQueue.getCurrentSound();
+        this.previousSound = soundHistory.getNextSound();
+        this.nextSound = soundQueue.getNextSound();
+        */
+    }
+
+    public static Player getInstance() {
+        return INSTANCE;
+    }
+
+    public SoundHistory getSoundHistory() {
+        return this.soundHistory;
+    }
+    public SoundQueue getSoundQueue() {
+        return this.soundQueue;
     }
 
     /**

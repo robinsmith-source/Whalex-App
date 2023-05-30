@@ -166,6 +166,9 @@ public class Playlist {
         if (sound == null) {
             log.error("Sound cannot be null");
             throw new IllegalArgumentException("Sound cannot be null");
+        } else if (this.SOUNDS.contains(sound)) {
+            log.error("Sound is already in the playlist");
+            throw new IllegalArgumentException("Sound is already in the playlist");
         } else if (activeUser == null) {
             log.error("Active user cannot be null");
             throw new IllegalArgumentException("Active user cannot be null");
