@@ -10,7 +10,7 @@
    <children>
       <HBox fx:id="outerBox" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0">
          <children>
-            <VBox prefWidth="300.0" HBox.hgrow="ALWAYS">
+            <VBox fx:id="innerBox1" prefWidth="300.0" HBox.hgrow="ALWAYS">
                <children>
                   <Label text="Sounds" textFill="WHITE">
                      <font>
@@ -71,7 +71,7 @@
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </HBox.margin>
             </VBox>
-            <VBox prefWidth="300.0" HBox.hgrow="ALWAYS">
+            <VBox fx:id="innerBox2" prefWidth="300.0" HBox.hgrow="ALWAYS">
                <children>
                   <Label text="Playlists" textFill="WHITE">
                      <font>
@@ -124,7 +124,7 @@
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </HBox.margin>
             </VBox>
-            <VBox prefWidth="300.0">
+            <VBox fx:id="innerBox3" prefWidth="300.0">
                <children>
                   <Label text="Queue" textFill="WHITE">
                      <font>

@@ -1,5 +1,6 @@
 #anchor {
-    -fx-background-color: #210733;
+    -fx-background-color: #2C3360;
+    -fx-background-color: linear-gradient(#2C3346 40%,#4E4F5B 120%) opacity 0.5;
 }
 
 #soundCover #playlistCover{
@@ -19,13 +20,21 @@
     -fx-background-color: linear-gradient(#370B54 30%,#370B54 70%) opacity 0.5;
 }
 
-#outerBox {
-    -fx-background-color: #210733;
-    -fx-background-radius: 40px ;
+#innerBox1 {
+    -fx-border-color: #7B7E8A;
+    -fx-border-radius: 40px ;
+}
+#innerBox2 {
+    -fx-border-color: #7B7E8A;
+    -fx-border-radius: 40px ;
+}
+#innerBox3 {
+    -fx-border-color: #7B7E8A;
+    -fx-border-radius: 40px ;
 }
 
 .table-view .column-header {
-    -fx-background-color: linear-gradient(#370B54 0%,#370B54 100%);
+    -fx-background-color: #2C3346;
 }
 
 .table-view .scroll-bar:horizontal .thumb {
