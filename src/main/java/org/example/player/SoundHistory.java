@@ -26,21 +26,26 @@ public class SoundHistory {
      * @see SoundQueue
      */
     public ISound getNextSound() {
-        return null;
+        return soundHistory.get(1);
     }
 
     /**
      * @param sound Sound to be added to the soundHistory
      */
-    public void addSound(ISound sound) {}
-
+    public void addSound(ISound sound) {
+        soundHistory.add(sound);
+    }
     /**
      * @param sound Sound to be removed from the soundHistory
      */
-    public void removeSound(ISound sound) {}
+    public void removeSound(ISound sound) {
+        soundHistory.remove(sound);
+    }
 
     /**
      * Clears the soundHistory
      */
-    public void clear() {}
+    public void clear() {
+        soundHistory.clear();
+    }
 }

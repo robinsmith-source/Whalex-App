@@ -93,13 +93,10 @@ public class SoundQueue {
      * Method to add a playlist to the soundQueue
      * @param playlist Playlist to be added to the soundQueue
      */
-    public void addPlaylist(Playlist playlist) {}
-
-    /**
-     * Method to remove a playlist from the soundQueue
-     * @param playlist Playlist to be removed from the soundQueue
-     */
-    public void removePlaylist(Playlist playlist) {}
+    public void addPlaylist(Playlist playlist) {
+        log.info("Adding playlist to soundQueue");
+        soundQueue.addAll(playlist.getSounds());
+    }
 
     /**
      * Method to override the soundQueue with a playlist
