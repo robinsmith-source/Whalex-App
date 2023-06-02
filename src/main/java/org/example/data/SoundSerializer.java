@@ -16,8 +16,8 @@ public class SoundSerializer implements JsonSerializer<ISound>, JsonDeserializer
         jsonObject.addProperty("soundID", src.getSoundID());
         jsonObject.addProperty("title", src.getTitle());
         String absolutePath = src.getMedia().getSource();
-        String relativePath = absolutePath.substring(absolutePath.lastIndexOf('/'));
-        jsonObject.addProperty("path", "src/main/resources/data/sounds" + relativePath);
+        String fileName = absolutePath.substring(absolutePath.lastIndexOf('/'));
+        jsonObject.addProperty("path", "src/main/resources/data/sounds" + fileName);
         jsonObject.addProperty("uploadedBy", src.getUploadedBy().getUserID());
         return jsonObject;
     }

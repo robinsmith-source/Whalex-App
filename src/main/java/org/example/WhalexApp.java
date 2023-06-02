@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.controller.SceneManager;
+import org.example.player.PlayerCombined;
 
 public class WhalexApp extends Application {
 
@@ -35,13 +36,12 @@ public class WhalexApp extends Application {
     public void start(Stage stage) throws Exception {
         applicationStage = stage;
 
+        stage.setOnCloseRequest(event -> {
+            log.info("Closing Whalex Application");
+            PlayerCombined.getInstance().clearQueue();
 
-        //Start Application with Login Scene
-        SceneManager.LOGIN.changeScene();
-
+        });
         log.info("Starting Whalex Application");
-
-        stage.show();
-        log.debug("Showing {}.", stage.getTitle());
+        SceneManager.LOGIN.changeScene();
     }
 }

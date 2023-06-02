@@ -21,7 +21,7 @@ public class SoundQueue {
     /**
      * soundQueue of the player
      */
-    private final Deque<ISound> soundQueue = new ArrayDeque<>();
+    private final Deque<ISound> soundQueue;
 
     /**
      * order of the soundQueue : ORDERED, SHUFFLED
@@ -33,6 +33,7 @@ public class SoundQueue {
      * Default order is ORDERED
      */
     SoundQueue() {
+        soundQueue = new ArrayDeque<>();
     }
 
     public ArrayList<ISound> getSounds() {
@@ -59,7 +60,7 @@ public class SoundQueue {
      * Method to get the current sound in the soundQueue
      * @return Current sound in the soundQueue
      */
-    public ISound getCurrentSound() {
+    public ISound getCurrentSound() throws NullPointerException{
         return soundQueue.getFirst();
     }
 
@@ -79,6 +80,7 @@ public class SoundQueue {
      */
     public void addSound(ISound sound) {
         soundQueue.add(sound);
+        Player.getInstance().initializeMediaPlayer();
     }
 
     /**
@@ -107,5 +109,9 @@ public class SoundQueue {
 
         soundQueue.addAll(playlist.getSounds());
         addPlaylist(playlist);
+    }
+
+    private boolean isEmpty() {
+        return soundQueue.isEmpty();
     }
 }

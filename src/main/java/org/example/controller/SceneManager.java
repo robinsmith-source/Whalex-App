@@ -3,6 +3,8 @@ package org.example.controller;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.WhalexApp;
@@ -18,6 +20,8 @@ public enum SceneManager {
 
     private final String fxmlPath;
 
+    private final Stage applicationStage = WhalexApp.getApplicationStage();
+
     SceneManager(String fxmlPath) {
         this.fxmlPath = fxmlPath;
     }
@@ -31,29 +35,30 @@ public enum SceneManager {
         Scene scene;
         switch (this) {
             case LOGIN:
-                WhalexApp.getApplicationStage().setTitle("Whalex - Login");
+                applicationStage.setTitle("Whalex - Login");
                 scene = new Scene(SceneManager.LOGIN.getScene(), 600, 400);
-                WhalexApp.getApplicationStage().setScene(scene);
-                WhalexApp.getApplicationStage().setResizable(false);
+                applicationStage.setScene(scene);
+                applicationStage.setResizable(false);
                 break;
             case LOADING:
-                WhalexApp.getApplicationStage().setTitle("Whalex - Loading");
+                applicationStage.setTitle("Whalex - Loading");
                 scene = new Scene(SceneManager.LOADING.getScene(), 600, 400);
-                WhalexApp.getApplicationStage().setScene(scene);
-                WhalexApp.getApplicationStage().setResizable(false);
+                applicationStage.setScene(scene);
+                applicationStage.setResizable(false);
                 break;
             case MAIN:
-                WhalexApp.getApplicationStage().setTitle("Whalex - Overview");
+                applicationStage.setTitle("Whalex - Overview");
                 scene = new Scene(SceneManager.MAIN.getScene());
-                WhalexApp.getApplicationStage().setScene(scene);
-                WhalexApp.getApplicationStage().setResizable(true);
-                WhalexApp.getApplicationStage().setMaximized(true);
+                applicationStage.setScene(scene);
+                applicationStage.setResizable(true);
+                applicationStage.setMaximized(true);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + this);
         }
-        WhalexApp.getApplicationStage().show();
-        log.debug("Loading FXML for {} from: {}",WhalexApp.getApplicationStage().getTitle(), this.fxmlPath);
+        applicationStage.getIcons().add(new Image(getClass().getResourceAsStream("/fxml/assets/WhalexLOGO.png")));
+        applicationStage.show();
+        log.debug("Showing Scene: {}, from: {}",WhalexApp.getApplicationStage().getTitle(), this.fxmlPath);
     }
 }
 
