@@ -87,17 +87,32 @@ public class Player {
      * Constructor of the Player
      */
     private Player() {
-       // this.mediaPlayer = new MediaPlayer(soundQueue.getCurrentSound().getMedia());
+        this.mediaPlayer = null;
         this.isPlaying = false;
         this.isShuffle = soundQueue.getOrder() == Order.SHUFFLED;
         this.isRepeat = false;
         this.isMute = false;
         this.volume = 0.5f;
-       /*
+    }
+
+    private void playNext() {
+        if (this.isRepeat) {
+            this.mediaPlayer.stop();
+            this.mediaPlayer.play();
+        } else {
+            this.mediaPlayer.stop();
+            soundHistory.addSound(this.currentSound);
+            this.mediaPlayer = new MediaPlayer(this.nextSound.getMedia());
+            this.mediaPlayer.play();
+        }
+    }
+
+    public void initializeMediaPlayer() {
         this.currentSound = soundQueue.getCurrentSound();
-        this.previousSound = soundHistory.getNextSound();
+        //this.previousSound = soundHistory.getNextSound();
         this.nextSound = soundQueue.getNextSound();
-        */
+
+        this.mediaPlayer = new MediaPlayer(this.currentSound.getMedia());
     }
 
     public static Player getInstance() {
@@ -169,6 +184,8 @@ public class Player {
 
     //Todo : Implement methods to play, pause, next, previous, seekTo
     public void play() {
+        mediaPlayer.play();
+        log.info("Playing sound : " + this.currentSound.getTitle());
     }
 
     public void pause() {
@@ -178,6 +195,9 @@ public class Player {
     }
 
     public void previous() {
+        this.soundQueue.addSound(previousSound);
+        this.mediaPlayer = new MediaPlayer(previousSound.getMedia());
+        this.mediaPlayer.play();
     }
 
     public void seekTo(float time) {

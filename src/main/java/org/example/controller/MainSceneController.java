@@ -1,19 +1,26 @@
 package org.example.controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.player.PlayerCombined;
 import org.example.profile.UserManager;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainSceneController implements Initializable {
 
@@ -28,7 +35,21 @@ public class MainSceneController implements Initializable {
     @FXML
     private ImageView userProfilePicture;
 
+    @FXML
+    private Button playButton;
+
     private ViewController viewController;
+
+    @FXML
+    private Label currentSoundTitle;
+    @FXML
+    private Label currentSoundUploadedBy;
+
+    @FXML
+    private Slider soundProgress;
+
+    @FXML
+    private TextField searchBar;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -44,12 +65,23 @@ public class MainSceneController implements Initializable {
             throw new RuntimeException(e);
         }
         log.debug("MainSceneController initialized");
+
+        //TODO: FIX THIS!!
+        Timer updateTimer = new Timer();
+        TimerTask updateTask = new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> updatePlayerContent());
+            }
+        };
+        updateTimer.scheduleAtFixedRate(updateTask, 0, 500);
     }
 
     /**
      * Method to show all content by the current user
      */
     public void showAllContentByUser() {
+
         viewController.setView(ViewType.USER);
     }
 
@@ -58,5 +90,41 @@ public class MainSceneController implements Initializable {
      */
     public void showAllContent() {
         viewController.setView(ViewType.ALL);
+    }
+
+    public void playSound() {
+        PlayerCombined.getInstance().playPause();
+    }
+
+    public void previousSound() {
+        PlayerCombined.getInstance().previous();
+        log.info("Previous sound");
+    }
+
+    public void nextSound() {
+        PlayerCombined.getInstance().next();
+        log.info("Next sound");
+    }
+
+    //TODO: Only for debugging --> Implement correctly
+    private void updatePlayerContent() {
+        if (PlayerCombined.getInstance().getCurrentSound() != null) {
+            currentSoundTitle.setText(PlayerCombined.getInstance().getCurrentSound().getTitle());
+            currentSoundUploadedBy.setText(PlayerCombined.getInstance().getCurrentSound().getUploadedBy().getUsername());
+            double progress = PlayerCombined.getInstance().getCurrentTime() / PlayerCombined.getInstance().getTotalTime();
+            System.out.println(progress);
+
+
+            PlayerCombined.getInstance().getSoundQueue().forEach(e -> System.out.println("Queue: " + e.getTitle()));
+            PlayerCombined.getInstance().getSoundHistory().forEach(e -> System.out.println("History: " + e.getTitle()));
+        } else {
+            currentSoundTitle.setText("");
+            currentSoundUploadedBy.setText("");
+        }
+    }
+
+    public void checkSearchQuery() {
+        log.debug("Checking search query {}.", searchBar.getText());
+        viewController.handleSearchBar(searchBar.getText());
     }
 }

@@ -14,7 +14,10 @@ import org.example.exceptions.ReadDataException;
 import org.example.profile.UserManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
@@ -42,7 +45,8 @@ public class LoginController implements Initializable {
     Label errorMessageLabel;
 
     private final FileChooser fileChooser = new FileChooser();
-    private File profilePicture;
+
+    private File choosenImage;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -85,10 +89,16 @@ public class LoginController implements Initializable {
 
     @FXML
     public void register() {
-        log.info("Register button pressed with username {}. - ProfilePicture: {}", usernameField.getText(), profilePicture);
+        log.info("Register button pressed with username {}. - ProfilePicture: {}", usernameField.getText(), choosenImage);
+        Path targetFolder = Path.of("src/main/resources/data/profilePictures");
+        String extension = choosenImage.getName().substring(choosenImage.getName().lastIndexOf("."));
+        Path targetFile = targetFolder.resolve(usernameField.getText() + extension);
         try {
+            Files.copy(choosenImage.toPath(), targetFile);
+            File profilePicture = targetFile.toFile();
             UserManager.getInstance().createUser(profilePicture, usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
             SceneManager.LOADING.changeScene();
+            UserManager.getInstance().usersToJSON();
         } catch (IllegalArgumentException e) {
             errorMessageLabel.setText(e.getMessage());
         } catch (Exception e) {
@@ -102,6 +112,6 @@ public class LoginController implements Initializable {
         fileChooserWindow.setTitle("Choose a file");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-        profilePicture = fileChooser.showOpenDialog(fileChooserWindow);
+        choosenImage = fileChooser.showOpenDialog(fileChooserWindow);
     }
 }

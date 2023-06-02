@@ -1,5 +1,5 @@
 package org.example.controller;
-enum ViewType {
+public enum ViewType {
     USER,
     ALL
 }
