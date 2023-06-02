@@ -28,12 +28,9 @@ public class LoadingController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-       Thread loadingThread = new Thread(loadingTask);
+        Thread loadingThread = new Thread(loadingTask);
         loadingBar.progressProperty().bind(loadingTask.progressProperty());
         loadingThread.start();
-
-
-
 
         FadeTransition fadeIn = new FadeTransition(Duration.seconds(2), logo);
         fadeIn.setFromValue(0.0);

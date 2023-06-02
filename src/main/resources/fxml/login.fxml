@@ -6,15 +6,16 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import java.net.URL?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.LoginController">
    <children>
       <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox prefHeight="400.0" prefWidth="200.0">
+            <VBox fx:id="sideBar" prefHeight="400.0" prefWidth="200.0">
                <children>
                   <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@assets/WhalexLogo.jpg" />
+                        <Image url="@assets/WhalexLOGO.png" />
                      </image>
                      <VBox.margin>
                         <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
@@ -89,4 +90,7 @@
          </children>
       </HBox>
    </children>
+   <stylesheets>
+      <URL value="@../styles/login.css" />
+   </stylesheets>
 </AnchorPane>

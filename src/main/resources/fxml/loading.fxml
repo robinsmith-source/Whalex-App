@@ -4,13 +4,17 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import java.net.URL?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.LoadingController">
    <children>
       <ImageView fx:id="logo" fitHeight="150.0" fitWidth="150.0" layoutX="225.0" layoutY="111.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@assets/WhalexLogo.jpg" />
+            <Image url="@assets/WhalexLOGO.png" />
          </image>
       </ImageView>
       <ProgressBar fx:id="loadingBar" layoutX="200.0" layoutY="271.0" prefWidth="200.0" progress="0.0" />
    </children>
+   <stylesheets>
+      <URL value="@../styles/loading.css" />
+   </stylesheets>
 </Pane>

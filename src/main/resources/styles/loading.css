@@ -1,0 +1,7 @@
+.root {
+    -fx-background-color: #1E2337;
+}
+
+.progress-bar {
+    -fx-accent: orange;
+}

@@ -17,7 +17,7 @@
          <children>
             <VBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="160.0">
                <children>
-                  <Label text="Sound_title" textFill="WHITE" wrapText="true">
+                  <Label fx:id="currentSoundTitle" text="Sound_title" textFill="WHITE" wrapText="true">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -25,7 +25,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <Label text="Sound_uploadedBy" textFill="WHITE">
+                  <Label fx:id="currentSoundUploadedBy" text="Sound_uploadedBy" textFill="WHITE">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
@@ -43,17 +43,17 @@
                               <MaterialIconView fill="WHITE" glyphName="SHUFFLE" size="30" />
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false">
+                        <Button fx:id="previousButton" mnemonicParsing="false" onAction="#previousSound">
                            <graphic>
                               <MaterialIconView fill="WHITE" glyphName="SKIP_PREVIOUS" size="30" />
                            </graphic>
                         </Button>
-                        <Button fx:id="playButton" mnemonicParsing="false">
+                        <Button fx:id="playButton" mnemonicParsing="false" onAction="#playSound">
                            <graphic>
                               <MaterialIconView fill="WHITE" glyphName="PLAY_CIRCLE_OUTLINE" size="30" />
                            </graphic>
                         </Button>
-                        <Button mnemonicParsing="false">
+                        <Button fx:id="nextButton" mnemonicParsing="false" onAction="#nextSound">
                            <graphic>
                               <MaterialIconView fill="WHITE" glyphName="SKIP_NEXT" size="30" />
                            </graphic>
@@ -64,6 +64,9 @@
                            </graphic>
                         </Button>
                      </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="475.0">
                      <children>
@@ -71,7 +74,7 @@
                            <HBox.margin>
                               <Insets right="5.0" />
                            </HBox.margin></Label>
-                        <Slider prefWidth="400.0">
+                        <Slider fx:id="soundProgress" prefWidth="400.0">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -81,6 +84,9 @@
                               <Insets left="5.0" />
                            </HBox.margin></Label>
                      </children>
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
                   </HBox>
                </children>
                <HBox.margin>
@@ -108,9 +114,9 @@
    <top>
       <HBox alignment="CENTER" prefHeight="93.0" prefWidth="800.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox fx:id="" alignment="CENTER_LEFT" minWidth="200.0">
+            <HBox alignment="CENTER_LEFT" minWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#showAllContent" prefHeight="30.0" text="Home">
+                  <Button fx:id="homeButton" mnemonicParsing="false" onAction="#showAllContent" prefHeight="30.0" text="Home">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -118,7 +124,7 @@
                         <MaterialIconView fill="WHITE" glyphName="HOME" size="30" text="" wrappingWidth="30.0" />
                      </graphic>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#showAllContentByUser" prefHeight="30.0" text="Profile">
+                  <Button fx:id="profileButton" mnemonicParsing="false" onAction="#showAllContentByUser" prefHeight="30.0" text="Profile">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -134,7 +140,7 @@
             <HBox alignment="CENTER" maxWidth="800.0" prefWidth="300.0" HBox.hgrow="ALWAYS">
                <children>
                   <MaterialIconView fill="WHITE" glyphName="SEARCH" size="30" />
-                  <TextField promptText="search" HBox.hgrow="ALWAYS">
+                  <TextField fx:id="searchBar" onKeyTyped="#checkSearchQuery" promptText="search" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="14.0" />
                      </font></TextField>
@@ -155,7 +161,7 @@
                   </Label>
                   <ImageView fx:id="userProfilePicture" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@assets/WhalexLogo.jpg" />
+                        <Image url="@assets/WhalexLOGO.png" />
                      </image>
                   </ImageView>
                </children>

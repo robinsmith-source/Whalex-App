@@ -1,49 +1,87 @@
 #anchor {
-    -fx-background-color: #2C3360;
-    -fx-background-color: linear-gradient(#2C3346 40%,#4E4F5B 120%) opacity 0.5;
+    -fx-background-color: linear-gradient(#2C3346 40%, #4E4F5B 120%) opacity 0.5;
 }
 
-#soundCover #playlistCover{
-    -fx-padding: 20;
+.table-column {
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-alignment: center-left;
 }
-#soundTable #soundTitle.table-row-cell {
+
+.table-view .column-header .label {
+    -fx-alignment: center-left;
+}
+
+.label {
+    -fx-text-fill: white;
     -fx-font-size: 20;
     -fx-font-weight: bold;
 }
+
+#soundCover #playlistCover {
+    -fx-padding: 20;
+}
+
 .table-view {
     -fx-base: transparent;
     -fx-background-color: transparent;
 }
 
-.table-row-cell:selected {
-    -fx-border-color: white;
-    -fx-background-color: linear-gradient(#370B54 30%,#370B54 70%) opacity 0.5;
+.table-view > .virtual-flow > .scroll-bar:vertical,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track-background,
+.table-view > .virtual-flow > .scroll-bar:horizontal,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {
+    -fx-background-color: transparent;
+    -fx-hbar-policy: never;
 }
 
-#innerBox1 {
-    -fx-border-color: #7B7E8A;
-    -fx-border-radius: 40px ;
-}
-#innerBox2 {
-    -fx-border-color: #7B7E8A;
-    -fx-border-radius: 40px ;
-}
-#innerBox3 {
-    -fx-border-color: #7B7E8A;
-    -fx-border-radius: 40px ;
-}
-
-.table-view .column-header {
-    -fx-background-color: #2C3346;
-}
-
-.table-view .scroll-bar:horizontal .thumb {
-    -fx-background-color: linear-gradient(#370B54 0%,#370B54 100%);
+.table-view > .virtual-flow > .scroll-bar:vertical,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track-background {
+    -fx-background-color: transparent;
 }
 
 .table-view .scroll-bar:vertical .thumb {
-    -fx-background-color: linear-gradient(#370B54 0%,#370B54 100%);
+    -fx-background-color: orange;
+
 }
+
+.table-row-cell {
+    -fx-text-fill: white;
+    -fx-table-cell-border-color: transparent;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: linear-gradient(to top, rgba(255,165,0,0.5), rgba(255,165,0,0));
+}
+
+.table-row-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: linear-gradient(to top, rgba(255,165,0,0.5), rgba(255,165,0,0));
+    -fx-border-color: orange;
+    -fx-border-width: 0 0 5 0;
+}
+
+#innerBox1, #innerBox2, #innerBox3 {
+    -fx-background-color: #1E2337;
+    -fx-background-radius: 20px;
+}
+
+
+.table-view .column-header {
+    -fx-font-size: 16;
+    -fx-background-color: #2C3346;
+}
+
+
+
 
 
 

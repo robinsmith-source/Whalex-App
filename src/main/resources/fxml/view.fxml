@@ -12,7 +12,7 @@
          <children>
             <VBox fx:id="innerBox1" prefWidth="300.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Label text="Sounds" textFill="WHITE">
+                  <Label fx:id="soundTableLabel" text="Sounds" textFill="WHITE">
                      <font>
                         <Font size="22.0" />
                      </font>
@@ -20,7 +20,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TableView fx:id="soundTable" onMouseClicked="#selectRow">
+                  <TableView fx:id="soundTable" onMouseClicked="#handleOnSoundClicked" VBox.vgrow="ALWAYS">
                      <columns>
                         <TableColumn fx:id="soundCover" prefWidth="75.0" resizable="false" />
                         <TableColumn fx:id="soundTitle" prefWidth="75.0" resizable="false" text="Title" />
@@ -74,7 +74,7 @@
             </VBox>
             <VBox fx:id="innerBox2" prefWidth="300.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Label text="Playlists" textFill="WHITE">
+                  <Label fx:id="playlistTableLabel" text="Playlists" textFill="WHITE">
                      <font>
                         <Font size="22.0" />
                      </font>
@@ -82,12 +82,12 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TableView fx:id="playlistTable">
+                  <TableView fx:id="playlistTable" onMouseClicked="#handleOnPlaylistClicked" VBox.vgrow="ALWAYS">
                      <columns>
                         <TableColumn fx:id="playlistCover" prefWidth="75.0" resizable="false" />
                         <TableColumn fx:id="playlistName" prefWidth="75.0" resizable="false" text="Name" />
-                        <TableColumn fx:id="numberOfSounds" prefWidth="75.0" resizable="false" text="numberOfSounds" />
-                        <TableColumn fx:id="playlistCreatedBy" prefWidth="50.0" resizable="false" text="CreatedBy" />
+                        <TableColumn fx:id="numberOfSounds" prefWidth="75.0" resizable="false" text="Size" />
+                        <TableColumn fx:id="playlistCreatedBy" prefWidth="50.0" resizable="false" text="Created By" />
                      </columns>
                      <VBox.margin>
                         <Insets />
@@ -136,7 +136,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TableView fx:id="queueTable" onMouseClicked="#selectRow">
+                  <TableView fx:id="queueTable" onMouseClicked="#handleOnSoundClicked" VBox.vgrow="ALWAYS">
                      <columns>
                         <TableColumn fx:id="queueSoundCover" prefWidth="75.0" resizable="false" />
                         <TableColumn fx:id="queueSoundTitle" prefWidth="75.0" resizable="false" text="Title" />
