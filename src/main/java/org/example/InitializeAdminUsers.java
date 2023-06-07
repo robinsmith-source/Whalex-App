@@ -10,7 +10,6 @@ import org.example.profile.User;
 import org.example.profile.UserManager;
 
 import java.io.File;
-import java.io.IOException;
 
 public class InitializeAdminUsers {
     private static final Logger log = LogManager.getLogger(InitializeAdminUsers.class);
@@ -19,14 +18,14 @@ public class InitializeAdminUsers {
     private static final PlaylistManager pm = PlaylistManager.getInstance();
     private static final SoundManager sm = SoundManager.getINSTANCE();
 
-    public static void main(String[] args) throws ReadDataException, WriteDataException, IOException {
+    public static void main(String[] args) throws Exception {
         writeData();
         //readData();
         //showDataFromUser("Robin");
         //showDataFromUser("Marvin");
     }
 
-    public static void writeData() {
+    public static void writeData() throws Exception {
         //User 1 - Marvin
         um.createUser(null, "Marvin", "123", "123");
         User Marvin = um.getUserByName("Marvin");

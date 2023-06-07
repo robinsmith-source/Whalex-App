@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -131,12 +133,12 @@ public class UserManager {
     /**
      * Method to create a user by its profilePicture, username and password
      *
-     * @param profilePicture Profile picture of the user
+     * @param choosenImage Profile picture of the user
      * @param username       Username of the user
      * @param password       Password of the user
      * @throws IllegalArgumentException if the profile picture is null, the username is null or empty or the password is null or empty or the user already exists
      */
-    public void createUser(File profilePicture, String username, String password, String passwordConfirmation) throws IllegalArgumentException {
+    public void createUser(File choosenImage, String username, String password, String passwordConfirmation) throws Exception {
         if (username == null || username.isEmpty()) {
             log.warn("Username is null or empty.");
             throw new IllegalArgumentException("Username cannot be null or empty.");
@@ -149,10 +151,18 @@ public class UserManager {
         } else if (this.USERS.stream().anyMatch(user -> user.getUsername().equals(username))) {
             log.error("User {} already exists.", username);
             throw new IllegalArgumentException("User already exists.");
-        } else if (profilePicture == null) {
+        } else if (choosenImage == null) {
             log.warn("Profile picture is null.");
             this.USERS.add(new User(UUID.randomUUID().toString(), DEFAULT_PICTURE, username, password));
         } else {
+            Path targetFolder = Path.of("src/main/resources/data/profilePictures");
+
+            String extension = choosenImage.getName().substring(choosenImage.getName().lastIndexOf("."));
+            Path targetFile = targetFolder.resolve(username + extension);
+
+            Files.copy(choosenImage.toPath(), targetFile);
+            File profilePicture = targetFile.toFile();
+
             this.USERS.add(new User(UUID.randomUUID().toString(), profilePicture, username, password));
         }
         log.debug("User {} has been created.", username);
