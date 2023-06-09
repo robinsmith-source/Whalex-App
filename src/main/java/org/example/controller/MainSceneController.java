@@ -78,7 +78,7 @@ public class MainSceneController implements Initializable {
                 Platform.runLater(() -> updatePlayerContent());
             }
         };
-        updateTimer.scheduleAtFixedRate(updateTask, 0, 100);
+        updateTimer.scheduleAtFixedRate(updateTask, 0, 1000);
         volumeSlider.valueProperty().addListener((ov, old_val, new_val) -> Platform.runLater(() -> {
             Player.getInstance().setVolume(volumeSlider.getValue());
             log.info("Volume changed to: " + volumeSlider.getValue());
@@ -115,23 +115,23 @@ public class MainSceneController implements Initializable {
         log.info("Next sound");
     }
 
-    //TODO: Only for debugging --> Implement correctly
+    //TODO: Only for debugging --> Implement correctly -- should be done
     private void updatePlayerContent() {
-        if (Player.getInstance().getCurrentSound() != null) {
+        if (Player.getInstance().getSoundQueue().isEmpty()) {
+            soundProgress.setProgress(0);
+            totalSoundTime.setText("00:00");
+            currentSoundTime.setText("00:00");
+            currentSoundTitle.setText("");
+            currentSoundUploadedBy.setText("");
+        } else {
             currentSoundTitle.setText(Player.getInstance().getCurrentSound().getTitle());
             currentSoundUploadedBy.setText(Player.getInstance().getCurrentSound().getUploadedBy().getUsername());
             double progress = Player.getInstance().getCurrentTime() / Player.getInstance().getTotalTime();
             soundProgress.setProgress(progress);
             int totalTimeInt = (int) Player.getInstance().getTotalTime();
             int currentTimeInt = (int) Player.getInstance().getCurrentTime();
-            totalSoundTime.setText(String.format("%02d:%02d",totalTimeInt / 60, totalTimeInt % 60));
-            currentSoundTime.setText(String.format("%02d:%02d",currentTimeInt / 60, currentTimeInt % 60));
-        } else {
-            soundProgress.setProgress(0);
-            totalSoundTime.setText("00:00");
-            currentSoundTime.setText("00:00");
-            currentSoundTitle.setText("");
-            currentSoundUploadedBy.setText("");
+            totalSoundTime.setText(String.format("%02d:%02d", totalTimeInt / 60, totalTimeInt % 60));
+            currentSoundTime.setText(String.format("%02d:%02d", currentTimeInt / 60, currentTimeInt % 60));
         }
     }
 

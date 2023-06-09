@@ -7,7 +7,6 @@ import org.example.media.interfaces.ISound;
 import org.example.playlist.Playlist;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -161,7 +160,7 @@ public class Player {
     }
 
     public LinkedList<ISound> getSoundQueue() {
-        switch (queueOrder) {
+        /*switch (queueOrder) {
             case ORDERED:
                 return soundQueueOrdered;
             case SHUFFLED:
@@ -169,6 +168,8 @@ public class Player {
             default:
                 return soundQueueOrdered;
         }
+         */
+        return soundQueueOrdered;
     }
 
     public ArrayList<ISound> getSoundHistory() {
@@ -185,6 +186,7 @@ public class Player {
     }
 
     public void shuffle() {
+        /*
         if (queueOrder == Order.SHUFFLED) {
             queueOrder = Order.ORDERED;
         } else {
@@ -196,5 +198,6 @@ public class Player {
             System.out.println(soundQueueShuffled);
 
         }
+         */
     }
 }

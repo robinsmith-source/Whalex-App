@@ -1,7 +1,6 @@
 package org.example;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,7 +37,7 @@ public class WhalexApp extends Application {
 
         stage.setOnCloseRequest(event -> {
             log.info("Closing Whalex Application");
-            Platform.exit(); //TODO: Close application correct without data loss
+            System.exit(0); //TODO: Close application correct without data loss
         });
         log.info("Starting Whalex Application");
         SceneManager.LOGIN.changeScene();
