@@ -7,13 +7,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import java.net.URL?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.LoginController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.CreatePlaylistController">
    <children>
       <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox fx:id="sideBar" prefHeight="400.0" prefWidth="200.0">
                <children>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="userProfilePicture" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@assets/WhalexLOGO.png" />
                      </image>
@@ -21,7 +21,7 @@
                         <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                      </VBox.margin>
                   </ImageView>
-                  <Label alignment="CENTER" prefWidth="160.0" text="Username" textFill="WHITE">
+                  <Label fx:id="userUsername" alignment="CENTER" prefWidth="160.0" text="Username" textFill="WHITE">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -41,7 +41,7 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="400.0" prefWidth="400.0">
                <children>
-                  <TextField fx:id="usernameField" onKeyTyped="#checkUsername" promptText="name">
+                  <TextField fx:id="playlistNameTextField" promptText="name">
                      <VBox.margin>
                         <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
                      </VBox.margin>
@@ -49,7 +49,7 @@
                         <Font size="24.0" />
                      </font>
                   </TextField>
-                  <Button fx:id="fileChooserButton" mnemonicParsing="false" onAction="#chooseFile" text="Choose Cover">
+                  <Button fx:id="fileChooserButton" mnemonicParsing="false" onAction="#handleChooseCoverButton" text="Choose Cover">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -57,14 +57,26 @@
                         <Insets bottom="25.0" left="25.0" right="25.0" top="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" text="Add">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="25.0" right="25.0" top="25.0" />
-                     </VBox.margin>
-                  </Button>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddButton" text="Add">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="addButton1" mnemonicParsing="false" onAction="#handleAddButton" text="Cancel">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </children>

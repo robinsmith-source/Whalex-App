@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -30,6 +31,7 @@ import org.example.playlist.PlaylistManager;
 import org.example.profile.User;
 import org.example.profile.UserManager;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -402,6 +404,14 @@ public class ViewController implements Initializable {
             initializeSoundContent(soundsInSearch);
             initializePlaylistContent(playlistsInSearch);
         }
+    }
+
+    public void handleAddSoundButton(ActionEvent actionEvent) throws Exception {
+        SceneManager.ADD_SOUND.showSecondaryStage();
+    }
+
+    public void handleCreatePlaylistButton(ActionEvent actionEvent) throws IOException {
+        SceneManager.CREATE_PLAYLIST.showSecondaryStage();
     }
 }
 

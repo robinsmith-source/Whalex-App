@@ -172,6 +172,7 @@ public class UserManager {
         log.debug("User {} has been created.", username);
         activeUser = getUserByName(username);
         log.debug("User {} is now logged in.", username);
+        usersToJSON();
     }
 
     /**

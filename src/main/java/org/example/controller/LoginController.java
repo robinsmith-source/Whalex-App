@@ -90,7 +90,6 @@ public class LoginController implements Initializable {
         try {
             UserManager.getInstance().createUser(choosenImage, usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
             SceneManager.LOADING.changeScene();
-            UserManager.getInstance().usersToJSON();
         } catch (IllegalArgumentException e) {
             errorMessageLabel.setText(e.getMessage());
         } catch (Exception e) {

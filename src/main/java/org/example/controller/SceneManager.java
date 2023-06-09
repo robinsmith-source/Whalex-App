@@ -15,12 +15,18 @@ public enum SceneManager {
 
     LOGIN("/fxml/login.fxml"),
     LOADING("/fxml/loading.fxml"),
-    MAIN("/fxml/mainScene.fxml");
+    MAIN("/fxml/mainScene.fxml"),
+
+    ADD_SOUND("/fxml/addSound.fxml"),
+    CREATE_PLAYLIST("/fxml/createPlaylist.fxml"),
+    EDIT_PROFILE("/fxml/editProfile.fxml");
+
     private static final Logger log = LogManager.getLogger(SceneManager.class);
 
     private final String fxmlPath;
 
     private final Stage applicationStage = WhalexApp.getApplicationStage();
+    private final Stage secondaryStage = new Stage();
 
     SceneManager(String fxmlPath) {
         this.fxmlPath = fxmlPath;
@@ -29,6 +35,30 @@ public enum SceneManager {
     public Parent getScene() throws IOException {
         final FXMLLoader loader = new FXMLLoader(getClass().getResource(this.fxmlPath));
         return loader.load();
+    }
+
+    public void showSecondaryStage() throws IOException {
+        switch (this) {
+            case ADD_SOUND:
+                secondaryStage.setTitle("Whalex - Add Sound");
+                secondaryStage.setScene(new Scene(SceneManager.ADD_SOUND.getScene()));
+                break;
+                case CREATE_PLAYLIST:
+                secondaryStage.setTitle("Whalex - Create Playlist");
+                secondaryStage.setScene(new Scene(SceneManager.CREATE_PLAYLIST.getScene()));
+                break;
+                case EDIT_PROFILE:
+                secondaryStage.setTitle("Whalex - Edit Profile");
+                secondaryStage.setScene(new Scene(SceneManager.EDIT_PROFILE.getScene()));
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + this);
+        }
+    	secondaryStage.show();
+    }
+
+    public void closeSecondaryStage() {
+    	secondaryStage.close();
     }
 
     public void changeScene() throws Exception {

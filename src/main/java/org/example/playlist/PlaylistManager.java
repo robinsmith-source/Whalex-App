@@ -147,7 +147,7 @@ public class PlaylistManager {
     //TODO: PlaylistCover value is checked at input (FileExplorer)
     public void createPlaylist(User currentUser, File playlistCover, String playlistName) throws IllegalArgumentException {
         if (playlistName == null || playlistName.isEmpty()) {
-            log.warn("PlaylistName is null or empty");
+            log.debug("PlaylistName is null or empty");
             throw new IllegalArgumentException("PlaylistName cannot be null or empty");
         } else if (currentUser == null) {
             log.warn("User is null");
@@ -156,7 +156,7 @@ public class PlaylistManager {
             log.error("Playlist {} already exists.", playlistName);
             throw new IllegalArgumentException("Playlist " + playlistName + " already exists.");
         } else if (playlistCover == null) {
-            log.warn("PlaylistCover is null");
+            log.debug("PlaylistCover is null");
             this.PLAYLISTS.add(new Playlist(UUID.randomUUID().toString(), DEFAULT_COVER, playlistName, currentUser, new Date()));
         } else {
             this.PLAYLISTS.add(new Playlist(UUID.randomUUID().toString(), playlistCover, playlistName, currentUser, new Date()));
