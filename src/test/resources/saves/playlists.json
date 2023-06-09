@@ -1,0 +1,32 @@
+[
+  {
+    "playlistID": "dd5d9aff-1ff1-4b18-b8d9-61e671744d8c",
+    "playlistCover": "src\\main\\resources\\data\\defaultImages\\playlists\\defaultPlaylistCover.jpg",
+    "name": "Ocean Groove",
+    "createdBy": "17799b85-5a84-47e9-90c8-6d2e7dc7395a",
+    "createdAt": 1686305457919,
+    "sounds": [
+      {
+        "soundID": "31accdf0-edbc-481d-8c47-7a41347937d4"
+      },
+      {
+        "soundID": "f23b5752-7ba7-41f0-8d86-4ad7f4c7088b"
+      }
+    ]
+  },
+  {
+    "playlistID": "bc1b1028-5eda-4aca-93ea-7164a86b2891",
+    "playlistCover": "src\\main\\resources\\data\\defaultImages\\playlists\\defaultPlaylistCover.jpg",
+    "name": "Deepsea Dive",
+    "createdBy": "77769bf9-8175-4f9b-ad20-7d88348cdfe1",
+    "createdAt": 1686305457931,
+    "sounds": [
+      {
+        "soundID": "30029497-242c-40c1-9238-47cc3277ebb3"
+      },
+      {
+        "soundID": "59b891d6-9e74-415e-8476-ea4cd4639689"
+      }
+    ]
+  }
+]

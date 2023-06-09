@@ -44,7 +44,7 @@ public class UserManager {
     /**
      * Path to the file where all user data is stored
      */
-    private final File SAVE_FILE = new File("src/main/resources/data/saves/users.json");
+    private File SAVE_FILE = new File("src/main/resources/data/saves/users.json");
 
     /**
      * Path to the file where the default profile picture is stored
@@ -65,6 +65,10 @@ public class UserManager {
      * Constructor for UserManager
      */
     private UserManager() {
+    }
+
+    public void setSAVE_FILE(File SAVE_FILE) {
+        this.SAVE_FILE = SAVE_FILE;
     }
 
     /**

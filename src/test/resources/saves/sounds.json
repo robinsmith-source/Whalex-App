@@ -1,0 +1,26 @@
+[
+  {
+    "soundID": "31accdf0-edbc-481d-8c47-7a41347937d4",
+    "title": "Pottwal Pop13454645654",
+    "path": "src/main/resources/data/sounds/9750300N.wav",
+    "uploadedBy": "17799b85-5a84-47e9-90c8-6d2e7dc7395a"
+  },
+  {
+    "soundID": "f23b5752-7ba7-41f0-8d86-4ad7f4c7088b",
+    "title": "Glattschweinswal Gesang",
+    "path": "src/main/resources/data/sounds/89405023.wav",
+    "uploadedBy": "17799b85-5a84-47e9-90c8-6d2e7dc7395a"
+  },
+  {
+    "soundID": "59b891d6-9e74-415e-8476-ea4cd4639689",
+    "title": "Blauwal Ballade",
+    "path": "src/main/resources/data/sounds/72021005.wav",
+    "uploadedBy": "77769bf9-8175-4f9b-ad20-7d88348cdfe1"
+  },
+  {
+    "soundID": "30029497-242c-40c1-9238-47cc3277ebb3",
+    "title": "Rauzahldelfin Rap",
+    "path": "src/main/resources/data/sounds/78018003.wav",
+    "uploadedBy": "77769bf9-8175-4f9b-ad20-7d88348cdfe1"
+  }
+]

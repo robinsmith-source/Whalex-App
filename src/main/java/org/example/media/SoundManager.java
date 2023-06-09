@@ -49,7 +49,7 @@ public class SoundManager {
     /**
      * Path to the file where all sound data is stored
      */
-    private final File SAVE_FILE = new File("src/main/resources/data/saves/sounds.json");
+    private File SAVE_FILE = new File("src/main/resources/data/saves/sounds.json");
 
     /**
      * Path to the file where the default sound cover is stored
@@ -65,6 +65,10 @@ public class SoundManager {
      * Constructor of the SoundManager
      */
     private SoundManager() {
+    }
+
+    public void setSAVE_FILE(File SAVE_FILE) {
+        this.SAVE_FILE = SAVE_FILE;
     }
 
     /**

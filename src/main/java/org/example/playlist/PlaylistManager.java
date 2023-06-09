@@ -42,7 +42,7 @@ public class PlaylistManager {
     /**
      * Path to the file where all playlist data is stored
      */
-    private final File SAVE_FILE = new File("src/main/resources/data/saves/playlists.json");
+    private File SAVE_FILE = new File("src/main/resources/data/saves/playlists.json");
 
     /**
      * Default playlist cover
@@ -60,6 +60,10 @@ public class PlaylistManager {
     private PlaylistManager() {
     }
 
+
+    public void setSAVE_FILE(File SAVE_FILE) {
+        this.SAVE_FILE = SAVE_FILE;
+    }
     /**
      * Method to get the PlaylistManager instance
      *
