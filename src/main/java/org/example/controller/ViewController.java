@@ -1,8 +1,8 @@
 package org.example.controller;
 
+import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +15,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +30,9 @@ import org.example.profile.User;
 import org.example.profile.UserManager;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class ViewController implements Initializable {
@@ -39,7 +43,7 @@ public class ViewController implements Initializable {
     @FXML
     private TableView<ISound> soundTable;
     @FXML
-    private TableColumn<ISound, ImageView> soundCover;
+    private TableColumn<ISound, StackPane> soundCover;
     @FXML
     private TableColumn<ISound, String> soundTitle;
     @FXML
@@ -50,7 +54,7 @@ public class ViewController implements Initializable {
     @FXML
     private TableView<Playlist> playlistTable;
     @FXML
-    private TableColumn<Playlist, ImageView> playlistCover;
+    private TableColumn<Playlist, StackPane> playlistCover;
     @FXML
     private TableColumn<Playlist, String> playlistName;
     @FXML
@@ -82,10 +86,24 @@ public class ViewController implements Initializable {
                 image = ((Image) cellData.getValue().getMedia().getMetadata().get("image"));
             }
             ImageView imageView = new ImageView(image);
+            StackPane stackPane = new StackPane();
             imageView.setFitHeight(60);
             imageView.setFitWidth(60);
             imageView.setId("soundCover");
-            return new ReadOnlyObjectWrapper<>(imageView);
+
+            Button button = new Button();
+            MaterialIconView iconView = new MaterialIconView();
+            iconView.setGlyphName("PLAY_CIRCLE_FILLED");
+            iconView.setSize("35");
+            iconView.setFill(Color.WHITE);
+            iconView.setOpacity(0.5);
+            button.setGraphic(iconView);
+            stackPane.getChildren().addAll(imageView, button);
+            button.setId("playlistCoverButton");
+            button.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> handleOnSoundCoverButtonClicked(cellData.getValue()));
+            button.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> iconView.setOpacity(1));
+            button.addEventHandler(MouseEvent.MOUSE_EXITED, event -> iconView.setOpacity(0.5));
+            return new ReadOnlyObjectWrapper<>(stackPane);
         });
         soundTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
         soundUploadedBy.setCellValueFactory(cellData -> {
@@ -113,10 +131,23 @@ public class ViewController implements Initializable {
         playlistCover.setCellValueFactory(cellData -> {
             Image image = new Image(cellData.getValue().getPlaylistCover().toURI().toString());
             ImageView imageView = new ImageView(image);
+            StackPane stackPane = new StackPane();
             imageView.setFitHeight(60);
             imageView.setFitWidth(60);
             imageView.setId("playlistCover");
-            return new ReadOnlyObjectWrapper<>(imageView);
+            Button button = new Button();
+            MaterialIconView iconView = new MaterialIconView();
+            iconView.setGlyphName("PLAY_CIRCLE_FILLED");
+            iconView.setSize("35");
+            iconView.setFill(Color.WHITE);
+            iconView.setOpacity(0.5);
+            button.setGraphic(iconView);
+            stackPane.getChildren().addAll(imageView, button);
+            button.setId("playlistCoverButton");
+            button.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> handleOnPlaylistCoverButtonClicked(cellData.getValue()));
+            button.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> iconView.setOpacity(1));
+            button.addEventHandler(MouseEvent.MOUSE_EXITED, event -> iconView.setOpacity(0.5));
+            return new ReadOnlyObjectWrapper<>(stackPane);
         });
         playlistName.setCellValueFactory(new PropertyValueFactory<>("Name"));
         numberOfSounds.setCellValueFactory(new PropertyValueFactory<>("numberOfSounds"));
@@ -159,10 +190,11 @@ public class ViewController implements Initializable {
         queueSoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.6));
         setView(ViewType.ALL);
 
-        queueTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         queueTable.setItems(queueObjectList);
+        queueTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         //TODO: FIX THIS!!
+/*
         Timer updateTimer = new Timer();
         TimerTask updateTask = new TimerTask() {
             @Override
@@ -173,11 +205,25 @@ public class ViewController implements Initializable {
                     System.out.println("Sounds: " + soundObjectList.size());
                     System.out.println("Playlists: " + playlistObjectList.size());
                 });
-                //initializeQueueContent(PlayerCombined.getInstance().getSoundQueue());
             }
         };
-        updateTimer.schedule(updateTask, 0, 500);
+        updateTimer.schedule(updateTask, 0, 2000);
 
+ */
+
+        PlayerCombined player = PlayerCombined.getInstance();
+        player.registerOnNextSongEvent(() -> {
+                refresh();
+                log.info("{} refreshed", this.getClass().getSimpleName());
+
+        });
+    }
+
+    public void refresh() {
+        queueTable.refresh();
+        log.info("Refreshed main scene");
+        queueSoundCover.setVisible(false);
+        queueSoundCover.setVisible(true);
     }
 
     public void setView(ViewType viewType) {
@@ -258,7 +304,11 @@ public class ViewController implements Initializable {
     private void addToPlaylist() {
         ISound sound = soundTable.getSelectionModel().getSelectedItem();
         Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
-        playlist.addSound(UserManager.getInstance().getActiveUser(), sound);
+        try {
+            playlist.addSound(UserManager.getInstance().getActiveUser(), sound);
+        } catch (Exception e) {
+            showPopup(e);
+        }
         //soundTable.refresh();
         //playlistTable.refresh();
         updateView();
@@ -268,12 +318,15 @@ public class ViewController implements Initializable {
     private void addSoundToQueue() {
         ISound sound = soundTable.getSelectionModel().getSelectedItem();
         PlayerCombined.getInstance().addSoundToQueue(sound);
+        queueTable.refresh();
     }
 
     @FXML
     private void removeSoundFromQueue() {
+        log.info("Removing sound from queue");
         ISound sound = queueTable.getSelectionModel().getSelectedItem();
         PlayerCombined.getInstance().removeSoundFromQueue(sound);
+        queueTable.refresh();
     }
 
     @FXML
@@ -284,7 +337,6 @@ public class ViewController implements Initializable {
 
     /**
      * Method was only a test
-     *
      */
     private void showPopup(Exception e) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -308,42 +360,52 @@ public class ViewController implements Initializable {
     //TODO: implement correcly to play sounds
     @FXML
     private void handleOnSoundClicked(MouseEvent mouseEvent) {
+        /*
         if (mouseEvent.getClickCount() == 2) {
             try {
-                ISound sound = soundTable.getSelectionModel().getSelectedItem();
                 PlayerCombined.getInstance().clearQueue();
                 PlayerCombined.getInstance().addSoundToQueue(sound);
                 PlayerCombined.getInstance().playPause();
             } catch (NullPointerException e) {
                 log.error("No sound selected");
-            }
         }
+         */
     }
 
     @FXML
     private void handleOnPlaylistClicked(MouseEvent mouseEvent) {
-        if (mouseEvent.getClickCount() == 1) {
+        if (mouseEvent.getClickCount() == 2) {
             try {
                 Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
                 soundTableLabel.setText("Sounds in Playlist: " + playlist.getName());
                 initializeSoundContent(playlist.getSounds());
             } catch (NullPointerException e) {
                 log.error("No playlist selected");
+                showPopup(e);
             }
         }
         //TODO: Implement with button hover effect
-        /*
-        if (mouseEvent.getClickCount() > 1) {
+
+    }
+
+    private void handleOnSoundCoverButtonClicked(ISound sound) {
+        try {
+            PlayerCombined.getInstance().clearQueue();
+            PlayerCombined.getInstance().addSoundToQueue(sound);
+            PlayerCombined.getInstance().playPause();
+        } catch (NullPointerException e) {
+            log.error("No sound selected");
+        }
+    }
+
+    private void handleOnPlaylistCoverButtonClicked(Playlist value) {
             try {
-                Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
                 PlayerCombined.getInstance().clearQueue();
-                PlayerCombined.getInstance().addPlaylistToQueue(playlist);
+                PlayerCombined.getInstance().addPlaylistToQueue(value);
                 PlayerCombined.getInstance().playPause();
             } catch (NullPointerException e) {
                 log.error("No playlist selected");
             }
-        }
-         */
     }
 
     void handleSearchBar(String search) {

@@ -81,7 +81,15 @@
 }
 
 
+#playlistCoverButton {
+    -fx-background-color: transparent;
+    -fx-background-radius: 20px;
+}
 
+#playlistCoverButton:hover {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
 
 
 
