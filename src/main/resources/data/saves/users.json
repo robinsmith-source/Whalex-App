@@ -10,5 +10,17 @@
     "profilePicture": "src\\main\\resources\\data\\defaultImages\\users\\defaultUserProfilePicture.jpg",
     "username": "Robin",
     "password": "123"
+  },
+  {
+    "userID": "c5db5b14-dbcc-41c0-b1e3-6fa723a2bb54",
+    "profilePicture": "src\\main\\resources\\data\\profilePictures\\r.jpg",
+    "username": "r",
+    "password": "r"
+  },
+  {
+    "userID": "c63d602e-ceb9-4a1d-88f5-adbc658b9c67",
+    "profilePicture": "src\\main\\resources\\data\\defaultImages\\users\\defaultUserProfilePicture.jpg",
+    "username": "t",
+    "password": "t"
   }
 ]

@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,7 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.player.PlayerCombined;
+import org.example.player.Player;
 import org.example.profile.UserManager;
 
 import java.io.IOException;
@@ -79,7 +80,7 @@ public class MainSceneController implements Initializable {
         };
         updateTimer.scheduleAtFixedRate(updateTask, 0, 100);
         volumeSlider.valueProperty().addListener((ov, old_val, new_val) -> Platform.runLater(() -> {
-            PlayerCombined.getInstance().setVolume(volumeSlider.getValue());
+            Player.getInstance().setVolume(volumeSlider.getValue());
             log.info("Volume changed to: " + volumeSlider.getValue());
 
         }));
@@ -100,29 +101,29 @@ public class MainSceneController implements Initializable {
         viewController.setView(ViewType.ALL);
     }
 
-    public void playSound() {
-        PlayerCombined.getInstance().playPause();
+    public void handlePlayButton() {
+        Player.getInstance().playPause();
     }
 
-    public void previousSound() {
-        PlayerCombined.getInstance().previous();
+    public void handlePreviousButton() {
+        Player.getInstance().previous();
         log.info("Previous sound");
     }
 
-    public void nextSound() {
-        PlayerCombined.getInstance().next();
+    public void handleNextButton() {
+        Player.getInstance().next();
         log.info("Next sound");
     }
 
     //TODO: Only for debugging --> Implement correctly
     private void updatePlayerContent() {
-        if (PlayerCombined.getInstance().getCurrentSound() != null) {
-            currentSoundTitle.setText(PlayerCombined.getInstance().getCurrentSound().getTitle());
-            currentSoundUploadedBy.setText(PlayerCombined.getInstance().getCurrentSound().getUploadedBy().getUsername());
-            double progress = PlayerCombined.getInstance().getCurrentTime() / PlayerCombined.getInstance().getTotalTime();
+        if (Player.getInstance().getCurrentSound() != null) {
+            currentSoundTitle.setText(Player.getInstance().getCurrentSound().getTitle());
+            currentSoundUploadedBy.setText(Player.getInstance().getCurrentSound().getUploadedBy().getUsername());
+            double progress = Player.getInstance().getCurrentTime() / Player.getInstance().getTotalTime();
             soundProgress.setProgress(progress);
-            int totalTimeInt = (int) PlayerCombined.getInstance().getTotalTime();
-            int currentTimeInt = (int) PlayerCombined.getInstance().getCurrentTime();
+            int totalTimeInt = (int) Player.getInstance().getTotalTime();
+            int currentTimeInt = (int) Player.getInstance().getCurrentTime();
             totalSoundTime.setText(String.format("%02d:%02d",totalTimeInt / 60, totalTimeInt % 60));
             currentSoundTime.setText(String.format("%02d:%02d",currentTimeInt / 60, currentTimeInt % 60));
         } else {
@@ -137,5 +138,12 @@ public class MainSceneController implements Initializable {
     public void checkSearchQuery() {
         log.debug("Checking search query {}.", searchBar.getText());
         viewController.handleSearchBar(searchBar.getText());
+    }
+
+    public void handleShuffleButton(ActionEvent actionEvent) {
+        Player.getInstance().shuffle();
+    }
+
+    public void handleRepeatButton(ActionEvent actionEvent) {
     }
 }

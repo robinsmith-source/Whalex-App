@@ -25,7 +25,6 @@ import org.apache.logging.log4j.Logger;
 import org.example.media.SoundManager;
 import org.example.media.interfaces.ISound;
 import org.example.player.Player;
-import org.example.player.PlayerCombined;
 import org.example.playlist.Playlist;
 import org.example.playlist.PlaylistManager;
 import org.example.profile.User;
@@ -74,7 +73,7 @@ public class ViewController implements Initializable {
     private ObservableList<Playlist> playlistObjectList;
     private ObservableList<ISound> soundObjectList;
 
-    private final ObservableList<ISound> queueObjectList = FXCollections.observableList(PlayerCombined.getInstance().getSoundQueue());
+    private final ObservableList<ISound> queueObjectList = FXCollections.observableList(Player.getInstance().getSoundQueue());
     private ViewType view;
 
 
@@ -267,14 +266,18 @@ public class ViewController implements Initializable {
         for (Playlist playlist : PlaylistManager.getInstance().getAllPlaylists()) {
             playlist.removeSound(sound);
         }
-        Player.getInstance().getSoundQueue().removeSound(sound);
+        Player.getInstance().removeSoundFromQueue(sound);
         updateView();
     }
 
     @FXML
     private void deletePlaylist() {
         Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
-        PlaylistManager.getInstance().deletePlaylistByID(UserManager.getInstance().getActiveUser(), playlist.getPlaylistID());
+        try {
+            PlaylistManager.getInstance().deletePlaylistByID(UserManager.getInstance().getActiveUser(), playlist.getPlaylistID());
+        } catch (IllegalArgumentException e) {
+            showPopup(e);
+        }
         updateView();
     }
 
@@ -284,7 +287,7 @@ public class ViewController implements Initializable {
         Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
         try {
             playlist.addSound(UserManager.getInstance().getActiveUser(), sound);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             showPopup(e);
         }
         updateView();
@@ -293,7 +296,7 @@ public class ViewController implements Initializable {
     @FXML
     private void addSoundToQueue() {
         ISound sound = soundTable.getSelectionModel().getSelectedItem();
-        PlayerCombined.getInstance().addSoundToQueue(sound);
+        Player.getInstance().addSoundToQueue(sound);
         queueTable.refresh();
     }
 
@@ -301,25 +304,25 @@ public class ViewController implements Initializable {
     private void removeSoundFromQueue() {
         log.info("Removing sound from queue");
         ISound sound = queueTable.getSelectionModel().getSelectedItem();
-        PlayerCombined.getInstance().removeSoundFromQueue(sound);
+        Player.getInstance().removeSoundFromQueue(sound);
         queueTable.refresh();
     }
 
     @FXML
     private void addPlaylistToQueue() {
         Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
-        PlayerCombined.getInstance().addPlaylistToQueue(playlist);
+        Player.getInstance().addPlaylistToQueue(playlist);
     }
 
     /**
      * Method was only a test
      */
     private void showPopup(Exception e) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.WARNING);
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(3000),
                 ae -> alert.close()));
-        alert.setTitle("Whalex - Information");
+        alert.setTitle("Whalex - Exception");
         alert.setHeaderText(getClass().getSimpleName());
         alert.setContentText(e.getMessage());
         alert.show();
@@ -331,7 +334,7 @@ public class ViewController implements Initializable {
      * Probably the method to set the sound / playlist in queues first place
      *
      * @param mouseEvent mouse event
-     * @see org.example.player.Player
+     * @see Player
      */
     //TODO: implement correcly to play sounds
     @FXML
@@ -339,9 +342,9 @@ public class ViewController implements Initializable {
         /*
         if (mouseEvent.getClickCount() == 2) {
             try {
-                PlayerCombined.getInstance().clearQueue();
-                PlayerCombined.getInstance().addSoundToQueue(sound);
-                PlayerCombined.getInstance().playPause();
+                Player.getInstance().clearQueue();
+                Player.getInstance().addSoundToQueue(sound);
+                Player.getInstance().playPause();
             } catch (NullPointerException e) {
                 log.error("No sound selected");
         }
@@ -366,22 +369,22 @@ public class ViewController implements Initializable {
 
     private void handleOnSoundCoverButtonClicked(ISound sound) {
         try {
-            PlayerCombined.getInstance().clearQueue();
-            PlayerCombined.getInstance().addSoundToQueue(sound);
-            PlayerCombined.getInstance().playPause();
+            Player.getInstance().clearQueue();
+            Player.getInstance().addSoundToQueue(sound);
+            Player.getInstance().playPause();
         } catch (NullPointerException e) {
             log.error("No sound selected");
         }
     }
 
     private void handleOnPlaylistCoverButtonClicked(Playlist value) {
-            try {
-                PlayerCombined.getInstance().clearQueue();
-                PlayerCombined.getInstance().addPlaylistToQueue(value);
-                PlayerCombined.getInstance().playPause();
-            } catch (NullPointerException e) {
-                log.error("No playlist selected");
-            }
+        try {
+            Player.getInstance().clearQueue();
+            Player.getInstance().addPlaylistToQueue(value);
+            Player.getInstance().playPause();
+        } catch (NullPointerException e) {
+            log.error("No playlist selected");
+        }
     }
 
     void handleSearchBar(String search) {

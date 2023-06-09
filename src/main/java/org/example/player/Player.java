@@ -4,202 +4,197 @@ import javafx.scene.media.MediaPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.media.interfaces.ISound;
+import org.example.playlist.Playlist;
 
-/**
- * Player class is used to handle all media player actions
- *
- * @link SoundQueue (1 to 1 : Each Player can only have one SoundQueue)
- * @link SoundHistory (1 to 1 : Each Player can only have one SoundHistory)
- * TODO : Write tests for the Player
- * @see MediaPlayer
- * @see ISound
- */
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Stack;
+
 public class Player {
     private static final Logger log = LogManager.getLogger(Player.class);
-
     private static final Player INSTANCE = new Player();
-
-    /**
-     * isPlaying is true if the player is playing, false if it is paused
-     */
-    private boolean isPlaying;
-
-    /**
-     * isShuffle is true if the player is shuffling, false if it is not
-     */
-    private boolean isShuffle;
-
-    /**
-     * isRepeat is true if the player is repeating, false if it is not
-     */
-    private boolean isRepeat;
-
-    /**
-     * isMute is true if the player is muted, false if it is not
-     */
-    private boolean isMute;
-
-    /**
-     * volume of the player (between 0 and 1)
-     */
-    private double volume;
-
-
-    /**
-     * current Sound playing
-     */
-    private ISound currentSound;
-
-    /**
-     * previous Sound played
-     */
-    private ISound previousSound;
-
-
-    /**
-     * next Sound to play
-     */
-    private ISound nextSound;
-
-
-    /**
-     * SoundQueue of the player
-     *
-     * @link SoundQueue
-     */
-    private final SoundQueue soundQueue = new SoundQueue();
-
-    /**
-     * SoundHistory of the player
-     *
-     * @link SoundHistory
-     */
-    private final SoundHistory soundHistory = new SoundHistory();
-
-    /**
-     * MediaPlayer object from JavaFX Media Library
-     * TODO : Connect with MediaPlayer
-     * @see MediaPlayer
-     */
+    private final LinkedList<ISound> soundQueueOrdered;
+    private final LinkedList<ISound> soundQueueShuffled;
+    private final Stack<ISound> soundHistory;
     private MediaPlayer mediaPlayer;
 
-    /**
-     * Constructor of the Player
-     */
+    private Order queueOrder = Order.ORDERED;
+
+
+    ISound currentSound;
+
     private Player() {
-        this.mediaPlayer = null;
-        this.isPlaying = false;
-        this.isShuffle = soundQueue.getOrder() == Order.SHUFFLED;
-        this.isRepeat = false;
-        this.isMute = false;
-        this.volume = 0.5f;
-    }
-
-    private void playNext() {
-        if (this.isRepeat) {
-            this.mediaPlayer.stop();
-            this.mediaPlayer.play();
-        } else {
-            this.mediaPlayer.stop();
-            soundHistory.addSound(this.currentSound);
-            this.mediaPlayer = new MediaPlayer(this.nextSound.getMedia());
-            this.mediaPlayer.play();
-        }
-    }
-
-    public void initializeMediaPlayer() {
-        this.currentSound = soundQueue.getCurrentSound();
-        //this.previousSound = soundHistory.getNextSound();
-        this.nextSound = soundQueue.getNextSound();
-
-        this.mediaPlayer = new MediaPlayer(this.currentSound.getMedia());
+        soundQueueOrdered = new LinkedList<>();
+        soundQueueShuffled = new LinkedList<>();
+        soundHistory = new Stack<>();
     }
 
     public static Player getInstance() {
         return INSTANCE;
     }
 
-    public SoundHistory getSoundHistory() {
-        return this.soundHistory;
-    }
-    public SoundQueue getSoundQueue() {
-        return this.soundQueue;
+    public void addSoundToQueue(ISound sound) {
+        this.soundQueueOrdered.add(sound);
     }
 
-    /**
-     * @return true if the player is playing, false if it is not
-     */
-    public boolean isPlaying() {
-        return this.isPlaying;
+    public void removeSoundFromQueue(ISound sound) {
+        this.soundQueueOrdered.remove(sound);
+        log.info("Removed sound {} from queue", sound.getTitle());
     }
 
-    /**
-     * @return true if the player is in shuffle mode, false if it is not
-     */
-    public boolean isShuffle() {
-        return this.isShuffle;
+    public void addPlaylistToQueue(Playlist playlist) {
+        this.soundQueueOrdered.addAll(playlist.getSounds());
     }
 
-    /**
-     * @return true if the player is in repeat mode, false if it is not
-     */
-    public boolean isRepeat() {
-        return this.isRepeat;
+
+    private void setMediaPlayer() {
+        if (currentSound == null) {
+            throw new IllegalStateException("Current sound is null");
+        }
+        mediaPlayer = new MediaPlayer(currentSound.getMedia());
+        mediaPlayer.setOnEndOfMedia(() -> {
+
+
+            log.info("Refreshed main scene");
+            mediaPlayer.dispose();
+            mediaPlayer = null;
+            if (!soundQueueOrdered.isEmpty()) {
+                next();
+            }
+            /*
+            if (onNextSongListener != null) {
+                onNextSongListener.onEvent();
+            }
+
+             */
+        });
+        mediaPlayer.play();
+        log.info("Playing sound: " + currentSound.getTitle());
     }
 
-    /**
-     * @return true if the player is muted, false if it is not
-     */
-    public boolean isMute() {
-        return this.isMute;
+    public void playPause() {
+        if (this.soundQueueOrdered.isEmpty()) {
+            log.info("Sound queue is empty");
+            return;
+        }
+
+        if (mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            log.info("Sound {} has been paused", currentSound.getTitle());
+            mediaPlayer.pause();
+            return;
+        } else if (mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED) {
+            log.info("Sound {} has been resumed", currentSound.getTitle());
+            mediaPlayer.play();
+            return;
+        }
+
+        this.currentSound = this.soundQueueOrdered.peek();
+        setMediaPlayer();
     }
 
-    /**
-     * @return volume value between 0 and 1
-     */
-    public double getVolume() {
-        return this.volume;
+
+    public void next() {
+        soundQueueOrdered.remove(currentSound);
+        soundHistory.add(currentSound);
+
+
+        if (mediaPlayer != null) {
+            mediaPlayer.dispose();
+            mediaPlayer = null;
+        }
+
+        if (soundQueueOrdered.isEmpty()) {
+            log.info("Sound queue is empty");
+            return;
+        }
+        this.currentSound = this.soundQueueOrdered.peek();
+        setMediaPlayer();
     }
 
-    /**
-     * @return current sound playing
-     */
+    public void previous() {
+        if (this.soundHistory.isEmpty()) {
+            log.info("Sound history is empty");
+            return;
+        }
+
+        if (mediaPlayer != null) {
+            mediaPlayer.dispose();
+            mediaPlayer = null;
+        }
+
+        this.soundQueueOrdered.addFirst(soundHistory.pop()); // Füge den abgespielten Sound zur History hinzu
+        this.currentSound = this.soundQueueOrdered.peek(); // Nimm den ersten Sound aus der Warteschlange
+        setMediaPlayer();
+    }
+
+    public double getCurrentTime() {
+        if (mediaPlayer != null) {
+            return mediaPlayer.getCurrentTime().toSeconds();
+        }
+        return 0;
+    }
+
+    public double getTotalTime() {
+        if (mediaPlayer != null) {
+            return mediaPlayer.getTotalDuration().toSeconds();
+        }
+        return 0;
+    }
+
+    public void clearQueue() {
+        this.soundQueueOrdered.clear();
+        if (mediaPlayer != null) {
+            mediaPlayer.dispose();
+        }
+    }
+
+    private OnNextSongListener onNextSongListener;
+
+    public void registerOnNextSongEvent(OnNextSongListener listener) {
+        this.onNextSongListener = listener;
+    }
+
+
     public ISound getCurrentSound() {
         return this.currentSound;
     }
 
-    /**
-     * @return previous sound played
-     */
-    public ISound getPreviousSound() {
-        return this.previousSound;
+    public LinkedList<ISound> getSoundQueue() {
+        switch (queueOrder) {
+            case ORDERED:
+                return soundQueueOrdered;
+            case SHUFFLED:
+                return soundQueueShuffled;
+            default:
+                return soundQueueOrdered;
+        }
     }
 
-    /**
-     * @return next sound to play
-     */
-    public ISound getNextSound() {
-        return this.nextSound;
+    public ArrayList<ISound> getSoundHistory() {
+        return new ArrayList<>(soundHistory);
     }
 
-    //Todo : Implement methods to play, pause, next, previous, seekTo
-    public void play() {
-        mediaPlayer.play();
-        log.info("Playing sound : " + this.currentSound.getTitle());
+    public void setVolume(double value) {
+        mediaPlayer.setVolume(value);
+        System.out.println("Mediaplayer vol: " + mediaPlayer.getVolume());
     }
 
-    public void pause() {
+    public MediaPlayer.Status getStatus() {
+        return mediaPlayer.getStatus();
     }
 
-    public void next() {
-    }
+    public void shuffle() {
+        if (queueOrder == Order.SHUFFLED) {
+            queueOrder = Order.ORDERED;
+        } else {
+            queueOrder = Order.SHUFFLED;
+        soundQueueShuffled.clear();
+        soundQueueShuffled.addAll(soundQueueOrdered);
+        Collections.shuffle(soundQueueShuffled);
+            System.out.println(soundQueueOrdered);
+            System.out.println(soundQueueShuffled);
 
-    public void previous() {
-        this.soundQueue.addSound(previousSound);
-        this.mediaPlayer = new MediaPlayer(previousSound.getMedia());
-        this.mediaPlayer.play();
-    }
-
-    public void seekTo(float time) {
+        }
     }
 }

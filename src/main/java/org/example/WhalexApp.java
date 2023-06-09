@@ -1,11 +1,11 @@
 package org.example;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.controller.SceneManager;
-import org.example.player.PlayerCombined;
 
 public class WhalexApp extends Application {
 
@@ -38,8 +38,7 @@ public class WhalexApp extends Application {
 
         stage.setOnCloseRequest(event -> {
             log.info("Closing Whalex Application");
-            PlayerCombined.getInstance().clearQueue();
-
+            Platform.exit(); //TODO: Close application correct without data loss
         });
         log.info("Starting Whalex Application");
         SceneManager.LOGIN.changeScene();

@@ -61,6 +61,12 @@ public enum SceneManager {
     	secondaryStage.close();
     }
 
+    public MainSceneController getController() throws IOException {
+        final FXMLLoader loader = new FXMLLoader(getClass().getResource(this.fxmlPath));
+        loader.load();
+        return loader.getController();
+    }
+
     public void changeScene() throws Exception {
         Scene scene;
         switch (this) {
