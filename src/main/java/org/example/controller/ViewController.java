@@ -3,6 +3,7 @@ package org.example.controller;
 import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,9 +31,7 @@ import org.example.profile.User;
 import org.example.profile.UserManager;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ViewController implements Initializable {
@@ -194,36 +193,16 @@ public class ViewController implements Initializable {
         queueTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         //TODO: FIX THIS!!
-/*
+
         Timer updateTimer = new Timer();
         TimerTask updateTask = new TimerTask() {
             @Override
             public void run() {
-                Platform.runLater(() -> {
-                    queueTable.refresh();
-                    System.out.println("Queue: " + queueObjectList.size());
-                    System.out.println("Sounds: " + soundObjectList.size());
-                    System.out.println("Playlists: " + playlistObjectList.size());
-                });
+                Platform.runLater(() -> queueTable.refresh());
             }
         };
-        updateTimer.schedule(updateTask, 0, 2000);
+        updateTimer.schedule(updateTask, 0, 1000);
 
- */
-
-        PlayerCombined player = PlayerCombined.getInstance();
-        player.registerOnNextSongEvent(() -> {
-                refresh();
-                log.info("{} refreshed", this.getClass().getSimpleName());
-
-        });
-    }
-
-    public void refresh() {
-        queueTable.refresh();
-        log.info("Refreshed main scene");
-        queueSoundCover.setVisible(false);
-        queueSoundCover.setVisible(true);
     }
 
     public void setView(ViewType viewType) {
@@ -287,8 +266,6 @@ public class ViewController implements Initializable {
             playlist.removeSound(sound);
         }
         Player.getInstance().getSoundQueue().removeSound(sound);
-        //soundTable.refresh();
-        //playlistTable.refresh();
         updateView();
     }
 
@@ -296,7 +273,6 @@ public class ViewController implements Initializable {
     private void deletePlaylist() {
         Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
         PlaylistManager.getInstance().deletePlaylistByID(UserManager.getInstance().getActiveUser(), playlist.getPlaylistID());
-        //playlistTable.refresh();
         updateView();
     }
 
@@ -309,8 +285,6 @@ public class ViewController implements Initializable {
         } catch (Exception e) {
             showPopup(e);
         }
-        //soundTable.refresh();
-        //playlistTable.refresh();
         updateView();
     }
 

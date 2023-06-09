@@ -1,12 +1,13 @@
 package org.example.controller;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -125,6 +126,7 @@ public class MainSceneController implements Initializable {
             totalSoundTime.setText(String.format("%02d:%02d",totalTimeInt / 60, totalTimeInt % 60));
             currentSoundTime.setText(String.format("%02d:%02d",currentTimeInt / 60, currentTimeInt % 60));
         } else {
+            soundProgress.setProgress(0);
             totalSoundTime.setText("00:00");
             currentSoundTime.setText("00:00");
             currentSoundTitle.setText("");
