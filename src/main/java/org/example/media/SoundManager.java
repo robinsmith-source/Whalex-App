@@ -150,7 +150,7 @@ public class SoundManager {
             log.debug("Sound {} has been added.", title);
         } catch (Exception e) {
             log.error("Sound could not be added", e);
-            throw new IllegalArgumentException("Sound " + title + " not be added", e);
+            throw new IllegalArgumentException("Sound " + title + " could not be added");
         }
     }
 
