@@ -70,16 +70,16 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="475.0">
                      <children>
-                        <Label prefHeight="23.0" text="00:00" textFill="WHITE">
+                        <Label fx:id="currentSoundTime" prefHeight="23.0" text="00:00" textFill="WHITE">
                            <HBox.margin>
                               <Insets right="5.0" />
                            </HBox.margin></Label>
-                        <Slider fx:id="soundProgress" prefWidth="400.0">
+                        <ProgressBar fx:id="soundProgress" prefWidth="400.0">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
-                        </Slider>
-                        <Label alignment="CENTER_RIGHT" prefHeight="23.0" text="00:00" textFill="WHITE">
+                        </ProgressBar>
+                        <Label fx:id="totalSoundTime" alignment="CENTER_RIGHT" prefHeight="23.0" text="00:00" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin></Label>
@@ -98,7 +98,7 @@
                   <HBox alignment="CENTER">
                      <children>
                         <MaterialIconView fill="WHITE" glyphName="VOLUME_UP" size="20" />
-                        <Slider />
+                        <Slider fx:id="volumeSlider" blockIncrement="5.0" />
                      </children>
                      <VBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

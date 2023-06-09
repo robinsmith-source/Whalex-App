@@ -37,6 +37,10 @@
     -fx-text-fill: white;
 }
 
+.progress-bar {
+    -fx-accent: orange;
+}
+
 #searchBar:focused,
 #searchBar:hover {
     -fx-border-color: orange;

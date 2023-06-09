@@ -142,4 +142,9 @@ public class PlayerCombined {
     public ArrayList<ISound> getSoundHistory() {
         return new ArrayList<>(soundHistory);
     }
+
+    public void setVolume(double value) {
+        mediaPlayer.setVolume(value);
+        System.out.println("Mediaplayer vol: " + mediaPlayer.getVolume());
+    }
 }

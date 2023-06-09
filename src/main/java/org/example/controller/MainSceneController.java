@@ -1,13 +1,12 @@
 package org.example.controller;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -25,6 +24,12 @@ import java.util.TimerTask;
 public class MainSceneController implements Initializable {
 
     private static final Logger log = LogManager.getLogger(MainSceneController.class);
+    @FXML
+    private Slider volumeSlider;
+    @FXML
+    private Label totalSoundTime;
+    @FXML
+    private Label currentSoundTime;
 
     @FXML
     private BorderPane border;
@@ -35,9 +40,6 @@ public class MainSceneController implements Initializable {
     @FXML
     private ImageView userProfilePicture;
 
-    @FXML
-    private Button playButton;
-
     private ViewController viewController;
 
     @FXML
@@ -46,7 +48,7 @@ public class MainSceneController implements Initializable {
     private Label currentSoundUploadedBy;
 
     @FXML
-    private Slider soundProgress;
+    private ProgressBar soundProgress;
 
     @FXML
     private TextField searchBar;
@@ -74,7 +76,12 @@ public class MainSceneController implements Initializable {
                 Platform.runLater(() -> updatePlayerContent());
             }
         };
-        updateTimer.scheduleAtFixedRate(updateTask, 0, 500);
+        updateTimer.scheduleAtFixedRate(updateTask, 0, 100);
+        volumeSlider.valueProperty().addListener((ov, old_val, new_val) -> Platform.runLater(() -> {
+            PlayerCombined.getInstance().setVolume(volumeSlider.getValue());
+            log.info("Volume changed to: " + volumeSlider.getValue());
+
+        }));
     }
 
     /**
@@ -112,12 +119,14 @@ public class MainSceneController implements Initializable {
             currentSoundTitle.setText(PlayerCombined.getInstance().getCurrentSound().getTitle());
             currentSoundUploadedBy.setText(PlayerCombined.getInstance().getCurrentSound().getUploadedBy().getUsername());
             double progress = PlayerCombined.getInstance().getCurrentTime() / PlayerCombined.getInstance().getTotalTime();
-            System.out.println(progress);
-
-
-            PlayerCombined.getInstance().getSoundQueue().forEach(e -> System.out.println("Queue: " + e.getTitle()));
-            PlayerCombined.getInstance().getSoundHistory().forEach(e -> System.out.println("History: " + e.getTitle()));
+            soundProgress.setProgress(progress);
+            int totalTimeInt = (int) PlayerCombined.getInstance().getTotalTime();
+            int currentTimeInt = (int) PlayerCombined.getInstance().getCurrentTime();
+            totalSoundTime.setText(String.format("%02d:%02d",totalTimeInt / 60, totalTimeInt % 60));
+            currentSoundTime.setText(String.format("%02d:%02d",currentTimeInt / 60, currentTimeInt % 60));
         } else {
+            totalSoundTime.setText("00:00");
+            currentSoundTime.setText("00:00");
             currentSoundTitle.setText("");
             currentSoundUploadedBy.setText("");
         }
