@@ -69,11 +69,19 @@ public class ViewController implements Initializable {
     @FXML
     private TableColumn<ISound, String> queueSoundTitle;
 
+    @FXML
+    public TableView<ISound> historyTable;
+    @FXML
+    public TableColumn<ISound, ImageView> historySoundCover;
+    @FXML
+    public TableColumn<ISound, String> historySoundTitle;
+
 
     private ObservableList<Playlist> playlistObjectList;
     private ObservableList<ISound> soundObjectList;
 
     private final ObservableList<ISound> queueObjectList = FXCollections.observableList(Player.getInstance().getSoundQueue());
+    private final ObservableList<ISound> historyObjectList = FXCollections.observableList(Player.getInstance().getSoundHistory());
     private ViewType view;
 
 
@@ -188,18 +196,42 @@ public class ViewController implements Initializable {
 
         queueSoundCover.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.4));
         queueSoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.6));
-        setView(ViewType.ALL);
 
         queueTable.setItems(queueObjectList);
         queueTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
+        //History table
+        historySoundCover.setCellValueFactory(cellData -> {
+            Image image = new Image(SoundManager.getINSTANCE().getDEFAULT_COVER().toURI().toString());
+            if (cellData.getValue().getMedia().getMetadata().get("image") != null) {
+                image = ((Image) cellData.getValue().getMedia().getMetadata().get("image"));
+            }
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(60);
+            imageView.setFitWidth(60);
+            imageView.setId("soundCover");
+            return new ReadOnlyObjectWrapper<>(imageView);
+        });
+        historySoundTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
+        historyTable.setPlaceholder(new Label("History is empty"));
+
+        historySoundCover.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.4));
+        historySoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.6));
+        historyTable.setItems(historyObjectList);
+
+        setView(ViewType.ALL);
         //TODO: FIX THIS!!
 
         Timer updateTimer = new Timer();
         TimerTask updateTask = new TimerTask() {
             @Override
             public void run() {
-                Platform.runLater(() -> queueTable.refresh());
+                Platform.runLater(() -> {
+                    System.out.println(queueObjectList.size());
+                    System.out.println(historyObjectList.size());
+                    queueTable.refresh();
+                    historyTable.refresh();
+                });
             }
         };
         updateTimer.schedule(updateTask, 0, 1000);

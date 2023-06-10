@@ -129,18 +129,11 @@
                               <Label text="History" textFill="WHITE" />
                            </graphic>
                            <content>
-                              <TableView fx:id="queueTable1">
+                              <TableView fx:id="historyTable">
                                  <columns>
-                                    <TableColumn fx:id="queueSoundCover1" prefWidth="75.0" resizable="false" />
-                                    <TableColumn fx:id="queueSoundTitle1" prefWidth="75.0" resizable="false" text="Title" />
+                                    <TableColumn fx:id="historySoundCover" prefWidth="75.0" resizable="false" />
+                                    <TableColumn fx:id="historySoundTitle" prefWidth="75.0" resizable="false" text="Title" />
                                  </columns>
-                                 <contextMenu>
-                                    <ContextMenu>
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" onAction="#removeSoundFromQueue" text="Remove from Queue" />
-                                       </items>
-                                    </ContextMenu>
-                                 </contextMenu>
                               </TableView>
                            </content>
                         </Tab>

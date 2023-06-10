@@ -6,16 +6,14 @@ import org.apache.logging.log4j.Logger;
 import org.example.media.interfaces.ISound;
 import org.example.playlist.Playlist;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Stack;
 
 public class Player {
     private static final Logger log = LogManager.getLogger(Player.class);
     private static final Player INSTANCE = new Player();
     private final LinkedList<ISound> soundQueueOrdered;
     private final LinkedList<ISound> soundQueueShuffled;
-    private final Stack<ISound> soundHistory;
+    private final LinkedList<ISound> soundHistory;
     private MediaPlayer mediaPlayer;
 
     private Order queueOrder = Order.ORDERED;
@@ -26,7 +24,7 @@ public class Player {
     private Player() {
         soundQueueOrdered = new LinkedList<>();
         soundQueueShuffled = new LinkedList<>();
-        soundHistory = new Stack<>();
+        soundHistory = new LinkedList<>();
     }
 
     public static Player getInstance() {
@@ -53,9 +51,6 @@ public class Player {
         }
         mediaPlayer = new MediaPlayer(currentSound.getMedia());
         mediaPlayer.setOnEndOfMedia(() -> {
-
-
-            log.info("Refreshed main scene");
             mediaPlayer.dispose();
             mediaPlayer = null;
             if (!soundQueueOrdered.isEmpty()) {
@@ -94,11 +89,9 @@ public class Player {
 
 
     public void next() {
-        soundQueueOrdered.remove(currentSound);
-        soundHistory.add(currentSound);
-
-
-        if (mediaPlayer != null) {
+        if (mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            soundQueueOrdered.remove(currentSound);
+            soundHistory.add(currentSound);
             mediaPlayer.dispose();
             mediaPlayer = null;
         }
@@ -107,6 +100,7 @@ public class Player {
             log.info("Sound queue is empty");
             return;
         }
+
         this.currentSound = this.soundQueueOrdered.peek();
         setMediaPlayer();
     }
@@ -172,8 +166,8 @@ public class Player {
         return soundQueueOrdered;
     }
 
-    public ArrayList<ISound> getSoundHistory() {
-        return new ArrayList<>(soundHistory);
+    public LinkedList<ISound> getSoundHistory() {
+        return soundHistory;
     }
 
     public void setVolume(double value) {
