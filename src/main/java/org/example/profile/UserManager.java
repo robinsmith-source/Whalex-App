@@ -156,7 +156,7 @@ public class UserManager {
             log.error("User {} already exists.", username);
             throw new IllegalArgumentException("User already exists.");
         } else if (choosenImage == null) {
-            log.warn("Profile picture is null.");
+            log.debug("Profile picture is null.");
             this.USERS.add(new User(UUID.randomUUID().toString(), DEFAULT_PICTURE, username, password));
         } else {
             Path targetFolder = Path.of("src/main/resources/data/profilePictures");
@@ -178,26 +178,25 @@ public class UserManager {
     /**
      * Method to delete a user by its username
      *
-     * @param currentUser          User who wants to be deleted
      * @param password             Password of the user
      * @param passwordConfirmation Password confirmation of the user
      * @throws IllegalArgumentException if the user does not exist or the password is incorrect or the password confirmation is incorrect
      */
     //TODO: Check if the log states are correct -> Should be
     //Todo: Add Custom Exception + Exception handling
-    public void deleteUser(User currentUser, String password, String passwordConfirmation) throws IllegalArgumentException {
-        if (this.USERS.stream().noneMatch(user -> user.getUsername().equals(currentUser.getUsername()))) {
-            log.error("User {} does not exist.", currentUser.getUsername());
+    public void deleteUser(String password, String passwordConfirmation) throws IllegalArgumentException {
+        if (this.USERS.stream().noneMatch(user -> user.getUsername().equals(activeUser.getUsername()))) {
+            log.error("User {} does not exist.", activeUser.getUsername());
             throw new IllegalArgumentException("User does not exist.");
-        } else if (!currentUser.getPassword().equals(password)) {
+        } else if (!activeUser.getPassword().equals(password)) {
             log.error("Password is incorrect.");
             throw new IllegalArgumentException("Password is incorrect.");
         } else if (!password.equals(passwordConfirmation)) {
             log.error("Password confirmation is incorrect.");
             throw new IllegalArgumentException("Password confirmation is incorrect.");
         }
-        USERS.remove(currentUser);
-        log.debug("User {} has been deleted.", currentUser.getUsername());
+        log.debug("User {} has been deleted.", activeUser.getUsername());
+        USERS.remove(activeUser);
     }
 
     /**

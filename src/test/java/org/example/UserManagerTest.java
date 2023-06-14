@@ -4,6 +4,7 @@ import org.example.media.SoundManager;
 import org.example.playlist.PlaylistManager;
 import org.example.profile.User;
 import org.example.profile.UserManager;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +16,8 @@ public class UserManagerTest {
     final SoundManager sm = SoundManager.getINSTANCE();
     final PlaylistManager pm = PlaylistManager.getInstance();
 
+    User Marvin;
+
     //TODO: Remove and add a relative resource path to the Managers
     @BeforeEach
     public void setup() {
@@ -25,26 +28,43 @@ public class UserManagerTest {
 
     @Test
     public void testCreateUser() throws Exception {
-        //User 1 - Marvin
-        um.createUser(null, "Marvin", "123", "123");
-        User Marvin = um.getUserByName("Marvin");
+        //positive test
+        Assertions.assertDoesNotThrow(() -> um.createUser(null, "Marvin", "123", "123"));
+        Marvin = um.getUserByName("Marvin");
 
-        sm.addSound(Marvin, "Pottwal Pop13454645654", new File("src/main/resources/data/sounds/9750300N.wav"));
-        sm.addSound(Marvin, "Glattschweinswal Gesang", new File("src/main/resources/data/sounds/89405023.wav"));
-        pm.createPlaylist(Marvin, null, "Ocean Groove");
-        pm.getPlaylistByName("Ocean Groove").addAllSounds(Marvin, sm.getAllSoundsByUser(Marvin));
+        Assertions.assertEquals(um.getUserByName("Marvin"), Marvin);
+        Assertions.assertEquals(um.getUserById(Marvin.getUserID()), Marvin);
 
-        //User 2 - Robin
-        um.createUser(null, "Robin", "123", "123");
-        User rootUser = um.getUserByName("Robin");
+        Assertions.assertEquals("src\\main\\resources\\data\\defaultImages\\users\\defaultUserProfilePicture.jpg", Marvin.getProfilePicture().getPath());
+        //negative tests
+        //Username null or empty
+        Assertions.assertThrows(IllegalArgumentException.class, () -> um.createUser(null, "", "123", "123"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> um.createUser(null, null, "123", "123"));
 
-        sm.addSound(rootUser, "Blauwal Ballade", new File("src/main/resources/data/sounds/72021005.wav"));
-        sm.addSound(rootUser, "Rauzahldelfin Rap", new File("src/main/resources/data/sounds/78018003.wav"));
-        pm.createPlaylist(rootUser, null, "Deepsea Dive");
-        pm.getPlaylistByName("Deepsea Dive").addAllSounds(rootUser, sm.getAllSoundsByUser(rootUser));
+        //Password null or empty
+        Assertions.assertThrows(IllegalArgumentException.class, () -> um.createUser(null, "Marvin", "", "123"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> um.createUser(null, "Marvin", null, "123"));
 
-        um.usersToJSON();
-        sm.soundsToJSON();
-        pm.playlistsToJSON();
+        //Wrong password confirmation
+        Assertions.assertThrows(IllegalArgumentException.class, () -> um.createUser(null, "Marvin", "123", "12"));
+
+        //Username already exists
+        Assertions.assertThrows(IllegalArgumentException.class, () -> um.createUser(null, "Marvin", "123", "123"));
+    }
+
+    @Test
+    public void testLogin() {
+        Assertions.assertDoesNotThrow(() -> um.login("Marvin", "123"));
+        Assertions.assertEquals(um.getActiveUser(), Marvin);
+    }
+
+    @Test
+    public void testDeleteUser() throws Exception {
+        //positive test
+        Assertions.assertDoesNotThrow(() -> um.deleteUser("123","123"));
+        Assertions.assertNull(um.getUserByName("Marvin"));
+        Assertions.assertNull(um.getUserById(Marvin.getUserID()));
+
+        //negative test
     }
 }

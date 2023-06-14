@@ -16,6 +16,7 @@ public enum SceneManager {
     LOGIN("/fxml/login.fxml"),
     LOADING("/fxml/loading.fxml"),
     MAIN("/fxml/mainScene.fxml"),
+    VIEW("/fxml/view.fxml"),
 
     ADD_SOUND("/fxml/addSound.fxml"),
     CREATE_PLAYLIST("/fxml/createPlaylist.fxml"),
@@ -27,6 +28,7 @@ public enum SceneManager {
 
     private final Stage applicationStage = WhalexApp.getApplicationStage();
     private final Stage secondaryStage = new Stage();
+    private MainSceneController msc;
 
     SceneManager(String fxmlPath) {
         this.fxmlPath = fxmlPath;
@@ -34,7 +36,9 @@ public enum SceneManager {
 
     public Parent getScene() throws IOException {
         final FXMLLoader loader = new FXMLLoader(getClass().getResource(this.fxmlPath));
-        return loader.load();
+        loader.load();
+        if (this == MAIN) msc = loader.getController();
+        return loader.getRoot();
     }
 
     public void showSecondaryStage() throws IOException {
@@ -61,10 +65,8 @@ public enum SceneManager {
     	secondaryStage.close();
     }
 
-    public MainSceneController getController() throws IOException {
-        final FXMLLoader loader = new FXMLLoader(getClass().getResource(this.fxmlPath));
-        loader.load();
-        return loader.getController();
+    public MainSceneController getController() {
+        return msc;
     }
 
     public void changeScene() throws Exception {

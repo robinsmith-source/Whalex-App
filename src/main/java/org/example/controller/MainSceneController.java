@@ -57,6 +57,7 @@ public class MainSceneController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        log.info("Initializing MainSceneController");
         username.setText(UserManager.getInstance().getActiveUser().getUsername());
         Image image = new Image(UserManager.getInstance().getActiveUser().getProfilePicture().toURI().toString());
         userProfilePicture.setImage(image);
@@ -145,5 +146,10 @@ public class MainSceneController implements Initializable {
     }
 
     public void handleRepeatButton(ActionEvent actionEvent) {
+    }
+
+    public void updateView() {
+        viewController.updateView();
+        log.info("View updated access from MainSceneController (Added Playlist)");
     }
 }

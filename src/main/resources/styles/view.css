@@ -91,5 +91,15 @@
     -fx-border-width: 0;
 }
 
+#addSoundButton, #createPlaylistButton {
+    -fx-background-color: orange;
+    -fx-font-size: 18;
+}
+
+#addSoundButton:hover, #createPlaylistButton:hover {
+    -fx-border-color: orange;
+    -fx-border-radius: 2;
+    -fx-border-width: 1.5;
+}
 
 

@@ -87,6 +87,7 @@ public class ViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        log.info("Initializing view controller");
         //Sound table
         soundCover.setCellValueFactory(cellData -> {
             Image image = new Image(SoundManager.getINSTANCE().getDEFAULT_COVER().toURI().toString());
@@ -218,8 +219,8 @@ public class ViewController implements Initializable {
         historySoundCover.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.4));
         historySoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.6));
         historyTable.setItems(historyObjectList);
-
         setView(ViewType.ALL);
+
         //TODO: FIX THIS!!
 
         Timer updateTimer = new Timer();
@@ -227,23 +228,21 @@ public class ViewController implements Initializable {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                    System.out.println(queueObjectList.size());
-                    System.out.println(historyObjectList.size());
                     queueTable.refresh();
                     historyTable.refresh();
                 });
             }
         };
         updateTimer.schedule(updateTask, 0, 1000);
-
     }
 
     public void setView(ViewType viewType) {
-        view = viewType;
+        this.view = viewType;
         updateView();
+        log.info("View set to " + viewType.toString());
     }
 
-    private void updateView() {
+    public void updateView() {
         switch (view) {
             case ALL:
                 soundTableLabel.setText("All Sounds");
@@ -261,6 +260,7 @@ public class ViewController implements Initializable {
         soundTable.selectionModelProperty().get().clearSelection();
         playlistTable.selectionModelProperty().get().clearSelection();
         queueTable.selectionModelProperty().get().clearSelection();
+        log.info("View updated");
     }
 
     private void initializeSoundContent(ArrayList<ISound> sounds) {
@@ -277,12 +277,6 @@ public class ViewController implements Initializable {
         FXCollections.sort(playlistObjectList, Comparator.comparing(Playlist::getName));
         playlistTable.setItems(playlistObjectList);
         playlistTable.refresh();
-    }
-
-    private void initializeQueueContent(ArrayList<ISound> sounds) {
-        queueObjectList.setAll(sounds);
-        queueTable.setItems(queueObjectList);
-        queueTable.refresh();
     }
 
     /**

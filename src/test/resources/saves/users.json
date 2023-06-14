@@ -1,14 +1,8 @@
 [
   {
-    "userID": "17799b85-5a84-47e9-90c8-6d2e7dc7395a",
+    "userID": "5eee685e-685c-486a-88d8-8bd5177d3692",
     "profilePicture": "src\\main\\resources\\data\\defaultImages\\users\\defaultUserProfilePicture.jpg",
     "username": "Marvin",
-    "password": "123"
-  },
-  {
-    "userID": "77769bf9-8175-4f9b-ad20-7d88348cdfe1",
-    "profilePicture": "src\\main\\resources\\data\\defaultImages\\users\\defaultUserProfilePicture.jpg",
-    "username": "Robin",
     "password": "123"
   }
 ]

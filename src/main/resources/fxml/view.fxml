@@ -19,7 +19,7 @@
                               <Font size="22.0" />
                            </font>
                         </Label>
-                        <Button onAction="#handleAddSoundButton" mnemonicParsing="false" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Button fx:id="addSoundButton" onAction="#handleAddSoundButton" mnemonicParsing="false" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <graphic>
                               <MaterialIconView glyphName="ADD" size="24" />
                            </graphic>
@@ -62,7 +62,7 @@
                               <Font size="22.0" />
                            </font>
                         </Label>
-                        <Button onAction="#handleCreatePlaylistButton" alignment="TOP_RIGHT" mnemonicParsing="false" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Button fx:id="createPlaylistButton" onAction="#handleCreatePlaylistButton" alignment="TOP_RIGHT" mnemonicParsing="false" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <graphic>
                               <MaterialIconView glyphName="ADD" size="24" />
                            </graphic>
