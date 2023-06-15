@@ -41,6 +41,18 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="400.0" prefWidth="400.0">
                <children>
+                  <VBox>
+                     <children>
+                        <Label text="Create Playlist" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="25.0" left="25.0" right="25.0" />
+                     </VBox.margin>
+                  </VBox>
                   <TextField fx:id="playlistNameTextField" promptText="name">
                      <VBox.margin>
                         <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
@@ -59,7 +71,7 @@
                   </Button>
                   <HBox alignment="CENTER">
                      <children>
-                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddButton" text="Add">
+                        <Button fx:id="addButton1" mnemonicParsing="false" onAction="#handleAddButton" text="Cancel">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -67,7 +79,7 @@
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="addButton1" mnemonicParsing="false" onAction="#handleAddButton" text="Cancel">
+                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddButton" text="Create">
                            <font>
                               <Font size="24.0" />
                            </font>

@@ -32,7 +32,9 @@ import org.example.profile.UserManager;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class ViewController implements Initializable {
@@ -198,8 +200,8 @@ public class ViewController implements Initializable {
         queueSoundCover.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.4));
         queueSoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.6));
 
+        queueTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         queueTable.setItems(queueObjectList);
-        queueTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         //History table
         historySoundCover.setCellValueFactory(cellData -> {
@@ -220,10 +222,17 @@ public class ViewController implements Initializable {
         historySoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.6));
         historyTable.setItems(historyObjectList);
         setView(ViewType.ALL);
+        updateView();
 
-        //TODO: FIX THIS!!
+        //TODO: FIX THIS!! YEYYYYYYY IT WORKS 😊😊
 
-        Timer updateTimer = new Timer();
+        Player.getInstance().registerOnNextSongEvent(() -> {
+                Platform.runLater(() -> {
+                    queueTable.refresh();
+                    historyTable.refresh();
+                });
+        });
+       /* Timer updateTimer = new Timer();
         TimerTask updateTask = new TimerTask() {
             @Override
             public void run() {
@@ -234,11 +243,11 @@ public class ViewController implements Initializable {
             }
         };
         updateTimer.schedule(updateTask, 0, 1000);
+        */
     }
 
     public void setView(ViewType viewType) {
         this.view = viewType;
-        updateView();
         log.info("View set to " + viewType.toString());
     }
 
@@ -260,7 +269,7 @@ public class ViewController implements Initializable {
         soundTable.selectionModelProperty().get().clearSelection();
         playlistTable.selectionModelProperty().get().clearSelection();
         queueTable.selectionModelProperty().get().clearSelection();
-        log.info("View updated");
+        log.debug("View updated");
     }
 
     private void initializeSoundContent(ArrayList<ISound> sounds) {
@@ -338,6 +347,7 @@ public class ViewController implements Initializable {
     private void addPlaylistToQueue() {
         Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
         Player.getInstance().addPlaylistToQueue(playlist);
+        queueTable.refresh();
     }
 
     /**

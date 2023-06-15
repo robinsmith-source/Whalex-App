@@ -41,6 +41,21 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="400.0" prefWidth="400.0">
                <children>
+                  <VBox>
+                     <children>
+                        <Label text="Add Sound" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="25.0" left="25.0" right="25.0" />
+                     </VBox.margin>
+                  </VBox>
                   <TextField fx:id="soundTitleTextField" promptText="title">
                      <VBox.margin>
                         <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
@@ -49,7 +64,7 @@
                         <Font size="24.0" />
                      </font>
                   </TextField>
-                  <Button fx:id="fileChooserButton" mnemonicParsing="false" onAction="#handleChooseSoundfileButton" text="Choose File">
+                  <Button fx:id="fileChooserButton" mnemonicParsing="false" onAction="#handleChooseSoundfileButton" text="Choose Soundfile">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -59,7 +74,7 @@
                   </Button>
                   <HBox alignment="CENTER">
                      <children>
-                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddButton" text="Add">
+                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -67,7 +82,7 @@
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel">
+                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddButton" text="Add">
                            <font>
                               <Font size="24.0" />
                            </font>

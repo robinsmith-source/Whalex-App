@@ -83,7 +83,6 @@ public class MainSceneController implements Initializable {
         volumeSlider.valueProperty().addListener((ov, old_val, new_val) -> Platform.runLater(() -> {
             Player.getInstance().setVolume(volumeSlider.getValue());
             log.info("Volume changed to: " + volumeSlider.getValue());
-
         }));
     }
 
@@ -91,8 +90,9 @@ public class MainSceneController implements Initializable {
      * Method to show all content by the current user
      */
     public void showAllContentByUser() {
-
         viewController.setView(ViewType.USER);
+        viewController.updateView();
+        log.info("Showing all content by user");
     }
 
     /**
@@ -100,20 +100,23 @@ public class MainSceneController implements Initializable {
      */
     public void showAllContent() {
         viewController.setView(ViewType.ALL);
+        viewController.updateView();
+        log.info("Showing all content");
     }
 
     public void handlePlayButton() {
         Player.getInstance().playPause();
+        log.debug("Trying to play/pause sound");
     }
 
     public void handlePreviousButton() {
         Player.getInstance().previous();
-        log.info("Previous sound");
+        log.debug("Trying to play previous sound");
     }
 
     public void handleNextButton() {
         Player.getInstance().next();
-        log.info("Next sound");
+        log.debug("Trying to play next sound");
     }
 
     //TODO: Only for debugging --> Implement correctly -- should be done
@@ -125,8 +128,8 @@ public class MainSceneController implements Initializable {
             currentSoundTitle.setText("");
             currentSoundUploadedBy.setText("");
         } else {
-            currentSoundTitle.setText(Player.getInstance().getCurrentSound().getTitle());
-            currentSoundUploadedBy.setText(Player.getInstance().getCurrentSound().getUploadedBy().getUsername());
+            currentSoundTitle.setText(Player.getInstance().getSoundQueue().getFirst().getTitle());
+            currentSoundUploadedBy.setText(Player.getInstance().getSoundQueue().getFirst().getUploadedBy().getUsername());
             double progress = Player.getInstance().getCurrentTime() / Player.getInstance().getTotalTime();
             soundProgress.setProgress(progress);
             int totalTimeInt = (int) Player.getInstance().getTotalTime();

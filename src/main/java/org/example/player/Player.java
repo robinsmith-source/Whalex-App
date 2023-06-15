@@ -45,80 +45,81 @@ public class Player {
     }
 
 
-    private void setMediaPlayer() {
+    private void setMediaplayer() {
         if (currentSound == null) {
             throw new IllegalStateException("Current sound is null");
         }
         mediaPlayer = new MediaPlayer(currentSound.getMedia());
         mediaPlayer.setOnEndOfMedia(() -> {
-            mediaPlayer.dispose();
-            mediaPlayer = null;
             if (!soundQueueOrdered.isEmpty()) {
                 next();
             }
-            /*
+
             if (onNextSongListener != null) {
                 onNextSongListener.onEvent();
             }
 
-             */
         });
         mediaPlayer.play();
         log.info("Playing sound: " + currentSound.getTitle());
     }
 
     public void playPause() {
-        if (this.soundQueueOrdered.isEmpty()) {
-            log.info("Sound queue is empty");
-            return;
-        }
-
         if (mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-            log.info("Sound {} has been paused", currentSound.getTitle());
+            log.debug("Sound {} has been paused", currentSound.getTitle());
             mediaPlayer.pause();
             return;
         } else if (mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED) {
-            log.info("Sound {} has been resumed", currentSound.getTitle());
+            log.debug("Sound {} has been resumed", currentSound.getTitle());
             mediaPlayer.play();
             return;
         }
 
-        this.currentSound = this.soundQueueOrdered.peek();
-        setMediaPlayer();
+        if (this.soundQueueOrdered.isEmpty()) {
+            log.debug("Sound queue is empty");
+        } else {
+            this.currentSound = this.soundQueueOrdered.peek();
+            setMediaplayer();
+        }
     }
 
 
     public void next() {
-        if (mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-            soundQueueOrdered.remove(currentSound);
-            soundHistory.add(currentSound);
+        if (mediaPlayer != null) {
+            soundHistory.addFirst(soundQueueOrdered.pop());
             mediaPlayer.dispose();
             mediaPlayer = null;
+            if (onNextSongListener != null) {
+                onNextSongListener.onEvent();
+            }
         }
 
         if (soundQueueOrdered.isEmpty()) {
-            log.info("Sound queue is empty");
+            log.debug("Sound queue is empty");
             return;
         }
 
         this.currentSound = this.soundQueueOrdered.peek();
-        setMediaPlayer();
+        setMediaplayer();
     }
 
     public void previous() {
-        if (this.soundHistory.isEmpty()) {
-            log.info("Sound history is empty");
-            return;
-        }
-
         if (mediaPlayer != null) {
             mediaPlayer.dispose();
             mediaPlayer = null;
+            if (onNextSongListener != null) {
+                onNextSongListener.onEvent();
+            }
         }
 
-        this.soundQueueOrdered.addFirst(soundHistory.pop()); // Füge den abgespielten Sound zur History hinzu
-        this.currentSound = this.soundQueueOrdered.peek(); // Nimm den ersten Sound aus der Warteschlange
-        setMediaPlayer();
+        if (soundHistory.isEmpty()) {
+            log.debug("Sound history is empty");
+            return;
+        }
+
+        soundQueueOrdered.addFirst(soundHistory.pop());
+        this.currentSound = this.soundQueueOrdered.peek();
+        setMediaplayer();
     }
 
     public double getCurrentTime() {
@@ -142,15 +143,10 @@ public class Player {
         }
     }
 
-    /*private OnNextSongListener onNextSongListener;
+    private OnNextSongListener onNextSongListener;
 
     public void registerOnNextSongEvent(OnNextSongListener listener) {
         this.onNextSongListener = listener;
-    }
-    */
-
-    public ISound getCurrentSound() {
-        return this.currentSound;
     }
 
     public LinkedList<ISound> getSoundQueue() {
@@ -173,10 +169,6 @@ public class Player {
     public void setVolume(double value) {
         mediaPlayer.setVolume(value);
         System.out.println("Mediaplayer vol: " + mediaPlayer.getVolume());
-    }
-
-    public MediaPlayer.Status getStatus() {
-        return mediaPlayer.getStatus();
     }
 
     public void shuffle() {
