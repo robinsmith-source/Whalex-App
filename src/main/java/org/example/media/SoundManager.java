@@ -76,7 +76,7 @@ public class SoundManager {
      *
      * @return SoundManager instance
      */
-    public static SoundManager getINSTANCE() {
+    public static SoundManager getInstance() {
         return INSTANCE;
     }
 

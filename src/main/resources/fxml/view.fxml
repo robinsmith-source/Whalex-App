@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.materialicons.MaterialIconView?>
-<?import java.net.URL?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ContextMenu?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
+<?import java.net.URL?>
 <AnchorPane fx:id="anchor" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.ViewController">
    <children>
       <HBox fx:id="outerBox" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0">
@@ -29,7 +19,7 @@
                               <Font size="22.0" />
                            </font>
                         </Label>
-                        <Button mnemonicParsing="false" onAction="#handleAddSoundButton" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Button fx:id="addSoundButton" mnemonicParsing="false" onAction="#handleAddSoundButton" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <graphic>
                               <MaterialIconView glyphName="ADD" size="24" />
                            </graphic>
@@ -72,7 +62,7 @@
                               <Font size="22.0" />
                            </font>
                         </Label>
-                        <Button alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#handleCreatePlaylistButton" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Button fx:id="createPlaylistButton" alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#handleCreatePlaylistButton" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <graphic>
                               <MaterialIconView glyphName="ADD" size="24" />
                            </graphic>

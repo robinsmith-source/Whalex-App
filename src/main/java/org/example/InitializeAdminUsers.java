@@ -16,7 +16,7 @@ public class InitializeAdminUsers {
 
     private static final UserManager um = UserManager.getInstance();
     private static final PlaylistManager pm = PlaylistManager.getInstance();
-    private static final SoundManager sm = SoundManager.getINSTANCE();
+    private static final SoundManager sm = SoundManager.getInstance();
 
     public static void main(String[] args) throws Exception {
         writeData();

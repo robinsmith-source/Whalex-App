@@ -50,7 +50,7 @@ public class PlaylistSerializer implements JsonSerializer<Playlist>, JsonDeseria
         for (JsonElement soundElement : soundsArray) {
             JsonObject soundJsonObject = soundElement.getAsJsonObject();
             String soundID = soundJsonObject.get("soundID").getAsString();
-            playlist.addSound(createdBy, SoundManager.getINSTANCE().getSoundByID(soundID));
+            playlist.addSound(createdBy, SoundManager.getInstance().getSoundByID(soundID));
         }
         return playlist;
     }

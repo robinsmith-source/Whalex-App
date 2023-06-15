@@ -13,7 +13,7 @@ import java.io.File;
 public class UserManagerTest {
 
     final UserManager um = UserManager.getInstance();
-    final SoundManager sm = SoundManager.getINSTANCE();
+    final SoundManager sm = SoundManager.getInstance();
     final PlaylistManager pm = PlaylistManager.getInstance();
 
     User Marvin;
@@ -27,7 +27,7 @@ public class UserManagerTest {
     }
 
     @Test
-    public void testCreateUser() throws Exception {
+    public void testCreateUser() {
         //positive test
         Assertions.assertDoesNotThrow(() -> um.createUser(null, "Marvin", "123", "123"));
         Marvin = um.getUserByName("Marvin");
@@ -59,7 +59,7 @@ public class UserManagerTest {
     }
 
     @Test
-    public void testDeleteUser() throws Exception {
+    public void testDeleteUser() {
         //positive test
         Assertions.assertDoesNotThrow(() -> um.deleteUser("123","123"));
         Assertions.assertNull(um.getUserByName("Marvin"));

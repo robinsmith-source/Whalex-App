@@ -29,7 +29,7 @@ public class User {
     /**
      * Username of the user
      */
-    private final String username;
+    private String username;
 
     /**
      * Password of the user
@@ -85,19 +85,28 @@ public class User {
         return this.password;
     }
 
+    public void setUsername(String username) {
+        if (username == null || username.isEmpty()) {
+            log.error("Username is null or empty.");
+            throw new IllegalArgumentException("Username is null or empty.");
+        } else if (UserManager.getInstance().getAllUsers().stream().anyMatch(user -> user.getUsername().equals(username))) {
+            log.error("User {} already exists.", username);
+            throw new IllegalArgumentException("User already exists.");
+        }
+        this.username = username;
+    }
+
     /**
      * Method to set the profile picture of the user
      *
      * @param profilePicture Profile picture of the user
-     * @return true if the profile picture is set, false if not
      */
-    public boolean setProfilePicture(File profilePicture) {
+    public void setProfilePicture(File profilePicture) {
         if (profilePicture == null) {
-            log.error("Path of new profilePicture is null.");
-            return false;
+            log.debug("Path of new profilePicture is null.");
+            throw new IllegalArgumentException("Path of new profilePicture is null.");
         }
         this.profilePicture = profilePicture;
-        return true;
     }
 
     /**
@@ -106,21 +115,18 @@ public class User {
      * @param oldPassword             Old password of the user
      * @param newPassword             New password of the user
      * @param newPasswordConfirmation New password confirmation of the user
-     * @return true if the password is changed, false if not
      */
-    public boolean changePassword(String oldPassword, String newPassword, String newPasswordConfirmation) {
+    public void changePassword(String oldPassword, String newPassword, String newPasswordConfirmation) {
         if (!this.password.equals(oldPassword)) {
-            log.error("Old password is incorrect.");
-            return false;
+            log.debug("Old password is incorrect.");
+            throw new IllegalArgumentException("Old password is incorrect.");
         } else if (newPassword == null || newPassword.isEmpty()) {
-            log.error("New password is null or empty.");
-            return false;
+            log.debug("New password is null or empty.");
+            throw new IllegalArgumentException("New password is null or empty.");
         } else if (!newPassword.equals(newPasswordConfirmation)) {
-            log.error("New password and new password confirmation are different.");
-            return false;
+            log.debug("New password and new password confirmation are different.");
+            throw new IllegalArgumentException("New password and new password confirmation are different.");
         }
         this.password = newPassword;
-        return true;
     }
-
 }

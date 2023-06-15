@@ -17,7 +17,6 @@ public enum SceneManager {
     LOADING("/fxml/loading.fxml"),
     MAIN("/fxml/mainScene.fxml"),
     VIEW("/fxml/view.fxml"),
-
     ADD_SOUND("/fxml/addSound.fxml"),
     CREATE_PLAYLIST("/fxml/createPlaylist.fxml"),
     EDIT_PROFILE("/fxml/editProfile.fxml");
@@ -34,42 +33,47 @@ public enum SceneManager {
         this.fxmlPath = fxmlPath;
     }
 
-    public Parent getScene() throws IOException {
+    public Parent getScene() {
         final FXMLLoader loader = new FXMLLoader(getClass().getResource(this.fxmlPath));
-        loader.load();
-        if (this == MAIN) msc = loader.getController();
+        try {
+            loader.load();
+            if (this == MAIN) msc = loader.getController();
+        } catch (IOException e) {
+            log.fatal("Error loading scene: " + this.fxmlPath);
+            System.exit(2);
+        }
         return loader.getRoot();
     }
 
-    public void showSecondaryStage() throws IOException {
+    public void showSecondaryStage() {
         switch (this) {
             case ADD_SOUND:
                 secondaryStage.setTitle("Whalex - Add Sound");
                 secondaryStage.setScene(new Scene(SceneManager.ADD_SOUND.getScene()));
                 break;
-                case CREATE_PLAYLIST:
+            case CREATE_PLAYLIST:
                 secondaryStage.setTitle("Whalex - Create Playlist");
                 secondaryStage.setScene(new Scene(SceneManager.CREATE_PLAYLIST.getScene()));
                 break;
-                case EDIT_PROFILE:
+            case EDIT_PROFILE:
                 secondaryStage.setTitle("Whalex - Edit Profile");
                 secondaryStage.setScene(new Scene(SceneManager.EDIT_PROFILE.getScene()));
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + this);
         }
-    	secondaryStage.show();
+        secondaryStage.show();
     }
 
     public void closeSecondaryStage() {
-    	secondaryStage.close();
+        secondaryStage.close();
     }
 
     public MainSceneController getController() {
         return msc;
     }
 
-    public void changeScene() throws Exception {
+    public void changeScene() {
         Scene scene;
         switch (this) {
             case LOGIN:
@@ -96,7 +100,7 @@ public enum SceneManager {
         }
         applicationStage.getIcons().add(new Image(getClass().getResourceAsStream("/fxml/assets/WhalexLOGO.png")));
         applicationStage.show();
-        log.debug("Showing Scene: {}, from: {}",WhalexApp.getApplicationStage().getTitle(), this.fxmlPath);
+        log.debug("Showing Scene: {}, from: {}", WhalexApp.getApplicationStage().getTitle(), this.fxmlPath);
     }
 }
 

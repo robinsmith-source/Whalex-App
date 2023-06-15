@@ -155,4 +155,8 @@ public class MainSceneController implements Initializable {
         viewController.updateView();
         log.info("View updated access from MainSceneController (Added Playlist)");
     }
+
+    public void handleSettingsButton(ActionEvent actionEvent) throws IOException {
+        SceneManager.EDIT_PROFILE.showSecondaryStage();
+    }
 }

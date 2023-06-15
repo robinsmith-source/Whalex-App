@@ -92,7 +92,7 @@ public class ViewController implements Initializable {
         log.info("Initializing view controller");
         //Sound table
         soundCover.setCellValueFactory(cellData -> {
-            Image image = new Image(SoundManager.getINSTANCE().getDEFAULT_COVER().toURI().toString());
+            Image image = new Image(SoundManager.getInstance().getDEFAULT_COVER().toURI().toString());
             if (cellData.getValue().getMedia().getMetadata().get("image") != null) {
                 image = ((Image) cellData.getValue().getMedia().getMetadata().get("image"));
             }
@@ -184,7 +184,7 @@ public class ViewController implements Initializable {
 
         //Queue table
         queueSoundCover.setCellValueFactory(cellData -> {
-            Image image = new Image(SoundManager.getINSTANCE().getDEFAULT_COVER().toURI().toString());
+            Image image = new Image(SoundManager.getInstance().getDEFAULT_COVER().toURI().toString());
             if (cellData.getValue().getMedia().getMetadata().get("image") != null) {
                 image = ((Image) cellData.getValue().getMedia().getMetadata().get("image"));
             }
@@ -205,7 +205,7 @@ public class ViewController implements Initializable {
 
         //History table
         historySoundCover.setCellValueFactory(cellData -> {
-            Image image = new Image(SoundManager.getINSTANCE().getDEFAULT_COVER().toURI().toString());
+            Image image = new Image(SoundManager.getInstance().getDEFAULT_COVER().toURI().toString());
             if (cellData.getValue().getMedia().getMetadata().get("image") != null) {
                 image = ((Image) cellData.getValue().getMedia().getMetadata().get("image"));
             }
@@ -226,12 +226,10 @@ public class ViewController implements Initializable {
 
         //TODO: FIX THIS!! YEYYYYYYY IT WORKS 😊😊
 
-        Player.getInstance().registerOnNextSongEvent(() -> {
-                Platform.runLater(() -> {
-                    queueTable.refresh();
-                    historyTable.refresh();
-                });
-        });
+        Player.getInstance().registerOnNextSongEvent(() -> Platform.runLater(() -> {
+            queueTable.refresh();
+            historyTable.refresh();
+        }));
        /* Timer updateTimer = new Timer();
         TimerTask updateTask = new TimerTask() {
             @Override
@@ -255,13 +253,13 @@ public class ViewController implements Initializable {
         switch (view) {
             case ALL:
                 soundTableLabel.setText("All Sounds");
-                initializeSoundContent(SoundManager.getINSTANCE().getAllSounds());
+                initializeSoundContent(SoundManager.getInstance().getAllSounds());
                 playlistTableLabel.setText("All Playlists");
                 initializePlaylistContent(PlaylistManager.getInstance().getAllPlaylists());
                 break;
             case USER:
                 soundTableLabel.setText("My Sounds");
-                initializeSoundContent(SoundManager.getINSTANCE().getAllSoundsByUser(UserManager.getInstance().getActiveUser()));
+                initializeSoundContent(SoundManager.getInstance().getAllSoundsByUser(UserManager.getInstance().getActiveUser()));
                 playlistTableLabel.setText("My Playlists");
                 initializePlaylistContent(PlaylistManager.getInstance().getPlaylistsByUser(UserManager.getInstance().getActiveUser()));
                 break;
@@ -297,7 +295,7 @@ public class ViewController implements Initializable {
     @FXML
     private void deleteSound() {
         ISound sound = soundTable.getSelectionModel().getSelectedItem();
-        SoundManager.getINSTANCE().deleteSoundByID(UserManager.getInstance().getActiveUser(), sound.getSoundID());
+        SoundManager.getInstance().deleteSoundByID(UserManager.getInstance().getActiveUser(), sound.getSoundID());
         for (Playlist playlist : PlaylistManager.getInstance().getAllPlaylists()) {
             playlist.removeSound(sound);
         }
@@ -356,7 +354,7 @@ public class ViewController implements Initializable {
     private void showPopup(Exception e) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(3000),
+                Duration.millis(5000),
                 ae -> alert.close()));
         alert.setTitle("Whalex - Exception");
         alert.setHeaderText(getClass().getSimpleName());
@@ -427,18 +425,18 @@ public class ViewController implements Initializable {
         if (search.isEmpty()) {
             updateView();
         } else if (search.startsWith("user:")) {
-            ArrayList<ISound> soundsInSearch = SoundManager.getINSTANCE().getAllSoundsByUser(UserManager.getInstance().getUserByName(search.substring(5)));
+            ArrayList<ISound> soundsInSearch = SoundManager.getInstance().getAllSoundsByUser(UserManager.getInstance().getUserByName(search.substring(5)));
             ArrayList<Playlist> playlistsInSearch = PlaylistManager.getInstance().getPlaylistsByUser(UserManager.getInstance().getUserByName(search.substring(5)));
             initializeSoundContent(soundsInSearch);
             initializePlaylistContent(playlistsInSearch);
         } else if (search.startsWith("sound:")) {
-            ArrayList<ISound> soundsInSearch = SoundManager.getINSTANCE().getAllSounds().stream().filter(sound -> sound.getTitle().toLowerCase().contains(search.substring(6).toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
+            ArrayList<ISound> soundsInSearch = SoundManager.getInstance().getAllSounds().stream().filter(sound -> sound.getTitle().toLowerCase().contains(search.substring(6).toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
             initializeSoundContent(soundsInSearch);
         } else if (search.startsWith("playlist:")) {
             ArrayList<Playlist> playlistsInSearch = PlaylistManager.getInstance().getAllPlaylists().stream().filter(playlist -> playlist.getName().toLowerCase().contains(search.substring(9).toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
             initializePlaylistContent(playlistsInSearch);
         } else {
-            ArrayList<ISound> soundsInSearch = SoundManager.getINSTANCE().getAllSounds().stream().filter(sound -> sound.getTitle().toLowerCase().contains(search.toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
+            ArrayList<ISound> soundsInSearch = SoundManager.getInstance().getAllSounds().stream().filter(sound -> sound.getTitle().toLowerCase().contains(search.toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
             ArrayList<Playlist> playlistsInSearch = PlaylistManager.getInstance().getAllPlaylists().stream().filter(playlist -> playlist.getName().toLowerCase().contains(search.toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
             initializeSoundContent(soundsInSearch);
             initializePlaylistContent(playlistsInSearch);
