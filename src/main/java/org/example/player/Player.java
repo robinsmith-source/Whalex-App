@@ -142,12 +142,12 @@ public class Player {
         }
     }
 
-    private OnNextSongListener onNextSongListener;
+    /*private OnNextSongListener onNextSongListener;
 
     public void registerOnNextSongEvent(OnNextSongListener listener) {
         this.onNextSongListener = listener;
     }
-
+    */
 
     public ISound getCurrentSound() {
         return this.currentSound;

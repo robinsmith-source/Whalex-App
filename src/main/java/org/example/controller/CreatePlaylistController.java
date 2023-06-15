@@ -31,14 +31,12 @@ public class CreatePlaylistController implements Initializable {
     private File choosenImage;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("CreatePlaylistController");
         Image image = new Image(UserManager.getInstance().getActiveUser().getProfilePicture().toURI().toString());
         userProfilePicture.setImage(image);
         userUsername.setText(UserManager.getInstance().getActiveUser().getUsername());
     }
 
     public void handleChooseCoverButton() {
-        System.out.println("Choose Cover Button");
         Stage fileChooserWindow = new Stage();
         fileChooserWindow.setTitle("Choose a file");
         fileChooser.getExtensionFilters().addAll(
@@ -47,8 +45,6 @@ public class CreatePlaylistController implements Initializable {
     }
 
     public void handleAddButton() {
-        System.out.println("Add Button");
-        System.out.println(playlistNameTextField.getText());
         try {
             PlaylistManager.getInstance().createPlaylist(UserManager.getInstance().getActiveUser(), choosenImage, playlistNameTextField.getText()); //braucht Playlistname, (braucht Cover)
         } catch (Exception e) {
