@@ -52,7 +52,5 @@ public class CreatePlaylistController implements Initializable {
         }
         SceneManager.CREATE_PLAYLIST.closeSecondaryStage();
         SceneManager.MAIN.getController().updateView();
-        //Name der Playlist abgreifen --> Playlistmanager --> Playlist erstellen (createPlaylist)
-        //Todo: Fenster schließen, Tabelle aktualisieren
     }
 }

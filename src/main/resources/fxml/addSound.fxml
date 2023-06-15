@@ -26,39 +26,47 @@
                         <Font size="20.0" />
                      </font>
                      <VBox.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        <Insets bottom="15.0" left="20.0" right="20.0" top="20.0" />
                      </VBox.margin>
                   </Label>
-                  <Label fx:id="errorMessageLabel" textFill="RED" wrapText="true">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="25.0" left="25.0" right="25.0" top="5.0" />
-                     </VBox.margin>
-                  </Label>
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="400.0" prefWidth="400.0">
-               <children>
-                  <VBox>
+                  <VBox alignment="TOP_CENTER">
                      <children>
-                        <Label text="Add Sound" textFill="WHITE">
+                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddButton" prefWidth="160.0" text="Add">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelButton" prefWidth="160.0" text="Cancel">
                            <font>
                               <Font size="24.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
-                        </Label>
+                        </Button>
                      </children>
                      <VBox.margin>
-                        <Insets bottom="25.0" left="25.0" right="25.0" />
+                        <Insets bottom="20.0" />
                      </VBox.margin>
                   </VBox>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" prefHeight="400.0" prefWidth="400.0" spacing="10.0">
+               <children>
+                  <Label text="Add Sound" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="50.0" left="25.0" right="25.0" top="25.0" />
+                     </VBox.margin>
+                  </Label>
                   <TextField fx:id="soundTitleTextField" promptText="title">
                      <VBox.margin>
-                        <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
+                        <Insets left="25.0" right="25.0" />
                      </VBox.margin>
                      <font>
                         <Font size="24.0" />
@@ -69,30 +77,22 @@
                         <Font size="24.0" />
                      </font>
                      <VBox.margin>
-                        <Insets bottom="25.0" left="25.0" right="25.0" top="10.0" />
+                        <Insets left="25.0" right="25.0" />
                      </VBox.margin>
                   </Button>
-                  <HBox alignment="CENTER">
-                     <children>
-                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                           </HBox.margin>
-                        </Button>
-                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddButton" text="Add">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                           </HBox.margin>
-                        </Button>
-                     </children>
-                  </HBox>
+                  <HBox alignment="CENTER" />
+                  <Label fx:id="errorMessageLabel" textFill="RED" wrapText="true">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="25.0" right="25.0" />
+                     </VBox.margin>
+                  </Label>
                </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
             </VBox>
          </children>
       </HBox>

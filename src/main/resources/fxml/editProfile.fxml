@@ -7,105 +7,149 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import java.net.URL?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.LoginController">
-   <children>
-      <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <VBox fx:id="sideBar" prefHeight="400.0" prefWidth="200.0">
-               <children>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@assets/WhalexLOGO.png" />
-                     </image>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.EditProfileController">
+    <children>
+        <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <VBox fx:id="sideBar">
+                    <children>
+                        <ImageView fx:id="userProfilePicture" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@assets/WhalexLOGO.png" />
+                            </image>
+                            <VBox.margin>
+                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                            </VBox.margin>
+                        </ImageView>
+                        <Label fx:id="userUsername" alignment="CENTER" prefWidth="160.0" text="Username" textFill="WHITE">
+                            <font>
+                                <Font size="20.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets bottom="15.0" left="20.0" right="20.0" top="20.0" />
+                            </VBox.margin>
+                        </Label>
+                        <VBox alignment="TOP_CENTER">
+                            <children>
+                                <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmitButton" prefWidth="160.0" text="Submit">
+                                    <font>
+                                        <Font size="24.0" />
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" />
+                                    </VBox.margin>
+                                </Button>
+                                <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelButton" prefWidth="160.0" text="Cancel">
+                                    <font>
+                                        <Font size="24.0" />
+                                    </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                                </Button>
+                            </children>
                      <VBox.margin>
-                        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                        <Insets bottom="20.0" />
                      </VBox.margin>
-                  </ImageView>
-                  <Label alignment="CENTER" prefWidth="160.0" text="Username" textFill="WHITE">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Button fx:id="fileChooserButton" mnemonicParsing="false" onAction="#chooseFile" prefWidth="160.0" text="Submit">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Label fx:id="errorMessageLabel" textFill="RED" wrapText="true">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="25.0" left="25.0" right="25.0" top="5.0" />
-                     </VBox.margin>
-                  </Label>
-               </children>
-            </VBox>
-            <TabPane tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
-              <tabs>
-                <Tab>
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <Button fx:id="fileChooserButton1" mnemonicParsing="false" onAction="#chooseFile" text="Choose Image">
+                        </VBox>
+                    </children>
+                </VBox>
+                <TabPane tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
+                    <tabs>
+                        <Tab text="Appearance">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                    <children>
+                                        <VBox alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                                <Label text="Change appearance" textFill="WHITE">
+                                                    <font>
+                                                        <Font size="24.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets bottom="50.0" left="25.0" right="25.0" top="25.0" />
+                                                    </VBox.margin>
+                                                </Label>
+                                                <Button fx:id="fileChooserButton" mnemonicParsing="false" onAction="#handleFileChooserButton" text="Choose Image">
+                                                    <font>
+                                                        <Font size="24.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets left="25.0" right="25.0" />
+                                                    </VBox.margin>
+                                                </Button>
+                                                <Label fx:id="errorMessageLabel1" textFill="RED" wrapText="true">
+                                                    <font>
+                                                        <Font size="16.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets left="25.0" right="25.0" />
+                                                    </VBox.margin>
+                                                </Label>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </Tab>
+                        <Tab text="Password">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                    <children>
+                                        <VBox alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                                <Label text="Change password" textFill="WHITE">
+                                                    <font>
+                                                        <Font size="24.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets bottom="50.0" left="25.0" right="25.0" top="25.0" />
+                                                    </VBox.margin>
+                                                </Label>
+                                    <PasswordField fx:id="oldPasswordTextField" promptText="old password">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
-                                    </Button>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                  </content>
-                     <graphic>
-                        <Label text="Change Profile Picture" />
-                     </graphic>
-                </Tab>
-                <Tab>
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <TextField promptText="username">
                                        <VBox.margin>
-                                          <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                          <Insets left="25.0" right="25.0" />
                                        </VBox.margin>
+                                    </PasswordField>
+                                    <PasswordField fx:id="newPasswordTextField" promptText="new Password">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
-                                    </TextField>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                  </content>
-                     <graphic>
-                        <Label text="Change Username" />
-                     </graphic>
-                </Tab>
-                  <Tab>
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                     </content>
-                     <graphic>
-                        <Label text="Change Password" />
-                     </graphic>
-                  </Tab>
-              </tabs>
-            </TabPane>
-         </children>
-      </HBox>
-   </children>
-   <stylesheets>
-      <URL value="@../styles/login.css" />
-   </stylesheets>
+                                       <VBox.margin>
+                                          <Insets left="25.0" right="25.0" />
+                                       </VBox.margin>
+                                    </PasswordField>
+                                    <PasswordField fx:id="confirmNewPasswordTextField" promptText="confirm new password">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets left="25.0" right="25.0" />
+                                       </VBox.margin>
+                                    </PasswordField>
+                                                <Label fx:id="errorMessageLabel2" textFill="RED" wrapText="true">
+                                                    <font>
+                                                        <Font size="16.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets left="25.0" right="25.0" />
+                                                    </VBox.margin>
+                                                </Label>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </children>
+        </HBox>
+    </children>
+    <stylesheets>
+        <URL value="@../styles/login.css" />
+    </stylesheets>
 </AnchorPane>

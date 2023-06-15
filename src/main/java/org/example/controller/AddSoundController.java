@@ -9,7 +9,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example.media.SoundManager;
-import org.example.playlist.PlaylistManager;
 import org.example.profile.UserManager;
 
 import java.io.File;
@@ -37,7 +36,6 @@ public class AddSoundController implements Initializable {
     }
 
     public void handleChooseSoundfileButton() {
-        System.out.println("Choose Sound Button");
         Stage fileChooserWindow = new Stage();
         fileChooserWindow.setTitle("Choose a file");
         fileChooser.getExtensionFilters().addAll(
@@ -47,7 +45,7 @@ public class AddSoundController implements Initializable {
 
     public void handleAddButton() {
         try {
-            SoundManager.getINSTANCE().addSound(UserManager.getInstance().getActiveUser(),soundTitleTextField.getText(),choosenSoundfile);
+            SoundManager.getInstance().addSound(UserManager.getInstance().getActiveUser(),soundTitleTextField.getText(),choosenSoundfile);
             //ruft addSound in Soundmanager auf (mit Title, Soundfile, User)
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
