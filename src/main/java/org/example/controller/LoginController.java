@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -47,12 +48,9 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            UserManager.getInstance().usersFromJSON();
-        } catch (ReadDataException e) {
-            log.fatal("Failed to read user data from JSON file.");
-            System.exit(1);
-        }
+        Thread loadUsersThread = new Thread(loadingTask);
+        loadUsersThread.setDaemon(true);
+        loadUsersThread.start();
     }
 
     @FXML
@@ -105,4 +103,17 @@ public class LoginController implements Initializable {
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
         choosenImage = fileChooser.showOpenDialog(fileChooserWindow);
     }
+
+    Task<Void> loadingTask = new Task<>() {
+        @Override
+        public Void call() {
+            try {
+                UserManager.getInstance().usersFromJSON();
+            } catch (ReadDataException e) {
+                log.fatal("Failed to read user from JSON file.");
+                System.exit(1);
+            }
+            return null;
+        }
+    };
 }

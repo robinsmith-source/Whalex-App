@@ -29,6 +29,7 @@ public class LoadingController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Thread loadingThread = new Thread(loadingTask);
+        loadingThread.setDaemon(true);
         loadingBar.progressProperty().bind(loadingTask.progressProperty());
         loadingThread.start();
 
@@ -54,10 +55,10 @@ public class LoadingController implements Initializable {
         @Override
         public Void call() {
             try {
-                SoundManager.getINSTANCE().soundsFromJSON();
+                SoundManager.getInstance().soundsFromJSON();
                 PlaylistManager.getInstance().playlistsFromJSON();
             } catch (ReadDataException e) {
-                log.fatal("Failed to read data sound and playlist from JSON file.");
+                log.fatal("Failed to read sound and playlist data from JSON files.");
                 System.exit(1);
             }
             return null;
