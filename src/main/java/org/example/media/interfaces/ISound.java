@@ -31,4 +31,10 @@ public interface ISound {
      * @return User who uploaded the sound
      */
     User getUploadedBy();
+
+    @Override
+    boolean equals(Object o);
+
+    @Override
+    int hashCode();
 }

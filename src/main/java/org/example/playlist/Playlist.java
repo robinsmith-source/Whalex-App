@@ -30,7 +30,7 @@ public class Playlist {
     /**
      * Name of the playlist
      */
-    private String name;
+    private final String name;
 
     /**
      * List of songs in the playlist
@@ -70,21 +70,6 @@ public class Playlist {
         this.SOUNDS = new HashSet<>();
         this.createdBy = createdBy;
         this.createdAt = createdAt;
-    }
-
-    /**
-     * Method to set the name of the playlist
-     *
-     * @param name Name of the playlist
-     * @return true if the name of the playlist was set successfully, false if not
-     */
-    public boolean setName(String name) {
-        if (name == null || name.isEmpty()) {
-            log.error("Name of the playlist cannot be null or empty");
-            return false;
-        }
-        this.name = name;
-        return true;
     }
 
     /**
@@ -159,7 +144,7 @@ public class Playlist {
      * Method to add a sound to the playlist
      *
      * @param activeUser User who is currently logged in
-     * @param sound Sound to be added to the playlist
+     * @param sound      Sound to be added to the playlist
      * @throws IllegalArgumentException if the sound or the user is null or the active user is not the creator of the playlist
      */
     public void addSound(User activeUser, ISound sound) throws IllegalArgumentException {
@@ -215,5 +200,22 @@ public class Playlist {
         }
         this.SOUNDS.remove(sound);
         log.info("Sound {} has been removed from playlist {}.", sound.getTitle(), this.name);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Playlist otherPlaylist = (Playlist) obj;
+        return name.equals(otherPlaylist.name) && createdBy.equals(otherPlaylist.createdBy);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

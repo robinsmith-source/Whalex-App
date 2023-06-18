@@ -158,7 +158,7 @@
                     <children>
                         <Label fx:id="username" text="Label" textFill="WHITE">
                             <HBox.margin>
-                                <Insets bottom="10.0" left="10.0" right="20.0" top="10.0" />
+                                <Insets />
                             </HBox.margin>
                             <font>
                                 <Font size="14.0" />
@@ -175,6 +175,17 @@
                      </font>
                      <graphic>
                         <MaterialIconView fill="WHITE" glyphName="SETTINGS" size="30" wrappingWidth="30.0" />
+                     </graphic>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#handleLogoutButton" prefHeight="30.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <graphic>
+                        <MaterialIconView fill="WHITE" glyphName="LOGOUT" size="30" wrappingWidth="30.0" />
                      </graphic>
                   </Button>
                     </children>

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.UUID;
 
 /**
@@ -54,7 +55,7 @@ public class UserManager {
     /**
      * Map of all users (key = username, value = user)
      */
-    private final ArrayList<User> USERS = new ArrayList<>();
+    private final HashSet<User> USERS = new HashSet<>();
 
     /**
      * User who is currently logged in
@@ -241,7 +242,7 @@ public class UserManager {
      */
     //Todo: Check if the log states are correct -> Should be
     //Todo: Check if exception handling is correct
-    public void usersToJSON() throws WriteDataException {
+    public synchronized void usersToJSON() throws WriteDataException {
         try {
             FileWriter fileWriter = new FileWriter(SAVE_FILE);
             gson.toJson(USERS, fileWriter);
@@ -249,7 +250,7 @@ public class UserManager {
             fileWriter.close();
         } catch (Exception e) {
             log.fatal("Users have not been saved to JSON file {}.", SAVE_FILE);
-            throw new WriteDataException("Error while saving users to JSON file." + e.getMessage());
+            throw new WriteDataException("Error while saving users to JSON file.");
         }
     }
 
@@ -261,7 +262,7 @@ public class UserManager {
      */
     //Todo: Check if the log states are correct -> Should be
     //Todo: Check if exception handling is correct
-    public void usersFromJSON() throws ReadDataException {
+    public synchronized void usersFromJSON() throws ReadDataException {
         try {
             FileReader fileReader = new FileReader(SAVE_FILE);
             USERS.addAll(gson.fromJson(fileReader, new TypeToken<ArrayList<User>>() {
@@ -270,7 +271,7 @@ public class UserManager {
             fileReader.close();
         } catch (IOException e) {
             log.fatal("Users have not been loaded from JSON file {}.", SAVE_FILE);
-            throw new ReadDataException("Error while loading users from JSON file." + e.getMessage());
+            throw new ReadDataException("Error while loading users from JSON file.");
         }
     }
 }

@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.UUID;
 
 /**
@@ -52,7 +53,7 @@ public class PlaylistManager {
     /**
      * Arraylist of all playlists of the user
      */
-    private final ArrayList<Playlist> PLAYLISTS = new ArrayList<>();
+    private final HashSet<Playlist> PLAYLISTS = new HashSet<>();
 
     /**
      * Constructor of the PlaylistManager
@@ -194,7 +195,7 @@ public class PlaylistManager {
      */
     //Todo: Check if the log states are correct -> Should be
     //Todo: Check if exception handling is correct -> Should be
-    public void playlistsToJSON() throws WriteDataException {
+    public synchronized void playlistsToJSON() throws WriteDataException {
         try {
             FileWriter fileWriter = new FileWriter(this.SAVE_FILE);
             gson.toJson(this.PLAYLISTS, fileWriter);
@@ -202,7 +203,7 @@ public class PlaylistManager {
             fileWriter.close();
         } catch (Exception e) {
             log.fatal("Playlists have not been saved to JSON file {}.", this.SAVE_FILE);
-            throw new WriteDataException("Error while saving playlists to JSON file." + e.getMessage());
+            throw new WriteDataException("Error while saving playlists to JSON file.");
         }
     }
 
@@ -214,7 +215,7 @@ public class PlaylistManager {
      */
     //Todo: Check if the log state is correct -> Should be
     //Todo: Check if exception handling is correct -> Should be
-    public void playlistsFromJSON() throws ReadDataException {
+    public synchronized void playlistsFromJSON() throws ReadDataException {
         try {
             FileReader fileReader = new FileReader(this.SAVE_FILE);
             this.PLAYLISTS.addAll(gson.fromJson(fileReader, new TypeToken<ArrayList<Playlist>>() {
@@ -223,7 +224,7 @@ public class PlaylistManager {
             fileReader.close();
         } catch (Exception e) {
             log.fatal("Playlists have not been loaded from JSON file {}.", this.SAVE_FILE);
-            throw new ReadDataException("Error while loading playlists from JSON file." + e.getMessage());
+            throw new ReadDataException("Error while loading playlists from JSON file.");
         }
     }
 }

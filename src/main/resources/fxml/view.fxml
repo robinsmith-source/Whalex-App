@@ -29,7 +29,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </AnchorPane>
-                  <TableView fx:id="soundTable" onMouseClicked="#handleOnSoundClicked" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="soundTable" VBox.vgrow="ALWAYS">
                      <columns>
                         <TableColumn fx:id="soundCover" prefWidth="75.0" resizable="false" />
                         <TableColumn fx:id="soundTitle" prefWidth="75.0" resizable="false" text="Title" />

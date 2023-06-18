@@ -116,4 +116,21 @@ public class Soundfile implements ISound {
     public User getUploadedBy() {
         return this.uploadedBy;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Soundfile otherSound = (Soundfile) obj;
+        return title.equals(otherSound.title) && uploadedBy.equals(otherSound.uploadedBy);
+    }
+
+    @Override
+    public int hashCode() {
+        return title.hashCode() + uploadedBy.hashCode();
+    }
 }

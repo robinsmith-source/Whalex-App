@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.UUID;
 
 /**
@@ -59,13 +60,12 @@ public class SoundManager {
     /**
      * Arraylist of all sounds
      */
-    private final ArrayList<ISound> SOUNDS = new ArrayList<>();
+    private final HashSet<ISound> SOUNDS = new HashSet<>();
 
     /**
      * Constructor of the SoundManager
      */
-    private SoundManager() {
-    }
+    private SoundManager() {}
 
     public void setSAVE_FILE(File SAVE_FILE) {
         this.SAVE_FILE = SAVE_FILE;
@@ -188,7 +188,7 @@ public class SoundManager {
      */
     //Todo: Check if the log states are correct -> Should be
     //Todo: Check if exception handling is correct
-    public void soundsToJSON() throws WriteDataException {
+    public synchronized void soundsToJSON() throws WriteDataException {
         try {
             FileWriter fileWriter = new FileWriter(this.SAVE_FILE);
             gson.toJson(this.SOUNDS, fileWriter);
@@ -196,7 +196,7 @@ public class SoundManager {
             fileWriter.close();
         } catch (Exception e) {
             log.fatal("Sounds have not been saved to JSON file {}.", this.SAVE_FILE);
-            throw new WriteDataException("Error while saving users to JSON." + e.getMessage());
+            throw new WriteDataException("Error while saving users to JSON.");
         }
     }
 
@@ -208,7 +208,7 @@ public class SoundManager {
      */
     //Todo: Check if the log states are correct -> Should be
     //Todo: Check if exception handling is correct
-    public void soundsFromJSON() throws ReadDataException {
+    public synchronized void soundsFromJSON() throws ReadDataException {
         try {
             FileReader fileReader = new FileReader(this.SAVE_FILE);
             this.SOUNDS.addAll(gson.fromJson(fileReader, new TypeToken<ArrayList<ISound>>() {
@@ -217,7 +217,7 @@ public class SoundManager {
             fileReader.close();
         } catch (Exception e) {
             log.fatal("Sounds have not been loaded from JSON file {}.", this.SAVE_FILE);
-            throw new ReadDataException("Error while loading Sounds from JSON." + e.getMessage());
+            throw new ReadDataException("Error while loading Sounds from JSON.");
         }
     }
 }

@@ -160,6 +160,7 @@ public class MainSceneController implements Initializable {
     }
 
     public void handleLogoutButton() {
+        UserManager.getInstance().logout();
         SceneManager.LOGIN.changeScene();
     }
 }
