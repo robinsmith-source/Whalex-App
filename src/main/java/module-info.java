@@ -17,4 +17,6 @@ module gui {
     exports org.example.media.interfaces;
     exports org.example.playlist;
     exports org.example.profile;
+    exports org.example.data;
+    opens org.example.data to javafx.fxml;
 }

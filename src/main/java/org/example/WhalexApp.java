@@ -8,7 +8,7 @@ import org.example.controller.SceneManager;
 
 public class WhalexApp extends Application {
 
-	private static final Logger log = LogManager.getLogger(WhalexApp.class);
+    private static final Logger log = LogManager.getLogger(WhalexApp.class);
 
     /**
      * The main stage of the application.
@@ -21,6 +21,7 @@ public class WhalexApp extends Application {
 
     /**
      * Method to get the main stage of the application into other scene controllers.
+     *
      * @return the main stage of the application
      */
     public static Stage getApplicationStage() {
@@ -29,15 +30,15 @@ public class WhalexApp extends Application {
 
     /**
      * Method to start the application.
+     *
      * @param stage the main stage of the application
-     * @throws Exception if the application can't be started
      */
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         applicationStage = stage;
 
         stage.setOnCloseRequest(event -> {
             log.info("Closing Whalex Application");
-            System.exit(0); //TODO: Close application correct without data loss
+            System.exit(0); //TODO: Close application correct without data loss --> should be done
         });
         log.info("Starting Whalex Application");
         SceneManager.LOGIN.changeScene();

@@ -8,6 +8,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.example.data.DataOperation;
+import org.example.data.DataThread;
+import org.example.data.DataType;
 import org.example.playlist.PlaylistManager;
 import org.example.profile.UserManager;
 
@@ -51,6 +54,7 @@ public class CreatePlaylistController implements Initializable {
             errorMessageLabel.setText(e.getMessage());
         }
         SceneManager.CREATE_PLAYLIST.closeSecondaryStage();
+        new DataThread(DataType.PLAYLIST, DataOperation.WRITE).start();
         SceneManager.MAIN.getController().updateView();
     }
 }

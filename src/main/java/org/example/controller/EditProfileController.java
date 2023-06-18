@@ -2,7 +2,6 @@ package org.example.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -11,6 +10,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.data.DataOperation;
+import org.example.data.DataThread;
+import org.example.data.DataType;
 import org.example.profile.UserManager;
 
 import java.io.File;
@@ -25,13 +27,6 @@ public class EditProfileController implements Initializable {
     @FXML
     private Label userUsername;
     @FXML
-    private Button submitButton;
-    @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Button fileChooserButton;
-    @FXML
     private Label errorMessageLabel1;
 
     @FXML
@@ -45,7 +40,7 @@ public class EditProfileController implements Initializable {
 
     private final FileChooser fileChooser = new FileChooser();
 
-    private File choosenImage;
+    private File chosenImage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -56,7 +51,7 @@ public class EditProfileController implements Initializable {
 
     public void handleSubmitButton() {
         try {
-            UserManager.getInstance().getActiveUser().setProfilePicture(choosenImage);
+            UserManager.getInstance().getActiveUser().setProfilePicture(chosenImage);
         } catch (Exception e) {
             errorMessageLabel1.setText(e.getMessage());
         }
@@ -66,6 +61,7 @@ public class EditProfileController implements Initializable {
             errorMessageLabel2.setText(e.getMessage());
         }
         SceneManager.EDIT_PROFILE.closeSecondaryStage();
+        new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.WRITE).start();
     }
 
     public void handleCancelButton() {
@@ -77,6 +73,6 @@ public class EditProfileController implements Initializable {
         fileChooserWindow.setTitle("Choose a file");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-        choosenImage = fileChooser.showOpenDialog(fileChooserWindow);
+        chosenImage = fileChooser.showOpenDialog(fileChooserWindow);
     }
 }

@@ -1,6 +1,5 @@
 package org.example.controller;
 
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -11,7 +10,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.exceptions.ReadDataException;
+import org.example.data.DataOperation;
+import org.example.data.DataThread;
+import org.example.data.DataType;
 import org.example.profile.UserManager;
 
 import java.io.File;
@@ -44,13 +45,11 @@ public class LoginController implements Initializable {
 
     private final FileChooser fileChooser = new FileChooser();
 
-    private File choosenImage;
+    private File chosenImage;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Thread loadUsersThread = new Thread(loadingTask);
-        loadUsersThread.setDaemon(true);
-        loadUsersThread.start();
+        new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.READ).start();
     }
 
     @FXML
@@ -84,9 +83,10 @@ public class LoginController implements Initializable {
 
     @FXML
     public void register() {
-        log.info("Register button pressed with username {}. - ProfilePicture: {}", usernameField.getText(), choosenImage);
+        log.info("Register button pressed with username {}. - ProfilePicture: {}", usernameField.getText(), chosenImage);
         try {
-            UserManager.getInstance().createUser(choosenImage, usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
+            UserManager.getInstance().createUser(chosenImage, usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
+            new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.WRITE).start();
             SceneManager.LOADING.changeScene();
         } catch (IllegalArgumentException e) {
             errorMessageLabel.setText(e.getMessage());
@@ -101,19 +101,6 @@ public class LoginController implements Initializable {
         fileChooserWindow.setTitle("Choose a file");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-        choosenImage = fileChooser.showOpenDialog(fileChooserWindow);
+        chosenImage = fileChooser.showOpenDialog(fileChooserWindow);
     }
-
-    Task<Void> loadingTask = new Task<>() {
-        @Override
-        public Void call() {
-            try {
-                UserManager.getInstance().usersFromJSON();
-            } catch (ReadDataException e) {
-                log.fatal("Failed to read user from JSON file.");
-                System.exit(1);
-            }
-            return null;
-        }
-    };
 }

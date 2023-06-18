@@ -1,7 +1,6 @@
 package org.example.controller;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -144,11 +143,11 @@ public class MainSceneController implements Initializable {
         viewController.handleSearchBar(searchBar.getText());
     }
 
-    public void handleShuffleButton(ActionEvent actionEvent) {
+    public void handleShuffleButton() {
         Player.getInstance().shuffle();
     }
 
-    public void handleRepeatButton(ActionEvent actionEvent) {
+    public void handleRepeatButton() {
     }
 
     public void updateView() {
@@ -156,7 +155,11 @@ public class MainSceneController implements Initializable {
         log.info("View updated access from MainSceneController (Added Playlist)");
     }
 
-    public void handleSettingsButton(ActionEvent actionEvent) throws IOException {
+    public void handleSettingsButton() {
         SceneManager.EDIT_PROFILE.showSecondaryStage();
+    }
+
+    public void handleLogoutButton() {
+        SceneManager.LOGIN.changeScene();
     }
 }

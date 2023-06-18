@@ -7,7 +7,6 @@ import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -22,6 +21,9 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.data.DataOperation;
+import org.example.data.DataThread;
+import org.example.data.DataType;
 import org.example.media.SoundManager;
 import org.example.media.interfaces.ISound;
 import org.example.player.Player;
@@ -30,7 +32,6 @@ import org.example.playlist.PlaylistManager;
 import org.example.profile.User;
 import org.example.profile.UserManager;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -78,9 +79,6 @@ public class ViewController implements Initializable {
     @FXML
     public TableColumn<ISound, String> historySoundTitle;
 
-
-    private ObservableList<Playlist> playlistObjectList;
-    private ObservableList<ISound> soundObjectList;
 
     private final ObservableList<ISound> queueObjectList = FXCollections.observableList(Player.getInstance().getSoundQueue());
     private final ObservableList<ISound> historyObjectList = FXCollections.observableList(Player.getInstance().getSoundHistory());
@@ -271,7 +269,7 @@ public class ViewController implements Initializable {
     }
 
     private void initializeSoundContent(ArrayList<ISound> sounds) {
-        soundObjectList = FXCollections.observableArrayList();
+        ObservableList<ISound> soundObjectList = FXCollections.observableArrayList();
         soundObjectList.setAll(sounds);
         FXCollections.sort(soundObjectList, Comparator.comparing(ISound::getTitle));
         soundTable.setItems(soundObjectList);
@@ -279,7 +277,7 @@ public class ViewController implements Initializable {
     }
 
     private void initializePlaylistContent(ArrayList<Playlist> playlists) {
-        playlistObjectList = FXCollections.observableArrayList();
+        ObservableList<Playlist> playlistObjectList = FXCollections.observableArrayList();
         playlistObjectList.setAll(playlists);
         FXCollections.sort(playlistObjectList, Comparator.comparing(Playlist::getName));
         playlistTable.setItems(playlistObjectList);
@@ -295,11 +293,17 @@ public class ViewController implements Initializable {
     @FXML
     private void deleteSound() {
         ISound sound = soundTable.getSelectionModel().getSelectedItem();
-        SoundManager.getInstance().deleteSoundByID(UserManager.getInstance().getActiveUser(), sound.getSoundID());
-        for (Playlist playlist : PlaylistManager.getInstance().getAllPlaylists()) {
-            playlist.removeSound(sound);
+        try {
+            SoundManager.getInstance().deleteSoundByID(UserManager.getInstance().getActiveUser(), sound.getSoundID());
+            for (Playlist playlist : PlaylistManager.getInstance().getAllPlaylists()) {
+                playlist.removeSound(sound);
+            }
+            Player.getInstance().removeSoundFromQueue(sound);
+        } catch (IllegalArgumentException e) {
+            showPopup(e);
         }
-        Player.getInstance().removeSoundFromQueue(sound);
+
+        new DataThread(DataType.SOUND_PLAYLIST, DataOperation.WRITE).start();
         updateView();
     }
 
@@ -311,6 +315,8 @@ public class ViewController implements Initializable {
         } catch (IllegalArgumentException e) {
             showPopup(e);
         }
+
+        new DataThread(DataType.PLAYLIST, DataOperation.WRITE).start();
         updateView();
     }
 
@@ -323,6 +329,8 @@ public class ViewController implements Initializable {
         } catch (IllegalArgumentException e) {
             showPopup(e);
         }
+
+        new DataThread(DataType.PLAYLIST, DataOperation.WRITE).start();
         updateView();
     }
 
@@ -354,35 +362,13 @@ public class ViewController implements Initializable {
     private void showPopup(Exception e) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(5000),
+                Duration.seconds(5),
                 ae -> alert.close()));
         alert.setTitle("Whalex - Exception");
         alert.setHeaderText(getClass().getSimpleName());
         alert.setContentText(e.getMessage());
         alert.show();
         timeline.play();
-    }
-
-
-    /**
-     * Probably the method to set the sound / playlist in queues first place
-     *
-     * @param mouseEvent mouse event
-     * @see Player
-     */
-    //TODO: implement correcly to play sounds
-    @FXML
-    private void handleOnSoundClicked(MouseEvent mouseEvent) {
-        /*
-        if (mouseEvent.getClickCount() == 2) {
-            try {
-                Player.getInstance().clearQueue();
-                Player.getInstance().addSoundToQueue(sound);
-                Player.getInstance().playPause();
-            } catch (NullPointerException e) {
-                log.error("No sound selected");
-        }
-         */
     }
 
     @FXML
@@ -443,11 +429,11 @@ public class ViewController implements Initializable {
         }
     }
 
-    public void handleAddSoundButton(ActionEvent actionEvent) throws Exception {
+    public void handleAddSoundButton() {
         SceneManager.ADD_SOUND.showSecondaryStage();
     }
 
-    public void handleCreatePlaylistButton(ActionEvent actionEvent) throws IOException {
+    public void handleCreatePlaylistButton() {
         SceneManager.CREATE_PLAYLIST.showSecondaryStage();
     }
 }
