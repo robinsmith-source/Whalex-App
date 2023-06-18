@@ -15,9 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * UserManager class manages all users.
@@ -209,16 +207,14 @@ public class UserManager {
      */
     //TODO: Safe stream for password check
     public void login(String username, String password) throws IllegalArgumentException {
-        if (username == null || username.isEmpty()) {
-            log.warn("Username is null or empty.");
-            throw new IllegalArgumentException("Username cannot be null or empty.");
-        } else if (password == null || password.isEmpty()) {
+        User matchedUser = this.USERS.stream().filter(user -> user.getUsername().equals(username)).findFirst().orElseThrow(() -> {
+            log.error("User {} does not exist.", username);
+            return new IllegalArgumentException("User does not exist.");
+        });
+        if (password == null || password.isEmpty()) {
             log.warn("Password is null or empty.");
             throw new IllegalArgumentException("Password cannot be null or empty.");
-        } else if (this.USERS.stream().noneMatch(user -> user.getUsername().equals(username))) {
-            log.error("User {} does not exist.", username);
-            throw new IllegalArgumentException("User does not exist.");
-        } else if (!this.USERS.stream().filter(user -> user.getUsername().equals(username)).findFirst().get().getPassword().equals(password)) {
+        } else if (!matchedUser.getPassword().equals(password)) {
             log.warn("Password is incorrect.");
             throw new IllegalArgumentException("Password is incorrect.");
         }
