@@ -10,13 +10,13 @@ import org.apache.logging.log4j.Logger;
 import org.example.WhalexApp;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public enum SceneManager {
 
     LOGIN("/fxml/login.fxml"),
     LOADING("/fxml/loading.fxml"),
     MAIN("/fxml/mainScene.fxml"),
-    VIEW("/fxml/view.fxml"),
     ADD_SOUND("/fxml/addSound.fxml"),
     CREATE_PLAYLIST("/fxml/createPlaylist.fxml"),
     EDIT_PROFILE("/fxml/editProfile.fxml");
@@ -98,7 +98,7 @@ public enum SceneManager {
             default:
                 throw new IllegalStateException("Unexpected value: " + this);
         }
-        applicationStage.getIcons().add(new Image(getClass().getResourceAsStream("/fxml/assets/WhalexLOGO.png")));
+        applicationStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fxml/assets/WhalexLOGO.png"))));
         applicationStage.show();
         log.debug("Showing Scene: {}, from: {}", WhalexApp.getApplicationStage().getTitle(), this.fxmlPath);
     }
