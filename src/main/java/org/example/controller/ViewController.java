@@ -1,8 +1,6 @@
 package org.example.controller;
 
 import de.jensd.fx.glyphs.materialicons.MaterialIconView;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -18,7 +16,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.data.DataOperation;
@@ -38,7 +35,7 @@ import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class ViewController implements Initializable {
+public class ViewController extends ExceptionVisualizer implements Initializable  {
     private static final Logger log = LogManager.getLogger(ViewController.class);
 
     @FXML
@@ -289,7 +286,6 @@ public class ViewController implements Initializable {
      *
      * @see org.example.player.Player
      */
-    //TODO: implement correcly to play sounds
     @FXML
     private void deleteSound() {
         ISound sound = soundTable.getSelectionModel().getSelectedItem();
@@ -302,7 +298,6 @@ public class ViewController implements Initializable {
         } catch (IllegalArgumentException e) {
             showPopup(e);
         }
-
         new DataThread(DataType.SOUND_PLAYLIST, DataOperation.WRITE).start();
         updateView();
     }
@@ -315,7 +310,6 @@ public class ViewController implements Initializable {
         } catch (IllegalArgumentException e) {
             showPopup(e);
         }
-
         new DataThread(DataType.PLAYLIST, DataOperation.WRITE).start();
         updateView();
     }
@@ -329,7 +323,6 @@ public class ViewController implements Initializable {
         } catch (IllegalArgumentException e) {
             showPopup(e);
         }
-
         new DataThread(DataType.PLAYLIST, DataOperation.WRITE).start();
         updateView();
     }
@@ -356,21 +349,6 @@ public class ViewController implements Initializable {
         queueTable.refresh();
     }
 
-    /**
-     * Method was only a test
-     */
-    private void showPopup(Exception e) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        Timeline timeline = new Timeline(new KeyFrame(
-                Duration.seconds(5),
-                ae -> alert.close()));
-        alert.setTitle("Whalex - Exception");
-        alert.setHeaderText(getClass().getSimpleName());
-        alert.setContentText(e.getMessage());
-        alert.show();
-        timeline.play();
-    }
-
     @FXML
     private void handleOnPlaylistClicked(MouseEvent mouseEvent) {
         if (mouseEvent.getClickCount() == 2) {
@@ -383,8 +361,6 @@ public class ViewController implements Initializable {
                 showPopup(e);
             }
         }
-        //TODO: Implement with button hover effect
-
     }
 
     private void handleOnSoundCoverButtonClicked(ISound sound) {
@@ -392,8 +368,10 @@ public class ViewController implements Initializable {
             Player.getInstance().clearQueue();
             Player.getInstance().addSoundToQueue(sound);
             Player.getInstance().playPause();
+            queueTable.refresh();
         } catch (NullPointerException e) {
             log.error("No sound selected");
+            showPopup(e);
         }
     }
 
@@ -402,8 +380,10 @@ public class ViewController implements Initializable {
             Player.getInstance().clearQueue();
             Player.getInstance().addPlaylistToQueue(value);
             Player.getInstance().playPause();
+            queueTable.refresh();
         } catch (NullPointerException e) {
             log.error("No playlist selected");
+            showPopup(e);
         }
     }
 
