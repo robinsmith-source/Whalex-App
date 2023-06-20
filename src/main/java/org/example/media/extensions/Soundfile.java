@@ -74,7 +74,7 @@ public class Soundfile implements ISound {
         this.soundID = soundID;
         this.title = title;
         this.uploadedBy = uploadedBy;
-        log.info("Soundfile " + title + " created by " + uploadedBy.getUsername());
+        log.debug("Soundfile {} created by {}", title, uploadedBy.getUsername());
     }
 
 

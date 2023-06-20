@@ -7,11 +7,11 @@ import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class ExceptionVisualizer {
+public abstract class ExceptionPopup {
 
-    private static final Logger log = LogManager.getLogger(ExceptionVisualizer.class);
+    private static final Logger log = LogManager.getLogger(ExceptionPopup.class);
 
-    void showPopup(Exception e) {
+    protected void showPopup(Exception e) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.seconds(5),

@@ -49,7 +49,6 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.READ).start();
     }
 
     @FXML
@@ -73,7 +72,7 @@ public class LoginController implements Initializable {
         log.debug("Login button pressed with username {}.", usernameField.getText());
         try {
             UserManager.getInstance().login(usernameField.getText(), passwordField.getText());
-            SceneManager.LOADING.changeScene();
+            SceneManager.MAIN.changeScene();
         } catch (IllegalArgumentException e) {
             errorMessageLabel.setText(e.getMessage());
         } catch (Exception e) {
@@ -87,7 +86,7 @@ public class LoginController implements Initializable {
         try {
             UserManager.getInstance().createUser(chosenImage, usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
             new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.WRITE).start();
-            SceneManager.LOADING.changeScene();
+            SceneManager.MAIN.changeScene();
         } catch (IllegalArgumentException e) {
             errorMessageLabel.setText(e.getMessage());
         } catch (Exception e) {

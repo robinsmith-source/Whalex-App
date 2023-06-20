@@ -41,6 +41,6 @@ public class WhalexApp extends Application {
             System.exit(0); //TODO: Close application correct without data loss --> should be done
         });
         log.info("Starting Whalex Application");
-        SceneManager.LOGIN.changeScene();
+        SceneManager.LOADING.changeScene();
     }
 }

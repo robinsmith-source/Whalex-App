@@ -3,27 +3,23 @@ package org.example.player;
 import javafx.scene.media.MediaPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.controller.ExceptionPopup;
 import org.example.media.interfaces.ISound;
 import org.example.playlist.Playlist;
 
 import java.util.LinkedList;
 
-public class Player {
+public class Player extends ExceptionPopup {
     private static final Logger log = LogManager.getLogger(Player.class);
     private static final Player INSTANCE = new Player();
     private final LinkedList<ISound> soundQueueOrdered;
-    private final LinkedList<ISound> soundQueueShuffled;
     private final LinkedList<ISound> soundHistory;
     private MediaPlayer mediaPlayer;
-
-    private Order queueOrder = Order.ORDERED;
-
 
     ISound currentSound;
 
     private Player() {
         soundQueueOrdered = new LinkedList<>();
-        soundQueueShuffled = new LinkedList<>();
         soundHistory = new LinkedList<>();
     }
 
@@ -150,15 +146,6 @@ public class Player {
     }
 
     public LinkedList<ISound> getSoundQueue() {
-        /*switch (queueOrder) {
-            case ORDERED:
-                return soundQueueOrdered;
-            case SHUFFLED:
-                return soundQueueShuffled;
-            default:
-                return soundQueueOrdered;
-        }
-         */
         return soundQueueOrdered;
     }
 
@@ -169,21 +156,5 @@ public class Player {
     public void setVolume(double value) {
         mediaPlayer.setVolume(value);
         System.out.println("Mediaplayer vol: " + mediaPlayer.getVolume());
-    }
-
-    public void shuffle() {
-        /*
-        if (queueOrder == Order.SHUFFLED) {
-            queueOrder = Order.ORDERED;
-        } else {
-            queueOrder = Order.SHUFFLED;
-        soundQueueShuffled.clear();
-        soundQueueShuffled.addAll(soundQueueOrdered);
-        Collections.shuffle(soundQueueShuffled);
-            System.out.println(soundQueueOrdered);
-            System.out.println(soundQueueShuffled);
-
-        }
-         */
     }
 }

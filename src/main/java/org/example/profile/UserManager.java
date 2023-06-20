@@ -121,7 +121,7 @@ public class UserManager {
     public User getUserByName(String username) throws IllegalArgumentException {
         log.debug("Getting user {}.", username);
         return this.USERS.stream().filter(user -> user.getUsername().equals(username)).findFirst().orElseThrow(() -> {
-            log.error("User {} could not be found.", username);
+            log.debug("User {} could not be found.", username);
             return new IllegalArgumentException("User " + username + " could not be found.");
         });
     }

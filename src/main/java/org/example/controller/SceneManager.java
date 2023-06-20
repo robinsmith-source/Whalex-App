@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -40,6 +41,7 @@ public enum SceneManager {
             if (this == MAIN) msc = loader.getController();
         } catch (IOException e) {
             log.fatal("Error loading scene: " + this.fxmlPath);
+            e.printStackTrace();
             System.exit(2);
         }
         return loader.getRoot();
@@ -81,12 +83,14 @@ public enum SceneManager {
                 scene = new Scene(SceneManager.LOGIN.getScene(), 600, 400);
                 applicationStage.setScene(scene);
                 applicationStage.setResizable(false);
+                applicationStage.centerOnScreen();
                 break;
             case LOADING:
                 applicationStage.setTitle("Whalex - Loading");
                 scene = new Scene(SceneManager.LOADING.getScene(), 600, 400);
                 applicationStage.setScene(scene);
                 applicationStage.setResizable(false);
+                applicationStage.centerOnScreen();
                 break;
             case MAIN:
                 applicationStage.setTitle("Whalex - Overview");
@@ -99,8 +103,10 @@ public enum SceneManager {
                 throw new IllegalStateException("Unexpected value: " + this);
         }
         applicationStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fxml/assets/WhalexLOGO.png"))));
-        applicationStage.show();
-        log.debug("Showing Scene: {}, from: {}", WhalexApp.getApplicationStage().getTitle(), this.fxmlPath);
+        new Thread(() -> {
+            Platform.runLater(applicationStage::show);
+            log.info("Showing Scene: {}, from: {}", WhalexApp.getApplicationStage().getTitle(), this.fxmlPath);
+        }).start();
     }
 }
 

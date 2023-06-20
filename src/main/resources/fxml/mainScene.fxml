@@ -39,7 +39,7 @@
                     <children>
                         <HBox alignment="CENTER" prefHeight="50.0">
                             <children>
-                                <Button mnemonicParsing="false" onAction="#handleShuffleButton">
+                                <Button mnemonicParsing="false">
                                     <graphic>
                                         <MaterialIconView fill="WHITE" glyphName="SHUFFLE" size="30" />
                                     </graphic>
@@ -144,7 +144,7 @@
                 <HBox alignment="CENTER" maxWidth="800.0" prefWidth="300.0" HBox.hgrow="ALWAYS">
                     <children>
                         <MaterialIconView fill="WHITE" glyphName="SEARCH" size="30" />
-                        <TextField fx:id="searchBar" onKeyTyped="#checkSearchQuery" promptText="search" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="searchBar" onKeyTyped="#handleSearchbar" promptText="search" HBox.hgrow="ALWAYS">
                             <font>
                                 <Font size="14.0" />
                             </font>
@@ -185,7 +185,7 @@
                         <Font size="14.0" />
                      </font>
                      <graphic>
-                        <MaterialIconView fill="WHITE" glyphName="LOGOUT" size="30" wrappingWidth="30.0" />
+                        <MaterialIconView fill="WHITE" glyphName="EXIT_TO_APP" size="30" wrappingWidth="30.0" />
                      </graphic>
                   </Button>
                     </children>

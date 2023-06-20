@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainSceneController implements Initializable {
+public class MainSceneController extends ExceptionPopup implements Initializable {
 
     private static final Logger log = LogManager.getLogger(MainSceneController.class);
     @FXML
@@ -56,7 +56,7 @@ public class MainSceneController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        log.info("Initializing MainSceneController");
+        log.trace("Initializing MainSceneController");
         username.setText(UserManager.getInstance().getActiveUser().getUsername());
         Image image = new Image(UserManager.getInstance().getActiveUser().getProfilePicture().toURI().toString());
         userProfilePicture.setImage(image);
@@ -70,7 +70,7 @@ public class MainSceneController implements Initializable {
         }
         log.debug("MainSceneController initialized");
 
-        //TODO: FIX THIS!!
+
         Timer updateTimer = new Timer();
         TimerTask updateTask = new TimerTask() {
             @Override
@@ -79,6 +79,8 @@ public class MainSceneController implements Initializable {
             }
         };
         updateTimer.scheduleAtFixedRate(updateTask, 0, 1000);
+
+
         volumeSlider.valueProperty().addListener((ov, old_val, new_val) -> Platform.runLater(() -> {
             Player.getInstance().setVolume(volumeSlider.getValue());
             log.info("Volume changed to: " + volumeSlider.getValue());
@@ -90,8 +92,7 @@ public class MainSceneController implements Initializable {
      */
     public void showAllContentByUser() {
         viewController.setView(ViewType.USER);
-        viewController.updateView();
-        log.info("Showing all content by user");
+        log.debug("Showing all content by user");
     }
 
     /**
@@ -99,8 +100,7 @@ public class MainSceneController implements Initializable {
      */
     public void showAllContent() {
         viewController.setView(ViewType.ALL);
-        viewController.updateView();
-        log.info("Showing all content");
+        log.debug("Showing all content");
     }
 
     public void handlePlayButton() {
@@ -118,8 +118,7 @@ public class MainSceneController implements Initializable {
         log.debug("Trying to play next sound");
     }
 
-    //TODO: Only for debugging --> Implement correctly -- should be done
-    private void updatePlayerContent() {
+    private synchronized void updatePlayerContent() {
         if (Player.getInstance().getSoundQueue().isEmpty()) {
             soundProgress.setProgress(0);
             totalSoundTime.setText("00:00");
@@ -138,13 +137,9 @@ public class MainSceneController implements Initializable {
         }
     }
 
-    public void checkSearchQuery() {
+    public void handleSearchbar() {
         log.debug("Checking search query {}.", searchBar.getText());
-        viewController.handleSearchBar(searchBar.getText());
-    }
-
-    public void handleShuffleButton() {
-        Player.getInstance().shuffle();
+        viewController.handleSearchBarQuery(searchBar.getText());
     }
 
     public void handleRepeatButton() {

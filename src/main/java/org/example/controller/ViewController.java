@@ -35,7 +35,7 @@ import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class ViewController extends ExceptionVisualizer implements Initializable  {
+public class ViewController extends ExceptionPopup implements Initializable {
     private static final Logger log = LogManager.getLogger(ViewController.class);
 
     @FXML
@@ -84,56 +84,66 @@ public class ViewController extends ExceptionVisualizer implements Initializable
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        log.info("Initializing view controller");
-        //Sound table
-        soundCover.setCellValueFactory(cellData -> {
+        log.trace("Initializing view controller");
+
+        new Thread(this::loadSoundTable).start();
+        new Thread(this::loadPlaylistTable).start();
+        new Thread(this::loadQueueTable).start();
+        new Thread(this::loadHistoryTable).start();
+
+        setView(ViewType.ALL);
+
+        Player.getInstance().registerOnNextSongEvent(() -> Platform.runLater(() -> {
+            queueTable.refresh();
+            historyTable.refresh();
+        }));
+    }
+
+    private synchronized void loadHistoryTable() {
+        historySoundCover.setCellValueFactory(cellData -> {
             Image image = new Image(SoundManager.getInstance().getDEFAULT_COVER().toURI().toString());
             if (cellData.getValue().getMedia().getMetadata().get("image") != null) {
                 image = ((Image) cellData.getValue().getMedia().getMetadata().get("image"));
             }
             ImageView imageView = new ImageView(image);
-            StackPane stackPane = new StackPane();
             imageView.setFitHeight(60);
             imageView.setFitWidth(60);
             imageView.setId("soundCover");
-
-            Button button = new Button();
-            MaterialIconView iconView = new MaterialIconView();
-            iconView.setGlyphName("PLAY_CIRCLE_FILLED");
-            iconView.setSize("35");
-            iconView.setFill(Color.WHITE);
-            iconView.setOpacity(0.5);
-            button.setGraphic(iconView);
-            stackPane.getChildren().addAll(imageView, button);
-            button.setId("playlistCoverButton");
-            button.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> handleOnSoundCoverButtonClicked(cellData.getValue()));
-            button.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> iconView.setOpacity(1));
-            button.addEventHandler(MouseEvent.MOUSE_EXITED, event -> iconView.setOpacity(0.5));
-            return new ReadOnlyObjectWrapper<>(stackPane);
+            return new ReadOnlyObjectWrapper<>(imageView);
         });
-        soundTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
-        soundUploadedBy.setCellValueFactory(cellData -> {
-            User user = UserManager.getInstance().getUserByName(cellData.getValue().getUploadedBy().getUsername());
-            Label label = new Label(user.getUsername());
-            ImageView imageView = new ImageView(new Image(cellData.getValue().getUploadedBy().getProfilePicture().toURI().toString()));
-            imageView.setFitHeight(40);
-            imageView.setFitWidth(40);
-            HBox hBox = new HBox();
-            hBox.setSpacing(10);
-            hBox.setAlignment(Pos.CENTER_LEFT);
-            hBox.getChildren().addAll(label, imageView);
-            return new ReadOnlyObjectWrapper<>(hBox);
+        historySoundTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
+        historyTable.setPlaceholder(new Label("History is empty"));
+
+        historySoundCover.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.4));
+        historySoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.6));
+        historyTable.setItems(historyObjectList);
+        log.debug("History table initialized");
+    }
+
+    private synchronized void loadQueueTable() {
+        queueSoundCover.setCellValueFactory(cellData -> {
+            Image image = new Image(SoundManager.getInstance().getDEFAULT_COVER().toURI().toString());
+            if (cellData.getValue().getMedia().getMetadata().get("image") != null) {
+                image = ((Image) cellData.getValue().getMedia().getMetadata().get("image"));
+            }
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(60);
+            imageView.setFitWidth(60);
+            imageView.setId("soundCover");
+            return new ReadOnlyObjectWrapper<>(imageView);
         });
-        soundTable.setPlaceholder(new Label("No sounds found"));
+        queueSoundTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
+        queueTable.setPlaceholder(new Label("Queue is empty"));
 
-        soundCover.prefWidthProperty().bind(soundTable.widthProperty().multiply(0.2));
-        soundTitle.prefWidthProperty().bind(soundTable.widthProperty().multiply(0.5));
-        soundUploadedBy.prefWidthProperty().bind(soundTable.widthProperty().multiply(0.3));
+        queueSoundCover.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.4));
+        queueSoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.6));
 
-        soundTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        queueTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        queueTable.setItems(queueObjectList);
+        log.debug("Queue table initialized");
+    }
 
-
-        //Playlist table
+    private synchronized void loadPlaylistTable() {
         playlistCover.setCellValueFactory(cellData -> {
             Image image = new Image(cellData.getValue().getPlaylistCover().toURI().toString());
             ImageView imageView = new ImageView(image);
@@ -175,97 +185,122 @@ public class ViewController extends ExceptionVisualizer implements Initializable
         numberOfSounds.prefWidthProperty().bind(playlistTable.widthProperty().multiply(0.2));
         playlistName.prefWidthProperty().bind(playlistTable.widthProperty().multiply(0.3));
         playlistCreatedBy.prefWidthProperty().bind(playlistTable.widthProperty().multiply(0.3));
-
-
-        //Queue table
-        queueSoundCover.setCellValueFactory(cellData -> {
-            Image image = new Image(SoundManager.getInstance().getDEFAULT_COVER().toURI().toString());
-            if (cellData.getValue().getMedia().getMetadata().get("image") != null) {
-                image = ((Image) cellData.getValue().getMedia().getMetadata().get("image"));
-            }
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(60);
-            imageView.setFitWidth(60);
-            imageView.setId("soundCover");
-            return new ReadOnlyObjectWrapper<>(imageView);
-        });
-        queueSoundTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
-        queueTable.setPlaceholder(new Label("Queue is empty"));
-
-        queueSoundCover.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.4));
-        queueSoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.6));
-
-        queueTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        queueTable.setItems(queueObjectList);
-
-        //History table
-        historySoundCover.setCellValueFactory(cellData -> {
-            Image image = new Image(SoundManager.getInstance().getDEFAULT_COVER().toURI().toString());
-            if (cellData.getValue().getMedia().getMetadata().get("image") != null) {
-                image = ((Image) cellData.getValue().getMedia().getMetadata().get("image"));
-            }
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(60);
-            imageView.setFitWidth(60);
-            imageView.setId("soundCover");
-            return new ReadOnlyObjectWrapper<>(imageView);
-        });
-        historySoundTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
-        historyTable.setPlaceholder(new Label("History is empty"));
-
-        historySoundCover.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.4));
-        historySoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.6));
-        historyTable.setItems(historyObjectList);
-        setView(ViewType.ALL);
-        updateView();
-
-        //TODO: FIX THIS!! YEYYYYYYY IT WORKS 😊😊
-
-        Player.getInstance().registerOnNextSongEvent(() -> Platform.runLater(() -> {
-            queueTable.refresh();
-            historyTable.refresh();
-        }));
-       /* Timer updateTimer = new Timer();
-        TimerTask updateTask = new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    queueTable.refresh();
-                    historyTable.refresh();
-                });
-            }
-        };
-        updateTimer.schedule(updateTask, 0, 1000);
-        */
+        log.debug("Playlist table initialized");
     }
 
+    private synchronized void loadSoundTable() {
+        soundCover.setCellValueFactory(cellData ->
+        {
+            Image image = new Image(SoundManager.getInstance().getDEFAULT_COVER().toURI().toString());
+            if (cellData.getValue().getMedia().getMetadata().get("image") != null) {
+                image = ((Image) cellData.getValue().getMedia().getMetadata().get("image"));
+            }
+            ImageView imageView = new ImageView(image);
+            StackPane stackPane = new StackPane();
+            imageView.setFitHeight(60);
+            imageView.setFitWidth(60);
+            imageView.setId("soundCover");
+
+            Button button = new Button();
+            MaterialIconView iconView = new MaterialIconView();
+            iconView.setGlyphName("PLAY_CIRCLE_FILLED");
+            iconView.setSize("35");
+            iconView.setFill(Color.WHITE);
+            iconView.setOpacity(0.5);
+            button.setGraphic(iconView);
+            stackPane.getChildren().addAll(imageView, button);
+            button.setId("playlistCoverButton");
+            button.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> handleOnSoundCoverButtonClicked(cellData.getValue()));
+            button.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> iconView.setOpacity(1));
+            button.addEventHandler(MouseEvent.MOUSE_EXITED, event -> iconView.setOpacity(0.5));
+            return new ReadOnlyObjectWrapper<>(stackPane);
+        });
+        soundTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
+        soundUploadedBy.setCellValueFactory(cellData ->
+
+        {
+            User user = UserManager.getInstance().getUserByName(cellData.getValue().getUploadedBy().getUsername());
+            Label label = new Label(user.getUsername());
+            ImageView imageView = new ImageView(new Image(cellData.getValue().getUploadedBy().getProfilePicture().toURI().toString()));
+            imageView.setFitHeight(40);
+            imageView.setFitWidth(40);
+            HBox hBox = new HBox();
+            hBox.setSpacing(10);
+            hBox.setAlignment(Pos.CENTER_LEFT);
+            hBox.getChildren().addAll(label, imageView);
+            return new ReadOnlyObjectWrapper<>(hBox);
+        });
+        soundTable.setPlaceholder(new Label("No sounds found"));
+        soundCover.prefWidthProperty().bind(soundTable.widthProperty().multiply(0.2));
+        soundTitle.prefWidthProperty().bind(soundTable.widthProperty().multiply(0.5));
+        soundUploadedBy.prefWidthProperty().bind(soundTable.widthProperty().multiply(0.3));
+
+        soundTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        log.debug("Sound table initialized");
+    }
+
+    /**
+     * Sets the view of the sound and playlist table
+     * @param viewType the view to be set
+     */
     public void setView(ViewType viewType) {
-        this.view = viewType;
-        log.info("View set to " + viewType.toString());
+        if (this.view != viewType) {
+            this.view = viewType;
+            log.info("View set to " + viewType.toString());
+            updateView();
+        } else log.info("View already set to " + viewType.toString());
     }
 
+    /**
+     * Updates the view of the sound and playlist table relative to the current view
+     */
     public void updateView() {
+        ObservableList<ISound> soundObjectList;
+        ObservableList<Playlist> playlistObjectList;
+
         switch (view) {
-            case ALL:
+            case ALL: {
                 soundTableLabel.setText("All Sounds");
-                initializeSoundContent(SoundManager.getInstance().getAllSounds());
+                soundObjectList = FXCollections.observableArrayList(SoundManager.getInstance().getAllSounds());
+                FXCollections.sort(soundObjectList, Comparator.comparing(ISound::getTitle));
+
                 playlistTableLabel.setText("All Playlists");
-                initializePlaylistContent(PlaylistManager.getInstance().getAllPlaylists());
+                playlistObjectList = FXCollections.observableArrayList(PlaylistManager.getInstance().getAllPlaylists());
+                FXCollections.sort(playlistObjectList, Comparator.comparing(Playlist::getName));
                 break;
-            case USER:
+            }
+            case USER: {
                 soundTableLabel.setText("My Sounds");
-                initializeSoundContent(SoundManager.getInstance().getAllSoundsByUser(UserManager.getInstance().getActiveUser()));
+                soundObjectList = FXCollections.observableArrayList(SoundManager.getInstance().getAllSoundsByUser(UserManager.getInstance().getActiveUser()));
+                FXCollections.sort(soundObjectList, Comparator.comparing(ISound::getTitle));
+
                 playlistTableLabel.setText("My Playlists");
-                initializePlaylistContent(PlaylistManager.getInstance().getPlaylistsByUser(UserManager.getInstance().getActiveUser()));
+                playlistObjectList = FXCollections.observableArrayList(PlaylistManager.getInstance().getPlaylistsByUser(UserManager.getInstance().getActiveUser()));
+                FXCollections.sort(playlistObjectList, Comparator.comparing(Playlist::getName));
                 break;
+            }
+            default:
+                throw new IllegalStateException("Unexpected value: " + view);
         }
+
+        new Thread(() -> {
+            soundTable.setItems(soundObjectList);
+            playlistTable.setItems(playlistObjectList);
+            soundTable.refresh();
+            playlistTable.refresh();
+            log.info("View updated to " + view.toString());
+        }).start();
+
         soundTable.selectionModelProperty().get().clearSelection();
         playlistTable.selectionModelProperty().get().clearSelection();
         queueTable.selectionModelProperty().get().clearSelection();
-        log.debug("View updated");
     }
 
-    private void initializeSoundContent(ArrayList<ISound> sounds) {
+    /**
+     * Shows specific sound content e.g. used for search
+     * @param sounds the sounds to show
+     */
+    private void showSpecificSoundContent(ArrayList<ISound> sounds) {
         ObservableList<ISound> soundObjectList = FXCollections.observableArrayList();
         soundObjectList.setAll(sounds);
         FXCollections.sort(soundObjectList, Comparator.comparing(ISound::getTitle));
@@ -273,7 +308,11 @@ public class ViewController extends ExceptionVisualizer implements Initializable
         soundTable.refresh();
     }
 
-    private void initializePlaylistContent(ArrayList<Playlist> playlists) {
+    /**
+     * Shows specific playlist content e.g. used for search
+     * @param playlists the playlists to show
+     */
+    private void showSpecificPlaylistContent(ArrayList<Playlist> playlists) {
         ObservableList<Playlist> playlistObjectList = FXCollections.observableArrayList();
         playlistObjectList.setAll(playlists);
         FXCollections.sort(playlistObjectList, Comparator.comparing(Playlist::getName));
@@ -282,9 +321,7 @@ public class ViewController extends ExceptionVisualizer implements Initializable
     }
 
     /**
-     * Probably the method to set the sound / playlist in queues first place
-     *
-     * @see org.example.player.Player
+     * Deletes the selected sound
      */
     @FXML
     private void deleteSound() {
@@ -302,6 +339,9 @@ public class ViewController extends ExceptionVisualizer implements Initializable
         updateView();
     }
 
+    /**
+     * Deletes the selected playlist
+     */
     @FXML
     private void deletePlaylist() {
         Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
@@ -314,6 +354,9 @@ public class ViewController extends ExceptionVisualizer implements Initializable
         updateView();
     }
 
+    /**
+     * Adds the selected sound to the selected playlist
+     */
     @FXML
     private void addToPlaylist() {
         ISound sound = soundTable.getSelectionModel().getSelectedItem();
@@ -327,6 +370,9 @@ public class ViewController extends ExceptionVisualizer implements Initializable
         updateView();
     }
 
+    /**
+     * Adds the selected sound to the queue
+     */
     @FXML
     private void addSoundToQueue() {
         ISound sound = soundTable.getSelectionModel().getSelectedItem();
@@ -334,6 +380,10 @@ public class ViewController extends ExceptionVisualizer implements Initializable
         queueTable.refresh();
     }
 
+    /**
+     * Removes the selected sound from the queuq
+     */
+    //Todo: Sound in queue table isn't clickable
     @FXML
     private void removeSoundFromQueue() {
         log.info("Removing sound from queue");
@@ -342,6 +392,9 @@ public class ViewController extends ExceptionVisualizer implements Initializable
         queueTable.refresh();
     }
 
+    /**
+     * Adds the selected playlist to the queue
+     */
     @FXML
     private void addPlaylistToQueue() {
         Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
@@ -349,13 +402,17 @@ public class ViewController extends ExceptionVisualizer implements Initializable
         queueTable.refresh();
     }
 
+    /**
+     * Handles the click on the playlist in the playlist table
+     * @param mouseEvent the mouse event that triggered the method
+     */
     @FXML
     private void handleOnPlaylistClicked(MouseEvent mouseEvent) {
         if (mouseEvent.getClickCount() == 2) {
             try {
                 Playlist playlist = playlistTable.getSelectionModel().getSelectedItem();
                 soundTableLabel.setText("Sounds in Playlist: " + playlist.getName());
-                initializeSoundContent(playlist.getSounds());
+                showSpecificSoundContent(playlist.getSounds());
             } catch (NullPointerException e) {
                 log.error("No playlist selected");
                 showPopup(e);
@@ -363,6 +420,10 @@ public class ViewController extends ExceptionVisualizer implements Initializable
         }
     }
 
+    /**
+     * Handles the click on the sound cover button
+     * @param sound the sound clicked on
+     */
     private void handleOnSoundCoverButtonClicked(ISound sound) {
         try {
             Player.getInstance().clearQueue();
@@ -375,10 +436,14 @@ public class ViewController extends ExceptionVisualizer implements Initializable
         }
     }
 
-    private void handleOnPlaylistCoverButtonClicked(Playlist value) {
+    /**
+     * Handles the click on the playlist cover button
+     * @param playlist the playlist clicked on
+     */
+    private void handleOnPlaylistCoverButtonClicked(Playlist playlist) {
         try {
             Player.getInstance().clearQueue();
-            Player.getInstance().addPlaylistToQueue(value);
+            Player.getInstance().addPlaylistToQueue(playlist);
             Player.getInstance().playPause();
             queueTable.refresh();
         } catch (NullPointerException e) {
@@ -387,34 +452,43 @@ public class ViewController extends ExceptionVisualizer implements Initializable
         }
     }
 
-    void handleSearchBar(String search) {
+    /**
+     * Handles the search bar query
+     * @param search the search query
+     */
+    void handleSearchBarQuery(String search) {
         if (search.isEmpty()) {
             updateView();
         } else if (search.startsWith("user:")) {
             ArrayList<ISound> soundsInSearch = SoundManager.getInstance().getAllSoundsByUser(UserManager.getInstance().getUserByName(search.substring(5)));
             ArrayList<Playlist> playlistsInSearch = PlaylistManager.getInstance().getPlaylistsByUser(UserManager.getInstance().getUserByName(search.substring(5)));
-            initializeSoundContent(soundsInSearch);
-            initializePlaylistContent(playlistsInSearch);
+            showSpecificSoundContent(soundsInSearch);
+            showSpecificPlaylistContent(playlistsInSearch);
         } else if (search.startsWith("sound:")) {
             ArrayList<ISound> soundsInSearch = SoundManager.getInstance().getAllSounds().stream().filter(sound -> sound.getTitle().toLowerCase().contains(search.substring(6).toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
-            initializeSoundContent(soundsInSearch);
+            showSpecificSoundContent(soundsInSearch);
         } else if (search.startsWith("playlist:")) {
             ArrayList<Playlist> playlistsInSearch = PlaylistManager.getInstance().getAllPlaylists().stream().filter(playlist -> playlist.getName().toLowerCase().contains(search.substring(9).toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
-            initializePlaylistContent(playlistsInSearch);
+            showSpecificPlaylistContent(playlistsInSearch);
         } else {
             ArrayList<ISound> soundsInSearch = SoundManager.getInstance().getAllSounds().stream().filter(sound -> sound.getTitle().toLowerCase().contains(search.toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
             ArrayList<Playlist> playlistsInSearch = PlaylistManager.getInstance().getAllPlaylists().stream().filter(playlist -> playlist.getName().toLowerCase().contains(search.toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
-            initializeSoundContent(soundsInSearch);
-            initializePlaylistContent(playlistsInSearch);
+            showSpecificSoundContent(soundsInSearch);
+            showSpecificPlaylistContent(playlistsInSearch);
         }
     }
 
+    /**
+     * Handles the add sound button
+     */
     public void handleAddSoundButton() {
         SceneManager.ADD_SOUND.showSecondaryStage();
     }
 
+    /**
+     * Handles the create playlist button
+     */
     public void handleCreatePlaylistButton() {
         SceneManager.CREATE_PLAYLIST.showSecondaryStage();
     }
 }
-

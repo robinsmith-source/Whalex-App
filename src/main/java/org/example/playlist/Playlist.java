@@ -162,7 +162,7 @@ public class Playlist {
             throw new IllegalArgumentException("Active user is not the creator of the playlist");
         }
         this.SOUNDS.add(sound);
-        log.info("Sound " + sound.getTitle() + " has been added to playlist " + this.name);
+        log.debug("Sound " + sound.getTitle() + " has been added to playlist " + this.name);
     }
 
     /**

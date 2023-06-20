@@ -15,7 +15,6 @@ public class DataThread extends Thread {
     private final DataType dataType;
 
     public DataThread(DataType dataType, DataOperation readOrWrite) {
-        log.info("SaveData was created");
         this.dataType = dataType;
         this.readOrWrite = readOrWrite;
     }
@@ -47,6 +46,7 @@ public class DataThread extends Thread {
                     }
                     break;
             }
+            log.info("Data {} successful on {}", readOrWrite, dataType);
         } catch (ReadDataException e) {
             log.fatal("Error while reading data", e);
             Thread.currentThread().interrupt();
