@@ -15,6 +15,9 @@ import org.example.profile.User;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
@@ -45,17 +48,17 @@ public class SoundManager {
     /**
      * Path to the folder where all sound files are stored
      */
-    private final File SOUNDS_PATH = new File("src/main/resources/data/sounds/");
+    private final String SOUNDS_PATH = "src/main/resources/data/sounds/";
 
     /**
      * Path to the file where all sound data is stored
      */
-    private File SAVE_FILE = new File("src/main/resources/data/saves/sounds.json");
+    private final File SAVE_FILE = new File("src/main/resources/data/saves/sounds.json");
 
     /**
      * Path to the file where the default sound cover is stored
      */
-    private final File DEFAULT_COVER = new File("src/main/resources/data/defaultImages/sounds/defaultSoundCover.jpg");
+    private final File DEFAULT_COVER = new File("src/main/resources/data/sounds/default/defaultSoundCover.jpg");
 
     /**
      * Arraylist of all sounds
@@ -65,10 +68,7 @@ public class SoundManager {
     /**
      * Constructor of the SoundManager
      */
-    private SoundManager() {}
-
-    public void setSAVE_FILE(File SAVE_FILE) {
-        this.SAVE_FILE = SAVE_FILE;
+    private SoundManager() {
     }
 
     /**
@@ -132,17 +132,17 @@ public class SoundManager {
      *
      * @param currentUser User who wants to add the sound
      * @param title       Title of the sound
-     * @param path        Path to the soundfile
+     * @param choosenPath Path to the soundfile
      * @throws IllegalArgumentException if title is null or empty, if path is null, if sound with the same title already exists, if path does not exist, if path is not a file, if path cannot be read
      */
     //TODO: Check if Exception handling is correct
     //TODO: Check if Exception handling is correct
     //TODO: Path value is checked at input (FileExplorer)
-    public void addSound(User currentUser, String title, File path) throws IllegalArgumentException {
+    public void addSound(User currentUser, String title, File choosenPath) throws IllegalArgumentException {
         if (title == null || title.isEmpty()) {
             log.warn("Title is null or empty");
             throw new IllegalArgumentException("Title cannot be null or empty");
-        } else if (path == null) {
+        } else if (choosenPath == null) {
             log.warn("Path is null");
             throw new IllegalArgumentException("Path cannot be null");
         } else if (SOUNDS.stream().anyMatch(sound -> sound.getTitle().equals(title))) {
@@ -150,10 +150,25 @@ public class SoundManager {
             throw new IllegalArgumentException("Sound " + title + " already exists.");
         }
         try {
-            SOUNDS.add(SoundFactory.getInstance().createSound(UUID.randomUUID().toString(), title, path, currentUser));
+            String uuid = UUID.randomUUID().toString();
+            Path targetFolder = Path.of(SOUNDS_PATH);
+
+            String extension = choosenPath.getName().substring(choosenPath.getName().lastIndexOf("."));
+            Path targetFile = targetFolder.resolve(uuid + extension);
+
+            new Thread(() -> {
+                try {
+                    Files.copy(choosenPath.toPath(), targetFile);
+                    log.info("File {} has been copied to {}", choosenPath, targetFile);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
+
+            File soundFile = targetFile.toFile();
+            SOUNDS.add(SoundFactory.getInstance().createSound(uuid, title, soundFile, currentUser));
             log.debug("Sound {} has been added.", title);
         } catch (Exception e) {
-            log.error("Sound could not be added", e);
             throw new IllegalArgumentException("Sound " + title + " could not be added");
         }
     }
@@ -170,11 +185,26 @@ public class SoundManager {
             if (sound.getUploadedBy().equals(currentUser)) {
                 log.info("Sound {} has been deleted.", sound.getTitle());
                 this.SOUNDS.remove(sound);
+
+                String extension = sound.getMedia().getSource().substring(sound.getMedia().getSource().lastIndexOf("."));
+                File file = new File(SOUNDS_PATH + soundID + extension);
+                log.info("Deleting sound file " + file.getAbsolutePath());
+
+                new Thread(() -> {
+                    try {
+                        file.delete();
+                        log.info("Sound file {} has been deleted.", file.getAbsolutePath());
+                    } catch (Exception e) {
+                        log.error("Sound file {} couldn't be deleted.", soundID);
+                    }
+                }).start();
             } else {
                 log.error("Sound {} wasn't uploaded by the active user.", sound.getTitle());
                 throw new IllegalArgumentException("Sound " + sound.getSoundID() + " could not be deleted because it was not uploaded by the activeUser");
             }
-        }, () -> {
+        }, () ->
+
+        {
             log.error("Sound {} could not be found.", soundID);
             throw new IllegalArgumentException("Sound " + soundID + " could not be found.");
         });

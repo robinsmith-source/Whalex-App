@@ -13,8 +13,10 @@ import org.example.profile.User;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -40,15 +42,17 @@ public class PlaylistManager {
             .setPrettyPrinting()
             .create();
 
+
+    private final Path PLAYLIST_COVERS = Path.of("src/main/resources/data/playlistCover/");
     /**
      * Path to the file where all playlist data is stored
      */
-    private File SAVE_FILE = new File("src/main/resources/data/saves/playlists.json");
+    private final File SAVE_FILE = new File("src/main/resources/data/saves/playlists.json");
 
     /**
      * Default playlist cover
      */
-    private final File DEFAULT_COVER = new File("src/main/resources/data/defaultImages/playlists/defaultPlaylistCover.jpg");
+    private final File DEFAULT_COVER = new File("src/main/resources/data/playlistCover/default/defaultPlaylistCover.jpg");
 
     /**
      * Arraylist of all playlists of the user
@@ -61,10 +65,6 @@ public class PlaylistManager {
     private PlaylistManager() {
     }
 
-
-    public void setSAVE_FILE(File SAVE_FILE) {
-        this.SAVE_FILE = SAVE_FILE;
-    }
     /**
      * Method to get the PlaylistManager instance
      *
@@ -156,13 +156,31 @@ public class PlaylistManager {
         } else if (this.PLAYLISTS.stream().anyMatch(playlist -> playlist.getName().equals(playlistName))) {
             log.error("Playlist {} already exists.", playlistName);
             throw new IllegalArgumentException("Playlist " + playlistName + " already exists.");
-        } else if (playlistCover == null) {
-            log.debug("PlaylistCover is null");
-            this.PLAYLISTS.add(new Playlist(UUID.randomUUID().toString(), DEFAULT_COVER, playlistName, currentUser, new Date()));
         } else {
-            this.PLAYLISTS.add(new Playlist(UUID.randomUUID().toString(), playlistCover, playlistName, currentUser, new Date()));
+            if (playlistCover == null) {
+                log.debug("PlaylistCover is null");
+                log.debug("Playlist {} has been created with Default Cover {}.", playlistName, DEFAULT_COVER);
+                this.PLAYLISTS.add(new Playlist(UUID.randomUUID().toString(), DEFAULT_COVER, playlistName, currentUser));
+            } else {
+                try {
+                    String uuid = UUID.randomUUID().toString();
+                    String extension = playlistCover.getName().substring(playlistCover.getName().lastIndexOf("."));
+                    Path targetFile = PLAYLIST_COVERS.resolve(uuid + extension);
+
+                    this.PLAYLISTS.add(new Playlist(uuid, targetFile.toFile(), playlistName, currentUser));
+                    log.debug("Playlist {} has been created with custom Cover {}.", playlistName, targetFile.toFile());
+
+                    try {
+                        Files.copy(playlistCover.toPath(), targetFile);
+                        log.debug("File copy from {} to {} successful", playlistCover, targetFile);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } catch (Exception e) {
+                    log.error("Playlist {} could not be created", playlistName);
+                }
+            }
         }
-        log.debug("Playlist {} has been created.", playlistName);
     }
 
     /**
@@ -177,6 +195,20 @@ public class PlaylistManager {
             if (playlist.getCreatedBy().equals(currentUser)) {
                 log.debug("Playlist {} has been deleted.", playlist.getName());
                 this.PLAYLISTS.remove(playlist);
+
+                File playlistCover = playlist.getPlaylistCover();
+                String extension = playlistCover.getName().substring(playlistCover.getName().lastIndexOf("."));
+                Path targetFile = PLAYLIST_COVERS.resolve(playlistID + extension);
+                System.out.println(targetFile);
+                new Thread(() -> {
+                    try {
+                        Files.deleteIfExists(targetFile);
+                        log.info("Playlist cover {} of playlist {} has been deleted.", targetFile, playlistID);
+                    } catch (IOException e) {
+                        log.error("Playlist cover from playlist {} couldn't be deleted", playlistID);
+                    }
+
+                }).start();
             } else {
                 log.error("Playlist {} wasn't created by the active user.", playlist.getName());
                 throw new IllegalArgumentException("Playlist " + playlist.getName() + " could not be deleted because it was not created by the active user.");

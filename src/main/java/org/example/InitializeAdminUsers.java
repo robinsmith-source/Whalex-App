@@ -30,8 +30,8 @@ public class InitializeAdminUsers {
         um.createUser(null, "Marvin", "123", "123");
         User Marvin = um.getUserByName("Marvin");
 
-        sm.addSound(Marvin, "Pottwal Pop", new File("src/main/resources/data/sounds/9750300N.wav"));
-        sm.addSound(Marvin, "Glattschweinswal Gesang", new File("src/main/resources/data/sounds/89405023.wav"));
+        sm.addSound(Marvin, "Pottwal Pop", new File("src/main/resources/data/sounds/example/9750300N.wav"));
+        sm.addSound(Marvin, "Glattschweinswal Gesang", new File("src/main/resources/data/sounds/example/89405023.wav"));
         pm.createPlaylist(Marvin, null,"Ocean Groove");
         pm.getPlaylistByName("Ocean Groove").addAllSounds(Marvin, sm.getAllSoundsByUser(Marvin));
 
@@ -39,8 +39,8 @@ public class InitializeAdminUsers {
         um.createUser(null, "Robin", "123", "123");
         User rootUser = um.getUserByName("Robin");
 
-        sm.addSound(rootUser, "Blauwal Ballade", new File("src/main/resources/data/sounds/72021005.wav"));
-        sm.addSound(rootUser, "Rauzahldelfin Rap", new File("src/main/resources/data/sounds/78018003.wav"));
+        sm.addSound(rootUser, "Blauwal Ballade", new File("src/main/resources/data/sounds/example/72021005.wav"));
+        sm.addSound(rootUser, "Rauzahldelfin Rap", new File("src/main/resources/data/sounds/example/78018003.wav"));
         pm.createPlaylist(rootUser, null, "Deepsea Dive");
         pm.getPlaylistByName("Deepsea Dive").addAllSounds(rootUser, sm.getAllSoundsByUser(rootUser));
 
@@ -53,7 +53,7 @@ public class InitializeAdminUsers {
         }
     }
 
-    public static void readData() throws ReadDataException {
+    public static void readData() {
         try {
             um.usersFromJSON();
             sm.soundsFromJSON();

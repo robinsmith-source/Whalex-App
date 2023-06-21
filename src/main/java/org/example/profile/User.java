@@ -4,6 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.UUID;
 
 /**
@@ -102,12 +105,36 @@ public class User {
      * @param profilePicture Profile picture of the user
      */
     public void setProfilePicture(File profilePicture) {
-        if (profilePicture == null) {
-            log.debug("Path of new profilePicture is null.");
-            throw new IllegalArgumentException("Path of new profilePicture is null.");
+        Path oldProfilePicture = Path.of(this.profilePicture.toURI());
+        if (profilePicture == null)
+            throw new IllegalArgumentException("Profile picture cannot be null when manually set.");
+
+
+        String extension = profilePicture.getName().substring(profilePicture.getName().lastIndexOf("."));
+        Path targetFile = UserManager.getInstance().getPROFILE_PICTURES().resolve(this.getUserID() + extension);
+
+        if (oldProfilePicture != UserManager.getInstance().getDEFAULT_PICTURE().toPath()) {
+            new Thread(() -> {
+                try {
+                    Files.deleteIfExists(oldProfilePicture);
+                    log.info("User profile picture {} of user {} has been deleted.", targetFile, this.getUsername());
+                } catch (IOException e) {
+                    log.error("User profile picture {} couldn't be deleted", targetFile);
+                }
+            }).start();
         }
-        this.profilePicture = profilePicture;
+
+        new Thread(() -> {
+            try {
+                Files.copy(profilePicture.toPath(), targetFile);
+                log.info("User profile picture {} of user {} has been copied.", targetFile, this.getUsername());
+            } catch (IOException e) {
+                log.error("User profile picture {} couldn't be copied", targetFile);
+            }
+        }).start();
+        this.profilePicture = targetFile.toFile();
     }
+
 
     /**
      * Method to change the password of the user

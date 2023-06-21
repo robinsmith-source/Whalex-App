@@ -46,6 +46,7 @@ public class Player extends ExceptionPopup {
             throw new IllegalStateException("Current sound is null");
         }
         mediaPlayer = new MediaPlayer(currentSound.getMedia());
+        mediaPlayer.setVolume(0.5);
         mediaPlayer.setOnEndOfMedia(() -> {
             if (!soundQueueOrdered.isEmpty()) {
                 next();
@@ -139,6 +140,13 @@ public class Player extends ExceptionPopup {
         }
     }
 
+    public void clearHistory() {
+        this.soundHistory.clear();
+        if (mediaPlayer != null) {
+            mediaPlayer.dispose();
+        }
+    }
+
     private OnNextSongListener onNextSongListener;
 
     public void registerOnNextSongEvent(OnNextSongListener listener) {
@@ -155,6 +163,5 @@ public class Player extends ExceptionPopup {
 
     public void setVolume(double value) {
         mediaPlayer.setVolume(value);
-        System.out.println("Mediaplayer vol: " + mediaPlayer.getVolume());
     }
 }

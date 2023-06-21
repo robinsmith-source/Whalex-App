@@ -47,29 +47,19 @@ public class Playlist {
     private final User createdBy;
 
     /**
-     * Date when the playlist was created
-     *
-     * @see Date
-     */
-    private final Date createdAt;
-
-
-    /**
      * Constructor of the playlist
      *
      * @param playlistID    ID of the playlist
      * @param playlistCover Cover of the playlist
      * @param name          Name of the playlist
      * @param createdBy     User who created the playlist
-     * @param createdAt     Date when the playlist was created
      */
-    public Playlist(String playlistID, File playlistCover, String name, User createdBy, Date createdAt) {
+    public Playlist(String playlistID, File playlistCover, String name, User createdBy) {
         this.playlistID = playlistID;
         this.playlistCover = playlistCover;
         this.name = name;
         this.SOUNDS = new HashSet<>();
         this.createdBy = createdBy;
-        this.createdAt = createdAt;
     }
 
     /**
@@ -127,17 +117,6 @@ public class Playlist {
      */
     public User getCreatedBy() {
         return this.createdBy;
-    }
-
-    /**
-     * Method to get the date when the playlist was created
-     *
-     * @return Date when the playlist was created
-     * @see Date
-     */
-    //TODO: Check if this method is necessary)
-    public Date getCreatedAt() {
-        return this.createdAt;
     }
 
     /**

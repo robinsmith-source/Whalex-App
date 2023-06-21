@@ -57,9 +57,7 @@ public class MainSceneController extends ExceptionPopup implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         log.trace("Initializing MainSceneController");
-        username.setText(UserManager.getInstance().getActiveUser().getUsername());
-        Image image = new Image(UserManager.getInstance().getActiveUser().getProfilePicture().toURI().toString());
-        userProfilePicture.setImage(image);
+        updateUserContent();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/view.fxml"));
             loader.load();
@@ -70,7 +68,6 @@ public class MainSceneController extends ExceptionPopup implements Initializable
         }
         log.debug("MainSceneController initialized");
 
-
         Timer updateTimer = new Timer();
         TimerTask updateTask = new TimerTask() {
             @Override
@@ -80,11 +77,16 @@ public class MainSceneController extends ExceptionPopup implements Initializable
         };
         updateTimer.scheduleAtFixedRate(updateTask, 0, 1000);
 
-
         volumeSlider.valueProperty().addListener((ov, old_val, new_val) -> Platform.runLater(() -> {
             Player.getInstance().setVolume(volumeSlider.getValue());
-            log.info("Volume changed to: " + volumeSlider.getValue());
+            log.debug("Volume changed to: " + volumeSlider.getValue());
         }));
+    }
+
+    void updateUserContent() {
+        username.setText(UserManager.getInstance().getActiveUser().getUsername());
+        Image image = new Image(UserManager.getInstance().getActiveUser().getProfilePicture().toURI().toString());
+        userProfilePicture.setImage(image);
     }
 
     /**
@@ -145,9 +147,9 @@ public class MainSceneController extends ExceptionPopup implements Initializable
     public void handleRepeatButton() {
     }
 
-    public void updateView() {
+    void updateView() {
         viewController.updateView();
-        log.info("View updated access from MainSceneController (Added Playlist)");
+        log.info("View updated access from MainSceneController");
     }
 
     public void handleSettingsButton() {
@@ -155,6 +157,8 @@ public class MainSceneController extends ExceptionPopup implements Initializable
     }
 
     public void handleLogoutButton() {
+        Player.getInstance().clearQueue();
+        Player.getInstance().clearHistory();
         UserManager.getInstance().logout();
         SceneManager.LOGIN.changeScene();
     }

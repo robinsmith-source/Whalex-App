@@ -62,6 +62,8 @@ public class EditProfileController implements Initializable {
         }
         SceneManager.EDIT_PROFILE.closeSecondaryStage();
         new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.WRITE).start();
+        SceneManager.MAIN.getController().updateUserContent();
+        SceneManager.MAIN.getController().updateView();
     }
 
     public void handleCancelButton() {

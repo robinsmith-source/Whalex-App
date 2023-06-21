@@ -31,6 +31,7 @@ public class AddSoundController implements Initializable {
     private final FileChooser fileChooser = new FileChooser();
 
     private File choosenSoundfile;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Image image = new Image(UserManager.getInstance().getActiveUser().getProfilePicture().toURI().toString());
@@ -48,7 +49,7 @@ public class AddSoundController implements Initializable {
 
     public void handleAddButton() {
         try {
-            SoundManager.getInstance().addSound(UserManager.getInstance().getActiveUser(),soundTitleTextField.getText(),choosenSoundfile);
+            SoundManager.getInstance().addSound(UserManager.getInstance().getActiveUser(), soundTitleTextField.getText(), choosenSoundfile);
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
         }

@@ -45,12 +45,17 @@ public class UserManager {
     /**
      * Path to the file where all user data is stored
      */
-    private File SAVE_FILE = new File("src/main/resources/data/saves/users.json");
+    private final Path PROFILE_PICTURES = Path.of("src/main/resources/data/profilePictures");
+
+    /**
+     * Path to the file where all user data is stored
+     */
+    private final File SAVE_FILE = new File("src/main/resources/data/saves/users.json");
 
     /**
      * Path to the file where the default profile picture is stored
      */
-    private final File DEFAULT_PICTURE = new File("src/main/resources/data/defaultImages/users/defaultUserProfilePicture.jpg");
+    private final File DEFAULT_PICTURE = new File("src/main/resources/data/profilePictures/default/defaultUserProfilePicture.jpg");
 
     /**
      * Map of all users (key = username, value = user)
@@ -68,10 +73,6 @@ public class UserManager {
     private UserManager() {
     }
 
-    public void setSAVE_FILE(File SAVE_FILE) {
-        this.SAVE_FILE = SAVE_FILE;
-    }
-
     /**
      * Method to get the UserManager instance
      *
@@ -79,6 +80,14 @@ public class UserManager {
      */
     public static UserManager getInstance() {
         return INSTANCE;
+    }
+
+    public File getDEFAULT_PICTURE() {
+        return DEFAULT_PICTURE;
+    }
+
+    public Path getPROFILE_PICTURES() {
+        return PROFILE_PICTURES;
     }
 
     /**
@@ -160,15 +169,15 @@ public class UserManager {
             log.debug("Profile picture is null.");
             this.USERS.add(new User(UUID.randomUUID().toString(), DEFAULT_PICTURE, username, password));
         } else {
-            Path targetFolder = Path.of("src/main/resources/data/profilePictures");
+            String uuid = UUID.randomUUID().toString();
 
             String extension = choosenImage.getName().substring(choosenImage.getName().lastIndexOf("."));
-            Path targetFile = targetFolder.resolve(username + extension);
+            Path targetFile = PROFILE_PICTURES.resolve(uuid + extension);
 
             Files.copy(choosenImage.toPath(), targetFile);
             File profilePicture = targetFile.toFile();
 
-            this.USERS.add(new User(UUID.randomUUID().toString(), profilePicture, username, password));
+            this.USERS.add(new User(uuid, profilePicture, username, password));
         }
         log.debug("User {} has been created.", username);
         activeUser = getUserByName(username);
@@ -198,6 +207,20 @@ public class UserManager {
         }
         log.debug("User {} has been deleted.", activeUser.getUsername());
         USERS.remove(activeUser);
+
+        File playlistCover = activeUser.getProfilePicture();
+        String extension = playlistCover.getName().substring(playlistCover.getName().lastIndexOf("."));
+        Path targetFile = PROFILE_PICTURES.resolve(activeUser.getUserID() + extension);
+        System.out.println(targetFile);
+        new Thread(() -> {
+            try {
+                Files.deleteIfExists(targetFile);
+                log.info("User profile picture {} of user {} has been deleted.", targetFile, activeUser.getUsername());
+            } catch (IOException e) {
+                log.error("User profile picture {} couldn't be deleted", targetFile);
+            }
+
+        }).start();
     }
 
     /**

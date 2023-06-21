@@ -8,6 +8,8 @@ import org.example.profile.UserManager;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 public class SoundSerializer implements JsonSerializer<ISound>, JsonDeserializer<ISound> {
     @Override
@@ -15,9 +17,11 @@ public class SoundSerializer implements JsonSerializer<ISound>, JsonDeserializer
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("soundID", src.getSoundID());
         jsonObject.addProperty("title", src.getTitle());
-        String absolutePath = src.getMedia().getSource();
-        String fileName = absolutePath.substring(absolutePath.lastIndexOf('/'));
-        jsonObject.addProperty("path", "src/main/resources/data/sounds" + fileName);
+
+        String input = (src.getMedia().getSource());
+        String decodedString = URLDecoder.decode(input, StandardCharsets.UTF_8);
+
+        jsonObject.addProperty("path","src\\main\\resources\\data\\sounds\\" + decodedString.substring(decodedString.lastIndexOf('/')+1));
         jsonObject.addProperty("uploadedBy", src.getUploadedBy().getUserID());
         return jsonObject;
     }
