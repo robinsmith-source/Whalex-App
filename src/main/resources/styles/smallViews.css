@@ -1,0 +1,61 @@
+.root {
+    -fx-background-color: linear-gradient(#2C3346 40%, #4E4F5B 120%) opacity 0.5;
+}
+
+#sideBar {
+    -fx-background-color: #1E2337;
+}
+
+.text-field {
+    -fx-background-color: #1E2337;
+    -fx-text-fill: white;
+}
+
+.text-field:hover, .text-field:selected {
+    -fx-border-radius: 2;
+    -fx-border-color: orange;
+    -fx-text-fill: white;
+}
+
+.button {
+    -fx-background-color: #FFA500;
+    -fx-text-fill: white;
+}
+.button:hover {
+    -fx-background-color: linear-gradient(#FFA500 20%, #FF8C00 80%) opacity 0.5;
+    -fx-text-fill: white;
+}
+
+#fileChooserButton {
+    -fx-font-size: 18;
+    -fx-background-color: #1E2337;
+}
+
+#fileChooserButton:hover {
+    -fx-border-color: orange;
+    -fx-border-radius: 2;
+    -fx-border-width: 1.5;
+}
+
+.tab-header-background {
+    -fx-background-color: transparent;
+}
+
+
+.tab-label {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+}
+.tab{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+}
+
+.tab-pane:focused .tab:selected .focus-indicator{
+    -fx-border-color: orange;
+    -fx-border-width: 0 0 4 0;
+    }
+
+

@@ -94,6 +94,6 @@
       </HBox>
    </children>
    <stylesheets>
-      <URL value="@../styles/login.css" />
+      <URL value="@../styles/smallViews.css" />
    </stylesheets>
 </AnchorPane>
