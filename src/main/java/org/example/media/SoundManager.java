@@ -15,7 +15,6 @@ import org.example.profile.User;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class SoundManager {
     /**
      * Path to the folder where all sound files are stored
      */
-    private final String SOUNDS_PATH = "src/main/resources/data/sounds/";
+    private final Path SOUNDS_PATH = Path.of("src/main/resources/data/sounds/");
 
     /**
      * Path to the file where all sound data is stored
@@ -151,19 +150,12 @@ public class SoundManager {
         }
         try {
             String uuid = UUID.randomUUID().toString();
-            Path targetFolder = Path.of(SOUNDS_PATH);
-
             String extension = choosenPath.getName().substring(choosenPath.getName().lastIndexOf("."));
-            Path targetFile = targetFolder.resolve(uuid + extension);
+            Path targetFile = SOUNDS_PATH.resolve(uuid + extension);
+            System.out.println(targetFile);
 
-            new Thread(() -> {
-                try {
-                    Files.copy(choosenPath.toPath(), targetFile);
-                    log.info("File {} has been copied to {}", choosenPath, targetFile);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }).start();
+            Files.copy(choosenPath.toPath(), targetFile);
+            log.info("File {} has been copied to {}", choosenPath, targetFile);
 
             File soundFile = targetFile.toFile();
             SOUNDS.add(SoundFactory.getInstance().createSound(uuid, title, soundFile, currentUser));
@@ -181,33 +173,29 @@ public class SoundManager {
      * @throws IllegalArgumentException if sound with the given ID could not be found or if the sound was not uploaded by the active user
      */
     public void deleteSoundByID(User currentUser, String soundID) throws IllegalArgumentException {
-        this.SOUNDS.stream().filter(sound -> sound.getSoundID().equals(soundID)).findFirst().ifPresentOrElse(sound -> {
-            if (sound.getUploadedBy().equals(currentUser)) {
-                log.info("Sound {} has been deleted.", sound.getTitle());
-                this.SOUNDS.remove(sound);
-
-                String extension = sound.getMedia().getSource().substring(sound.getMedia().getSource().lastIndexOf("."));
-                File file = new File(SOUNDS_PATH + soundID + extension);
-                log.info("Deleting sound file " + file.getAbsolutePath());
-
-                new Thread(() -> {
-                    try {
-                        file.delete();
-                        log.info("Sound file {} has been deleted.", file.getAbsolutePath());
-                    } catch (Exception e) {
-                        log.error("Sound file {} couldn't be deleted.", soundID);
-                    }
-                }).start();
-            } else {
-                log.error("Sound {} wasn't uploaded by the active user.", sound.getTitle());
-                throw new IllegalArgumentException("Sound " + sound.getSoundID() + " could not be deleted because it was not uploaded by the activeUser");
-            }
-        }, () ->
-
-        {
+        ISound matchedSound = this.SOUNDS.stream().filter(sound -> sound.getSoundID().equals(soundID)).findFirst().orElseThrow(() -> {
             log.error("Sound {} could not be found.", soundID);
-            throw new IllegalArgumentException("Sound " + soundID + " could not be found.");
+            return new IllegalArgumentException("Sound " + soundID + " could not be found.");
         });
+        if (matchedSound.getUploadedBy().equals(currentUser)) {
+            log.info("Sound {} has been deleted.", matchedSound.getTitle());
+            this.SOUNDS.remove(matchedSound);
+
+            String extension = matchedSound.getMedia().getSource().substring(matchedSound.getMedia().getSource().lastIndexOf("."));
+            Path targetFile = SOUNDS_PATH.resolve(soundID + extension);
+            log.info("Deleting sound file " + targetFile);
+
+            try {
+                Files.deleteIfExists(targetFile);
+                log.info("Sound file {} has been deleted.", targetFile);
+            } catch (Exception e) {
+                log.error("Sound file {} couldn't be deleted.", soundID);
+            }
+
+        } else {
+            log.error("Sound {} wasn't uploaded by the active user.", matchedSound.getTitle());
+            throw new IllegalArgumentException("Sound " + matchedSound.getSoundID() + " could not be deleted because it was not uploaded by the activeUser");
+        }
     }
 
     /**
