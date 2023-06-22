@@ -274,13 +274,13 @@ public class ViewController extends ExceptionPopup implements Initializable {
                 throw new IllegalStateException("Unexpected value: " + view);
         }
 
-        new Thread(() -> {
+        new Thread(() -> Platform.runLater(() -> {
             soundTable.setItems(soundObjectList);
             playlistTable.setItems(playlistObjectList);
             soundTable.refresh();
             playlistTable.refresh();
             log.info("View updated to " + view.toString());
-        }).start();
+        })).start();
 
         soundTable.selectionModelProperty().get().clearSelection();
         playlistTable.selectionModelProperty().get().clearSelection();
@@ -326,7 +326,7 @@ public class ViewController extends ExceptionPopup implements Initializable {
             }
             Player.getInstance().removeSoundFromQueue(sound);
             new DataThread(DataType.SOUND_PLAYLIST, DataOperation.WRITE).start();
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             showPopup(e);
         }
 

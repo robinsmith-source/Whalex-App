@@ -134,9 +134,6 @@ public class SoundManager {
      * @param choosenPath Path to the soundfile
      * @throws IllegalArgumentException if title is null or empty, if path is null, if sound with the same title already exists, if path does not exist, if path is not a file, if path cannot be read
      */
-    //TODO: Check if Exception handling is correct
-    //TODO: Check if Exception handling is correct
-    //TODO: Path value is checked at input (FileExplorer)
     public void addSound(User currentUser, String title, File choosenPath) throws IllegalArgumentException {
         if (title == null || title.isEmpty()) {
             log.warn("Title is null or empty");
@@ -152,15 +149,14 @@ public class SoundManager {
             String uuid = UUID.randomUUID().toString();
             String extension = choosenPath.getName().substring(choosenPath.getName().lastIndexOf("."));
             Path targetFile = SOUNDS_PATH.resolve(uuid + extension);
-            System.out.println(targetFile);
 
             Files.copy(choosenPath.toPath(), targetFile);
             log.info("File {} has been copied to {}", choosenPath, targetFile);
-
             File soundFile = targetFile.toFile();
             SOUNDS.add(SoundFactory.getInstance().createSound(uuid, title, soundFile, currentUser));
             log.debug("Sound {} has been added.", title);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new IllegalArgumentException("Sound " + title + " could not be added");
         }
     }
@@ -177,19 +173,19 @@ public class SoundManager {
             log.error("Sound {} could not be found.", soundID);
             return new IllegalArgumentException("Sound " + soundID + " could not be found.");
         });
-        if (matchedSound.getUploadedBy().equals(currentUser)) {
-            log.info("Sound {} has been deleted.", matchedSound.getTitle());
-            this.SOUNDS.remove(matchedSound);
 
+        if (matchedSound.getUploadedBy().equals(currentUser)) {
             String extension = matchedSound.getMedia().getSource().substring(matchedSound.getMedia().getSource().lastIndexOf("."));
             Path targetFile = SOUNDS_PATH.resolve(soundID + extension);
-            log.info("Deleting sound file " + targetFile);
+            log.trace("Deleting sound file " + targetFile);
 
             try {
                 Files.deleteIfExists(targetFile);
+                this.SOUNDS.remove(matchedSound);
                 log.info("Sound file {} has been deleted.", targetFile);
             } catch (Exception e) {
-                log.error("Sound file {} couldn't be deleted.", soundID);
+                log.error("Sound file {} couldn't be deleted because {}.", soundID, e.getMessage());
+                throw new RuntimeException("Sound file " + soundID + " couldn't be deleted because " + e.getMessage());
             }
 
         } else {

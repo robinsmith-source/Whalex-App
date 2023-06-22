@@ -3,6 +3,7 @@ package org.example.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,6 +14,11 @@ import org.apache.logging.log4j.Logger;
 import org.example.data.DataOperation;
 import org.example.data.DataThread;
 import org.example.data.DataType;
+import org.example.media.SoundManager;
+import org.example.media.interfaces.ISound;
+import org.example.player.Player;
+import org.example.playlist.Playlist;
+import org.example.playlist.PlaylistManager;
 import org.example.profile.UserManager;
 
 import java.io.File;
@@ -22,6 +28,13 @@ import java.util.ResourceBundle;
 public class EditProfileController implements Initializable {
 
     private static final Logger log = LogManager.getLogger(EditProfileController.class);
+    @FXML
+    private PasswordField deleteProfileConfirmPasswordField;
+    @FXML
+    private Label errorMessageLabel3;
+    @FXML
+    private PasswordField deleteProfilePasswordField;
+
     @FXML
     private ImageView userProfilePicture;
     @FXML
@@ -50,6 +63,7 @@ public class EditProfileController implements Initializable {
     }
 
     public void handleSubmitButton() {
+
         try {
             UserManager.getInstance().getActiveUser().setProfilePicture(chosenImage);
         } catch (Exception e) {
@@ -60,6 +74,24 @@ public class EditProfileController implements Initializable {
         } catch (Exception e) {
             errorMessageLabel2.setText(e.getMessage());
         }
+        try {
+            for (ISound sound : SoundManager.getInstance().getAllSoundsByUser(UserManager.getInstance().getActiveUser())) {
+                SoundManager.getInstance().deleteSoundByID(UserManager.getInstance().getActiveUser(), sound.getSoundID());
+            }
+            for (Playlist playlist : PlaylistManager.getInstance().getPlaylistsByUser(UserManager.getInstance().getActiveUser())) {
+                PlaylistManager.getInstance().deletePlaylistByID(UserManager.getInstance().getActiveUser(), playlist.getPlaylistID());
+            }
+            UserManager.getInstance().deleteUser(deleteProfilePasswordField.getText(), deleteProfileConfirmPasswordField.getText());
+            SceneManager.EDIT_PROFILE.closeSecondaryStage();
+            new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.WRITE).start();
+            Player.getInstance().clearQueue();
+            Player.getInstance().clearHistory();
+            SceneManager.LOGIN.changeScene();
+            return;
+        } catch (Exception e) {
+            errorMessageLabel3.setText(e.getMessage());
+        }
+
         SceneManager.EDIT_PROFILE.closeSecondaryStage();
         new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.WRITE).start();
         SceneManager.MAIN.getController().updateUserContent();

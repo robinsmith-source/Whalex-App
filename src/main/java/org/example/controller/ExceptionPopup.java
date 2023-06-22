@@ -20,7 +20,7 @@ public abstract class ExceptionPopup {
         alert.setHeaderText(e.getClass().getSimpleName());
         alert.setContentText(e.getMessage());
         alert.show();
-        log.info("Exception: {} - {}", e.getClass().getSimpleName(), e.getMessage());
+        log.debug("Exception: {} - {}", e.getClass().getSimpleName(), e.getMessage());
         timeline.play();
     }
 }

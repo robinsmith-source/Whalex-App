@@ -57,4 +57,8 @@ public class CreatePlaylistController implements Initializable {
         new DataThread(DataType.PLAYLIST, DataOperation.WRITE).start();
         SceneManager.MAIN.getController().updateView();
     }
+
+    public void handleCancelButton() {
+        SceneManager.CREATE_PLAYLIST.closeSecondaryStage();
+    }
 }

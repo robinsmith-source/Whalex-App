@@ -59,6 +59,7 @@ public class AddSoundController implements Initializable {
     }
 
     public void handleCancelButton() {
+        SceneManager.ADD_SOUND.closeSecondaryStage();
     }
 
 }

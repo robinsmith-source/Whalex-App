@@ -208,19 +208,21 @@ public class UserManager {
         log.debug("User {} has been deleted.", activeUser.getUsername());
         USERS.remove(activeUser);
 
-        File playlistCover = activeUser.getProfilePicture();
-        String extension = playlistCover.getName().substring(playlistCover.getName().lastIndexOf("."));
+        File profilePicture = activeUser.getProfilePicture();
+        String extension = profilePicture.getName().substring(profilePicture.getName().lastIndexOf("."));
         Path targetFile = PROFILE_PICTURES.resolve(activeUser.getUserID() + extension);
-        System.out.println(targetFile);
-        new Thread(() -> {
-            try {
-                Files.deleteIfExists(targetFile);
-                log.info("User profile picture {} of user {} has been deleted.", targetFile, activeUser.getUsername());
-            } catch (IOException e) {
-                log.error("User profile picture {} couldn't be deleted", targetFile);
-            }
 
-        }).start();
+        if (targetFile != UserManager.getInstance().getDEFAULT_PICTURE().toPath()) {
+            new Thread(() -> {
+                try {
+                    Files.deleteIfExists(targetFile);
+                    log.info("User profile picture {} has been deleted.", targetFile);
+                } catch (IOException e) {
+                    log.error("User profile picture {} couldn't be deleted", targetFile);
+                }
+            }).start();
+        }
+        logout();
     }
 
     /**
