@@ -2,8 +2,9 @@ package org.example;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.exceptions.ReadDataException;
-import org.example.exceptions.WriteDataException;
+import org.example.data.DataOperation;
+import org.example.data.DataThread;
+import org.example.data.DataType;
 import org.example.media.SoundManager;
 import org.example.playlist.PlaylistManager;
 import org.example.profile.User;
@@ -32,6 +33,7 @@ public class InitializeAdminUsers {
 
         sm.addSound(Marvin, "Pottwal Pop", new File("src/main/resources/data/sounds/example/9750300N.wav"));
         sm.addSound(Marvin, "Glattschweinswal Gesang", new File("src/main/resources/data/sounds/example/89405023.wav"));
+        sm.addSound(Marvin, "Geht nicht", new File("src/main/resources/data/sounds/example/3e745b2e-9025-4e1d-8d4b-353ff019af36.mp3"));
         pm.createPlaylist(Marvin, null,"Ocean Groove");
         pm.getPlaylistByName("Ocean Groove").addAllSounds(Marvin, sm.getAllSoundsByUser(Marvin));
 
@@ -44,23 +46,11 @@ public class InitializeAdminUsers {
         pm.createPlaylist(rootUser, null, "Deepsea Dive");
         pm.getPlaylistByName("Deepsea Dive").addAllSounds(rootUser, sm.getAllSoundsByUser(rootUser));
 
-        try {
-            um.usersToJSON();
-            sm.soundsToJSON();
-            pm.playlistsToJSON();
-        } catch (WriteDataException e) {
-            log.error("Error while writing data to JSON files", e);
-        }
+        new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.WRITE).start();
     }
 
     public static void readData() {
-        try {
-            um.usersFromJSON();
-            sm.soundsFromJSON();
-            pm.playlistsFromJSON();
-        } catch (ReadDataException e) {
-            log.error("Error while loading data from JSON files", e);
-        }
+        new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.READ).start();
     }
 
     public static void showDataFromUser(String username) {
