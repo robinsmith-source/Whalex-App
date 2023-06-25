@@ -12,7 +12,7 @@ import org.example.profile.UserManager;
 
 import java.io.File;
 
-public class InitializeAdminUsers {
+public abstract class InitializeAdminUsers {
     private static final Logger log = LogManager.getLogger(InitializeAdminUsers.class);
 
     private static final UserManager um = UserManager.getInstance();

@@ -157,6 +157,11 @@ public class SoundManager {
             throw new IllegalArgumentException("Sound " + title + " already exists.");
         }
         try {
+            if(!SOUNDS_PATH.toFile().exists()) {
+                Files.createDirectories(SOUNDS_PATH);
+                log.info("Directory {} has been created.", SOUNDS_PATH);
+            }
+
             String uuid = UUID.randomUUID().toString();
             String extension = choosenPath.getName().substring(choosenPath.getName().lastIndexOf("."));
             Path targetFile = SOUNDS_PATH.resolve(uuid + extension);

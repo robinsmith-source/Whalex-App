@@ -176,6 +176,11 @@ public class UserManager {
             log.debug("Profile picture is null.");
             this.USERS.add(new User(UUID.randomUUID().toString(), DEFAULT_PICTURE, username, password));
         } else {
+            if (!Files.exists(PROFILE_PICTURES)) {
+                Files.createDirectories(PROFILE_PICTURES);
+                log.info("Directory {} has been created.", PROFILE_PICTURES);
+            }
+
             String uuid = UUID.randomUUID().toString();
 
             String extension = choosenImage.getName().substring(choosenImage.getName().lastIndexOf("."));

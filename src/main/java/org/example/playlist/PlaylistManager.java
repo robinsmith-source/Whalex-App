@@ -174,6 +174,11 @@ public class PlaylistManager {
                 this.PLAYLISTS.add(new Playlist(UUID.randomUUID().toString(), DEFAULT_COVER, playlistName, currentUser));
             } else {
                 try {
+                    if (!Files.exists(PLAYLIST_COVERS)) {
+                        Files.createDirectories(PLAYLIST_COVERS);
+                        log.debug("Directory {} has been created.", PLAYLIST_COVERS);
+                    }
+
                     String uuid = UUID.randomUUID().toString();
                     String extension = playlistCover.getName().substring(playlistCover.getName().lastIndexOf("."));
                     Path targetFile = PLAYLIST_COVERS.resolve(uuid + extension);
