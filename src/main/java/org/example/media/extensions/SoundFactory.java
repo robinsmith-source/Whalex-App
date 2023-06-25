@@ -50,7 +50,7 @@ public class SoundFactory {
             return new Soundfile(soundID, title, path, uploadedBy);
         } catch (Exception e) {
             log.error("Sound {} could not be created by user {} with path {}", soundID, uploadedBy.getUsername(), path);
-            return null;
+            throw new IllegalArgumentException("Sound " + soundID + " could not be created by user " + uploadedBy.getUsername() + " with path " + path);
         }
     }
 }

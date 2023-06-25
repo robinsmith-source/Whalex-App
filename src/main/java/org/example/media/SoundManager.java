@@ -5,6 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.data.DataOperation;
+import org.example.data.DataThread;
+import org.example.data.DataType;
 import org.example.data.SoundSerializer;
 import org.example.exceptions.ReadDataException;
 import org.example.exceptions.WriteDataException;
@@ -47,12 +50,12 @@ public class SoundManager {
     /**
      * Path to the folder where all sound files are stored
      */
-    private final Path SOUNDS_PATH = Path.of("src/main/resources/data/sounds/");
+    private Path SOUNDS_PATH = Path.of("src/main/resources/data/sounds/");
 
     /**
      * Path to the file where all sound data is stored
      */
-    private final File SAVE_FILE = new File("src/main/resources/data/saves/sounds.json");
+    private File SAVE_FILE = new File("src/main/resources/data/saves/sounds.json");
 
     /**
      * Path to the file where the default sound cover is stored
@@ -77,6 +80,14 @@ public class SoundManager {
      */
     public static SoundManager getInstance() {
         return INSTANCE;
+    }
+
+    public void setSAVE_FILE(File SAVE_FILE) {
+        this.SAVE_FILE = SAVE_FILE;
+    }
+
+    public void setSOUNDS_PATH(Path SOUNDS_PATH) {
+        this.SOUNDS_PATH = SOUNDS_PATH;
     }
 
     /**
@@ -149,12 +160,14 @@ public class SoundManager {
             String uuid = UUID.randomUUID().toString();
             String extension = choosenPath.getName().substring(choosenPath.getName().lastIndexOf("."));
             Path targetFile = SOUNDS_PATH.resolve(uuid + extension);
+            File soundFile = targetFile.toFile();
 
             Files.copy(choosenPath.toPath(), targetFile);
             log.info("File {} has been copied to {}", choosenPath, targetFile);
-            File soundFile = targetFile.toFile();
+
             SOUNDS.add(SoundFactory.getInstance().createSound(uuid, title, soundFile, currentUser));
             log.debug("Sound {} has been added.", title);
+            new DataThread(DataType.SOUND_PLAYLIST, DataOperation.WRITE).start();
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalArgumentException("Sound " + title + " could not be added");
@@ -174,7 +187,10 @@ public class SoundManager {
             return new IllegalArgumentException("Sound " + soundID + " could not be found.");
         });
 
-        if (matchedSound.getUploadedBy().equals(currentUser)) {
+        if (!matchedSound.getUploadedBy().equals(currentUser)) {
+            log.error("Sound {} wasn't uploaded by the active user.", matchedSound.getTitle());
+            throw new IllegalArgumentException("Sound " + matchedSound.getSoundID() + " could not be deleted because it was not uploaded by the activeUser");
+        } else {
             String extension = matchedSound.getMedia().getSource().substring(matchedSound.getMedia().getSource().lastIndexOf("."));
             Path targetFile = SOUNDS_PATH.resolve(soundID + extension);
             log.trace("Deleting sound file " + targetFile);
@@ -183,14 +199,11 @@ public class SoundManager {
                 Files.deleteIfExists(targetFile);
                 this.SOUNDS.remove(matchedSound);
                 log.info("Sound file {} has been deleted.", targetFile);
+                new DataThread(DataType.SOUND_PLAYLIST, DataOperation.WRITE).start();
             } catch (Exception e) {
                 log.error("Sound file {} couldn't be deleted because {}.", soundID, e.getMessage());
                 throw new RuntimeException("Sound file " + soundID + " couldn't be deleted because " + e.getMessage());
             }
-
-        } else {
-            log.error("Sound {} wasn't uploaded by the active user.", matchedSound.getTitle());
-            throw new IllegalArgumentException("Sound " + matchedSound.getSoundID() + " could not be deleted because it was not uploaded by the activeUser");
         }
     }
 
@@ -200,8 +213,6 @@ public class SoundManager {
      * @throws WriteDataException if the sounds could not be saved to the JSON file
      * @see SoundSerializer
      */
-    //Todo: Check if the log states are correct -> Should be
-    //Todo: Check if exception handling is correct
     public synchronized void soundsToJSON() throws WriteDataException {
         try {
             FileWriter fileWriter = new FileWriter(this.SAVE_FILE);
@@ -220,8 +231,6 @@ public class SoundManager {
      * @throws ReadDataException if the sounds could not be loaded from the JSON file
      * @see SoundSerializer
      */
-    //Todo: Check if the log states are correct -> Should be
-    //Todo: Check if exception handling is correct
     public synchronized void soundsFromJSON() throws ReadDataException {
         try {
             FileReader fileReader = new FileReader(this.SAVE_FILE);

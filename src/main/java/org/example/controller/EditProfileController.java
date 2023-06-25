@@ -91,9 +91,7 @@ public class EditProfileController implements Initializable {
         } catch (Exception e) {
             errorMessageLabel3.setText(e.getMessage());
         }
-
         SceneManager.EDIT_PROFILE.closeSecondaryStage();
-        new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.WRITE).start();
         SceneManager.MAIN.getController().updateUserContent();
         SceneManager.MAIN.getController().updateView();
     }

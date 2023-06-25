@@ -8,9 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.example.data.DataOperation;
-import org.example.data.DataThread;
-import org.example.data.DataType;
 import org.example.playlist.PlaylistManager;
 import org.example.profile.UserManager;
 
@@ -32,6 +29,7 @@ public class CreatePlaylistController implements Initializable {
     private final FileChooser fileChooser = new FileChooser();
 
     private File choosenImage;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Image image = new Image(UserManager.getInstance().getActiveUser().getProfilePicture().toURI().toString());
@@ -47,6 +45,7 @@ public class CreatePlaylistController implements Initializable {
         choosenImage = fileChooser.showOpenDialog(fileChooserWindow);
     }
 
+    @FXML
     public void handleAddButton() {
         try {
             PlaylistManager.getInstance().createPlaylist(UserManager.getInstance().getActiveUser(), choosenImage, playlistNameTextField.getText()); //braucht Playlistname, (braucht Cover)
@@ -54,10 +53,10 @@ public class CreatePlaylistController implements Initializable {
             errorMessageLabel.setText(e.getMessage());
         }
         SceneManager.CREATE_PLAYLIST.closeSecondaryStage();
-        new DataThread(DataType.PLAYLIST, DataOperation.WRITE).start();
         SceneManager.MAIN.getController().updateView();
     }
 
+    @FXML
     public void handleCancelButton() {
         SceneManager.CREATE_PLAYLIST.closeSecondaryStage();
     }

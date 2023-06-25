@@ -5,6 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.data.DataOperation;
+import org.example.data.DataThread;
+import org.example.data.DataType;
 import org.example.data.UserSerializer;
 import org.example.exceptions.ReadDataException;
 import org.example.exceptions.WriteDataException;
@@ -50,7 +53,7 @@ public class UserManager {
     /**
      * Path to the file where all user data is stored
      */
-    private final File SAVE_FILE = new File("src/main/resources/data/saves/users.json");
+    private File SAVE_FILE = new File("src/main/resources/data/saves/users.json");
 
     /**
      * Path to the file where the default profile picture is stored
@@ -82,6 +85,10 @@ public class UserManager {
         return INSTANCE;
     }
 
+    public void setSAVE_FILE(File SAVE_FILE) {
+        this.SAVE_FILE = SAVE_FILE;
+    }
+
     public File getDEFAULT_PICTURE() {
         return DEFAULT_PICTURE;
     }
@@ -96,10 +103,10 @@ public class UserManager {
      * @return Current user
      * @throws IllegalArgumentException if no user is logged in
      */
-    public User getActiveUser() throws IllegalArgumentException {
+    public User getActiveUser() throws IllegalStateException {
         if (activeUser == null) {
             log.error("No user is logged in.");
-            throw new IllegalArgumentException("No user is logged in.");
+            throw new IllegalStateException("No user is logged in.");
         }
         log.debug("Current user is {}.", activeUser.getUsername());
         return activeUser;
@@ -182,7 +189,7 @@ public class UserManager {
         log.debug("User {} has been created.", username);
         activeUser = getUserByName(username);
         log.debug("User {} is now logged in.", username);
-        usersToJSON();
+        new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.WRITE).start();
     }
 
     /**
@@ -223,6 +230,7 @@ public class UserManager {
             }).start();
         }
         logout();
+        new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.WRITE).start();
     }
 
     /**

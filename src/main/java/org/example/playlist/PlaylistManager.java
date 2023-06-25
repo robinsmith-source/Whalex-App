@@ -5,6 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.data.DataOperation;
+import org.example.data.DataThread;
+import org.example.data.DataType;
 import org.example.data.PlaylistSerializer;
 import org.example.exceptions.ReadDataException;
 import org.example.exceptions.WriteDataException;
@@ -43,11 +46,11 @@ public class PlaylistManager {
             .create();
 
 
-    private final Path PLAYLIST_COVERS = Path.of("src/main/resources/data/playlistCover/");
+    private Path PLAYLIST_COVERS = Path.of("src/main/resources/data/playlistCover/");
     /**
      * Path to the file where all playlist data is stored
      */
-    private final File SAVE_FILE = new File("src/main/resources/data/saves/playlists.json");
+    private File SAVE_FILE = new File("src/main/resources/data/saves/playlists.json");
 
     /**
      * Default playlist cover
@@ -72,6 +75,14 @@ public class PlaylistManager {
      */
     public static PlaylistManager getInstance() {
         return INSTANCE;
+    }
+
+    public void setSAVE_FILE(File SAVE_FILE) {
+        this.SAVE_FILE = SAVE_FILE;
+    }
+
+    public void setPLAYLIST_COVERS(Path PLAYLIST_COVERS) {
+        this.PLAYLIST_COVERS = PLAYLIST_COVERS;
     }
 
     /**
@@ -180,6 +191,7 @@ public class PlaylistManager {
                     log.error("Playlist {} could not be created", playlistName);
                 }
             }
+            new DataThread(DataType.PLAYLIST, DataOperation.WRITE).start();
         }
     }
 
@@ -199,7 +211,6 @@ public class PlaylistManager {
                 File playlistCover = playlist.getPlaylistCover();
                 String extension = playlistCover.getName().substring(playlistCover.getName().lastIndexOf("."));
                 Path targetFile = PLAYLIST_COVERS.resolve(playlistID + extension);
-                System.out.println(targetFile);
                 new Thread(() -> {
                     try {
                         Files.deleteIfExists(targetFile);
@@ -207,8 +218,8 @@ public class PlaylistManager {
                     } catch (IOException e) {
                         log.error("Playlist cover from playlist {} couldn't be deleted", playlistID);
                     }
-
                 }).start();
+                new DataThread(DataType.PLAYLIST, DataOperation.WRITE).start();
             } else {
                 log.error("Playlist {} wasn't created by the active user.", playlist.getName());
                 throw new IllegalArgumentException("Playlist " + playlist.getName() + " could not be deleted because it was not created by the active user.");
@@ -225,8 +236,6 @@ public class PlaylistManager {
      * @throws WriteDataException if the playlists could not be saved to the JSON file
      * @see PlaylistSerializer
      */
-    //Todo: Check if the log states are correct -> Should be
-    //Todo: Check if exception handling is correct -> Should be
     public synchronized void playlistsToJSON() throws WriteDataException {
         try {
             FileWriter fileWriter = new FileWriter(this.SAVE_FILE);

@@ -10,9 +10,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.data.DataOperation;
-import org.example.data.DataThread;
-import org.example.data.DataType;
 import org.example.profile.UserManager;
 
 import java.io.File;
@@ -85,7 +82,6 @@ public class LoginController implements Initializable {
         log.info("Register button pressed with username {}. - ProfilePicture: {}", usernameField.getText(), chosenImage);
         try {
             UserManager.getInstance().createUser(chosenImage, usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
-            new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.WRITE).start();
             SceneManager.MAIN.changeScene();
         } catch (IllegalArgumentException e) {
             errorMessageLabel.setText(e.getMessage());

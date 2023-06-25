@@ -46,7 +46,6 @@ public class InitializeAdminUsers {
         pm.createPlaylist(rootUser, null, "Deepsea Dive");
         pm.getPlaylistByName("Deepsea Dive").addAllSounds(rootUser, sm.getAllSoundsByUser(rootUser));
 
-        new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.WRITE).start();
     }
 
     public static void readData() {

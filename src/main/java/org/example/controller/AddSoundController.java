@@ -8,9 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.example.data.DataOperation;
-import org.example.data.DataThread;
-import org.example.data.DataType;
 import org.example.media.SoundManager;
 import org.example.profile.UserManager;
 
@@ -54,7 +51,6 @@ public class AddSoundController implements Initializable {
             errorMessageLabel.setText(e.getMessage());
         }
         SceneManager.ADD_SOUND.closeSecondaryStage();
-        new DataThread(DataType.SOUND_PLAYLIST, DataOperation.WRITE).start();
         SceneManager.MAIN.getController().updateView();
     }
 

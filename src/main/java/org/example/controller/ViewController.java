@@ -325,11 +325,9 @@ public class ViewController extends ExceptionPopup implements Initializable {
                 playlist.removeSound(sound);
             }
             Player.getInstance().removeSoundFromQueue(sound);
-            new DataThread(DataType.SOUND_PLAYLIST, DataOperation.WRITE).start();
         } catch (RuntimeException e) {
             showPopup(e);
         }
-
         updateView();
     }
 
@@ -344,7 +342,6 @@ public class ViewController extends ExceptionPopup implements Initializable {
         } catch (IllegalArgumentException e) {
             showPopup(e);
         }
-        new DataThread(DataType.PLAYLIST, DataOperation.WRITE).start();
         updateView();
     }
 
