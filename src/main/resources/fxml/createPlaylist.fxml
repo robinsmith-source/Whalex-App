@@ -39,7 +39,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="addButton1" mnemonicParsing="false" onAction="#handleAddButton" prefWidth="160.0" text="Cancel">
+                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelButton" prefWidth="160.0" text="Cancel">
                            <font>
                               <Font size="24.0" />
                            </font>
