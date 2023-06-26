@@ -154,12 +154,12 @@ public class UserManager {
     /**
      * Method to create a user by its profilePicture, username and password
      *
-     * @param choosenImage Profile picture of the user
-     * @param username       Username of the user
-     * @param password       Password of the user
+     * @param chosenImage Profile picture of the user
+     * @param username    Username of the user
+     * @param password    Password of the user
      * @throws IllegalArgumentException if the profile picture is null, the username is null or empty or the password is null or empty or the user already exists
      */
-    public void createUser(File choosenImage, String username, String password, String passwordConfirmation) throws Exception {
+    public void createUser(File chosenImage, String username, String password, String passwordConfirmation) throws Exception {
         if (username == null || username.isEmpty()) {
             log.warn("Username is null or empty.");
             throw new IllegalArgumentException("Username cannot be null or empty.");
@@ -172,7 +172,7 @@ public class UserManager {
         } else if (this.USERS.stream().anyMatch(user -> user.getUsername().equals(username))) {
             log.error("User {} already exists.", username);
             throw new IllegalArgumentException("User already exists.");
-        } else if (choosenImage == null) {
+        } else if (chosenImage == null) {
             log.debug("Profile picture is null.");
             this.USERS.add(new User(UUID.randomUUID().toString(), DEFAULT_PICTURE, username, password));
         } else {
@@ -183,10 +183,10 @@ public class UserManager {
 
             String uuid = UUID.randomUUID().toString();
 
-            String extension = choosenImage.getName().substring(choosenImage.getName().lastIndexOf("."));
+            String extension = chosenImage.getName().substring(chosenImage.getName().lastIndexOf("."));
             Path targetFile = PROFILE_PICTURES.resolve(uuid + extension);
 
-            Files.copy(choosenImage.toPath(), targetFile);
+            Files.copy(chosenImage.toPath(), targetFile);
             File profilePicture = targetFile.toFile();
 
             this.USERS.add(new User(uuid, profilePicture, username, password));
@@ -204,8 +204,6 @@ public class UserManager {
      * @param passwordConfirmation Password confirmation of the user
      * @throws IllegalArgumentException if the user does not exist or the password is incorrect or the password confirmation is incorrect
      */
-    //TODO: Check if the log states are correct -> Should be
-    //Todo: Add Custom Exception + Exception handling
     public void deleteUser(String password, String passwordConfirmation) throws IllegalArgumentException {
         if (this.USERS.stream().noneMatch(user -> user.getUsername().equals(activeUser.getUsername()))) {
             log.error("User {} does not exist.", activeUser.getUsername());
@@ -245,12 +243,11 @@ public class UserManager {
      * @param password Password of the user
      * @throws IllegalArgumentException if the username is null or empty or the password is null or empty or the user does not exist or the password is incorrect
      */
-    //TODO: Safe stream for password check
     public void login(String username, String password) throws IllegalArgumentException {
-        User matchedUser = this.USERS.stream().filter(user -> user.getUsername().equals(username)).findFirst().orElseThrow(() -> {
-            log.error("User {} does not exist.", username);
-            return new IllegalArgumentException("User does not exist.");
-        });
+        User matchedUser = this.USERS.parallelStream().filter(user -> user.getUsername().equals(username)).findFirst().orElseThrow(() -> {
+                    log.error("User {} does not exist.", username);
+                    return new IllegalArgumentException("User does not exist.");
+                });
         if (password == null || password.isEmpty()) {
             log.warn("Password is null or empty.");
             throw new IllegalArgumentException("Password cannot be null or empty.");
@@ -276,14 +273,10 @@ public class UserManager {
      * @throws WriteDataException if the users could not be saved from the JSON file
      * @see UserSerializer
      */
-    //Todo: Check if the log states are correct -> Should be
-    //Todo: Check if exception handling is correct
     public synchronized void usersToJSON() throws WriteDataException {
-        try {
-            FileWriter fileWriter = new FileWriter(SAVE_FILE);
+        try (FileWriter fileWriter = new FileWriter(SAVE_FILE)) {
             gson.toJson(USERS, fileWriter);
             log.info("{} Users have been saved to JSON file {}.", USERS.size(), SAVE_FILE);
-            fileWriter.close();
         } catch (Exception e) {
             log.fatal("Users have not been saved to JSON file {}.", SAVE_FILE);
             throw new WriteDataException("Error while saving users to JSON file.");
@@ -296,15 +289,11 @@ public class UserManager {
      * @throws ReadDataException if the users could not be loaded from the JSON file
      * @see UserSerializer
      */
-    //Todo: Check if the log states are correct -> Should be
-    //Todo: Check if exception handling is correct
     public synchronized void usersFromJSON() throws ReadDataException {
-        try {
-            FileReader fileReader = new FileReader(SAVE_FILE);
+        try (FileReader fileReader = new FileReader(SAVE_FILE)) {
             USERS.addAll(gson.fromJson(fileReader, new TypeToken<ArrayList<User>>() {
             }.getType()));
             log.info("{} Users have been loaded from JSON file {}.", USERS.size(), SAVE_FILE);
-            fileReader.close();
         } catch (IOException e) {
             log.fatal("Users have not been loaded from JSON file {}.", SAVE_FILE);
             throw new ReadDataException("Error while loading users from JSON file.");

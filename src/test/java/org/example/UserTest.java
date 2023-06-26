@@ -14,7 +14,6 @@ public class UserTest {
 
     static final UserManager um = UserManager.getInstance();
 
-
     @BeforeAll
     @Description("Sets up the save files for the tests")
     public static void setup() {

@@ -105,8 +105,8 @@ public enum SceneManager {
         applicationStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fxml/assets/WhalexLOGO.png"))));
         new Thread(() -> {
             Platform.runLater(applicationStage::show);
-            log.info("Showing Scene: {}, from: {}", WhalexApp.getApplicationStage().getTitle(), this.fxmlPath);
         }).start();
+        log.info("Showing Scene: {}, from: {}", WhalexApp.getApplicationStage().getTitle(), this.fxmlPath);
     }
 }
 

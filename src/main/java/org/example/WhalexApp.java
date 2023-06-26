@@ -38,7 +38,7 @@ public class WhalexApp extends Application {
 
         stage.setOnCloseRequest(event -> {
             log.info("Closing Whalex Application");
-            System.exit(0); //TODO: Close application correct without data loss --> should be done
+            System.exit(0);
         });
         log.info("Starting Whalex Application");
         SceneManager.LOADING.changeScene();

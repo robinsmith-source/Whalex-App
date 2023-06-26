@@ -460,14 +460,14 @@ public class ViewController extends ExceptionPopup implements Initializable {
             showSpecificSoundContent(soundsInSearch);
             showSpecificPlaylistContent(playlistsInSearch);
         } else if (search.startsWith("sound:")) {
-            ArrayList<ISound> soundsInSearch = SoundManager.getInstance().getAllSounds().stream().filter(sound -> sound.getTitle().toLowerCase().contains(search.substring(6).toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
+            ArrayList<ISound> soundsInSearch = SoundManager.getInstance().getAllSounds().parallelStream().filter(sound -> sound.getTitle().toLowerCase().contains(search.substring(6).toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
             showSpecificSoundContent(soundsInSearch);
         } else if (search.startsWith("playlist:")) {
-            ArrayList<Playlist> playlistsInSearch = PlaylistManager.getInstance().getAllPlaylists().stream().filter(playlist -> playlist.getName().toLowerCase().contains(search.substring(9).toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
+            ArrayList<Playlist> playlistsInSearch = PlaylistManager.getInstance().getAllPlaylists().parallelStream().filter(playlist -> playlist.getName().toLowerCase().contains(search.substring(9).toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
             showSpecificPlaylistContent(playlistsInSearch);
         } else {
-            ArrayList<ISound> soundsInSearch = SoundManager.getInstance().getAllSounds().stream().filter(sound -> sound.getTitle().toLowerCase().contains(search.toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
-            ArrayList<Playlist> playlistsInSearch = PlaylistManager.getInstance().getAllPlaylists().stream().filter(playlist -> playlist.getName().toLowerCase().contains(search.toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
+            ArrayList<ISound> soundsInSearch = SoundManager.getInstance().getAllSounds().parallelStream().filter(sound -> sound.getTitle().toLowerCase().contains(search.toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
+            ArrayList<Playlist> playlistsInSearch = PlaylistManager.getInstance().getAllPlaylists().parallelStream().filter(playlist -> playlist.getName().toLowerCase().contains(search.toLowerCase())).collect(Collectors.toCollection(ArrayList::new));
             showSpecificSoundContent(soundsInSearch);
             showSpecificPlaylistContent(playlistsInSearch);
         }

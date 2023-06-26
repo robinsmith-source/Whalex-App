@@ -208,32 +208,33 @@ public class PlaylistManager {
      * @throws IllegalArgumentException if the playlist with the given ID could not be found or if the playlist wasn't created by the active user
      */
     public void deletePlaylistByID(User currentUser, String playlistID) throws IllegalArgumentException {
-        this.PLAYLISTS.stream().filter(playlist -> playlist.getPlaylistID().equals(playlistID)).findFirst().ifPresentOrElse(playlist -> {
-            if (playlist.getCreatedBy().equals(currentUser)) {
-                log.debug("Playlist {} has been deleted.", playlist.getName());
-                this.PLAYLISTS.remove(playlist);
-
-                File playlistCover = playlist.getPlaylistCover();
-                String extension = playlistCover.getName().substring(playlistCover.getName().lastIndexOf("."));
-                Path targetFile = PLAYLIST_COVERS.resolve(playlistID + extension);
-                new Thread(() -> {
-                    try {
-                        Files.deleteIfExists(targetFile);
-                        log.info("Playlist cover {} of playlist {} has been deleted.", targetFile, playlistID);
-                    } catch (IOException e) {
-                        log.error("Playlist cover from playlist {} couldn't be deleted", playlistID);
-                    }
-                }).start();
-                new DataThread(DataType.PLAYLIST, DataOperation.WRITE).start();
-            } else {
-                log.error("Playlist {} wasn't created by the active user.", playlist.getName());
-                throw new IllegalArgumentException("Playlist " + playlist.getName() + " could not be deleted because it was not created by the active user.");
-            }
-        }, () -> {
-            log.error("Playlist {} could not be found.", playlistID);
-            throw new IllegalArgumentException("Playlist " + playlistID + " could not be found.");
+        Playlist matchedPlaylist = this.PLAYLISTS.parallelStream().filter(playlist -> playlist.getPlaylistID().equals(playlistID)).findFirst().orElseThrow(() -> {
+            log.error("Playlist with ID {} could not be found.", playlistID);
+            return new IllegalArgumentException("Playlist with ID " + playlistID + " could not be found.");
         });
+
+        if (!matchedPlaylist.getCreatedBy().equals(currentUser)) {
+            log.error("Playlist with ID {} was not created by user {}.", playlistID, currentUser.getUsername());
+            throw new IllegalArgumentException("Playlist with ID " + playlistID + " was not created by user " + currentUser.getUsername() + ".");
+        } else {
+            log.debug("Playlist {} has been deleted.", matchedPlaylist.getName());
+            this.PLAYLISTS.remove(matchedPlaylist);
+
+            File playlistCover = matchedPlaylist.getPlaylistCover();
+            String extension = playlistCover.getName().substring(playlistCover.getName().lastIndexOf("."));
+            Path targetFile = PLAYLIST_COVERS.resolve(playlistID + extension);
+            new Thread(() -> {
+                try {
+                    Files.deleteIfExists(targetFile);
+                    log.info("Playlist cover {} of playlist {} has been deleted.", targetFile, playlistID);
+                } catch (IOException e) {
+                    log.error("Playlist cover from playlist {} couldn't be deleted", playlistID);
+                }
+            }).start();
+            new DataThread(DataType.PLAYLIST, DataOperation.WRITE).start();
+        }
     }
+
 
     /**
      * Method to write to a JSON file via Gson
@@ -242,11 +243,9 @@ public class PlaylistManager {
      * @see PlaylistSerializer
      */
     public synchronized void playlistsToJSON() throws WriteDataException {
-        try {
-            FileWriter fileWriter = new FileWriter(this.SAVE_FILE);
+        try (FileWriter fileWriter = new FileWriter(this.SAVE_FILE)) {
             gson.toJson(this.PLAYLISTS, fileWriter);
             log.info("{} Playlists have been saved to JSON file {}.", this.PLAYLISTS.size(), this.SAVE_FILE);
-            fileWriter.close();
         } catch (Exception e) {
             log.fatal("Playlists have not been saved to JSON file {}.", this.SAVE_FILE);
             throw new WriteDataException("Error while saving playlists to JSON file.");
@@ -259,15 +258,11 @@ public class PlaylistManager {
      * @throws ReadDataException if the playlists could not be loaded from the JSON file
      * @see PlaylistSerializer
      */
-    //Todo: Check if the log state is correct -> Should be
-    //Todo: Check if exception handling is correct -> Should be
     public synchronized void playlistsFromJSON() throws ReadDataException {
-        try {
-            FileReader fileReader = new FileReader(this.SAVE_FILE);
+        try (FileReader fileReader = new FileReader(this.SAVE_FILE)) {
             this.PLAYLISTS.addAll(gson.fromJson(fileReader, new TypeToken<ArrayList<Playlist>>() {
             }.getType()));
             log.info("{} Playlists have been loaded from JSON file {}.", this.PLAYLISTS.size(), this.SAVE_FILE);
-            fileReader.close();
         } catch (Exception e) {
             log.fatal("Playlists have not been loaded from JSON file {}.", this.SAVE_FILE);
             throw new ReadDataException("Error while loading playlists from JSON file.");

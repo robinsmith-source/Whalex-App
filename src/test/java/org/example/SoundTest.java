@@ -20,7 +20,6 @@ public class SoundTest {
     public static void setup() {
         sm.setSAVE_FILE(new File("src/test/resources/saves/sounds.json"));
         sm.setSOUNDS_PATH(new File("src/test/resources/data/sounds/").toPath());
-
         um.setSAVE_FILE(new File("src/test/resources/saves/users.json"));
     }
 
@@ -28,12 +27,16 @@ public class SoundTest {
     @Description("Sets up the Owner for the sounds to be tested")
     public static void setupOwner() {
         Assertions.assertDoesNotThrow(() -> um.createUser(null, "Marvin", "123", "123"));
-        Marvin = um.getUserByName("Marvin");
+        Marvin = Assertions.assertDoesNotThrow(() -> um.getUserByName("Marvin"));
     }
 
     @Test
     @Description("Tests the creation of a sound")
     public void testCreateSound() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> sm.addSound(null, "test", new File("src/main/resources/data/sounds/example/9750300N.wav")));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> sm.addSound(Marvin, "test", null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> sm.addSound(Marvin, "", new File("src/main/resources/data/sounds/example/9750300N.wav")));
+
         Assertions.assertDoesNotThrow(() -> sm.addSound(Marvin, "test", new File("src/main/resources/data/sounds/example/9750300N.wav")));
     }
 
@@ -45,7 +48,6 @@ public class SoundTest {
     public void teardownSounds() {
         //Assertions.assertDoesNotThrow(() -> sm.getAllSounds().forEach(sound -> sm.deleteSoundByID(sound.getUploadedBy(), sound.getSoundID())));
     }
-
 
     @AfterAll
     @Description("Deletes the test users after all tests")

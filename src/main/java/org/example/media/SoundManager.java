@@ -152,12 +152,15 @@ public class SoundManager {
         } else if (choosenPath == null) {
             log.warn("Path is null");
             throw new IllegalArgumentException("Path cannot be null");
+        } else if (currentUser == null) {
+            log.warn("User is null");
+            throw new IllegalArgumentException("User cannot be null");
         } else if (SOUNDS.stream().anyMatch(sound -> sound.getTitle().equals(title))) {
             log.warn("Sound {} already exists.", title);
             throw new IllegalArgumentException("Sound " + title + " already exists.");
         }
         try {
-            if(!SOUNDS_PATH.toFile().exists()) {
+            if (!SOUNDS_PATH.toFile().exists()) {
                 Files.createDirectories(SOUNDS_PATH);
                 log.info("Directory {} has been created.", SOUNDS_PATH);
             }
@@ -187,7 +190,7 @@ public class SoundManager {
      * @throws IllegalArgumentException if sound with the given ID could not be found or if the sound was not uploaded by the active user
      */
     public void deleteSoundByID(User currentUser, String soundID) throws IllegalArgumentException {
-        ISound matchedSound = this.SOUNDS.stream().filter(sound -> sound.getSoundID().equals(soundID)).findFirst().orElseThrow(() -> {
+        ISound matchedSound = this.SOUNDS.parallelStream().filter(sound -> sound.getSoundID().equals(soundID)).findFirst().orElseThrow(() -> {
             log.error("Sound {} could not be found.", soundID);
             return new IllegalArgumentException("Sound " + soundID + " could not be found.");
         });
@@ -219,11 +222,9 @@ public class SoundManager {
      * @see SoundSerializer
      */
     public synchronized void soundsToJSON() throws WriteDataException {
-        try {
-            FileWriter fileWriter = new FileWriter(this.SAVE_FILE);
+        try (FileWriter fileWriter = new FileWriter(this.SAVE_FILE)){
             gson.toJson(this.SOUNDS, fileWriter);
             log.info("{} Sounds have been saved to JSON file {}.", this.SOUNDS.size(), this.SAVE_FILE);
-            fileWriter.close();
         } catch (Exception e) {
             log.fatal("Sounds have not been saved to JSON file {}.", this.SAVE_FILE);
             throw new WriteDataException("Error while saving users to JSON.");
@@ -237,12 +238,10 @@ public class SoundManager {
      * @see SoundSerializer
      */
     public synchronized void soundsFromJSON() throws ReadDataException {
-        try {
-            FileReader fileReader = new FileReader(this.SAVE_FILE);
+        try (FileReader fileReader = new FileReader(this.SAVE_FILE)){
             this.SOUNDS.addAll(gson.fromJson(fileReader, new TypeToken<ArrayList<ISound>>() {
             }.getType()));
             log.info("{} Sounds have been loaded from JSON file {}.", this.SOUNDS.size(), this.SAVE_FILE);
-            fileReader.close();
         } catch (Exception e) {
             log.fatal("Sounds have not been loaded from JSON file {}.", this.SAVE_FILE);
             throw new ReadDataException("Error while loading Sounds from JSON.");
