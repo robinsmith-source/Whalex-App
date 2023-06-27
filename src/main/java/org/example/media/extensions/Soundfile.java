@@ -66,6 +66,7 @@ public class Soundfile implements ISound {
 
         try {
             media = new Media(path.toURI().toString());
+            log.debug("Soundfile {} created", title);
         } catch (Exception e) {
             log.error("Soundfile could not be created: " + e.getMessage());
             throw new Exception("Soundfile could not be created");

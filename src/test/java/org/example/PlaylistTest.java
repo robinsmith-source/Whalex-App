@@ -22,12 +22,8 @@ public class PlaylistTest {
     @Description("Sets up the save files for the tests")
     public static void setup() {
         um.setSAVE_FILE(new File("src/test/resources/saves/users.json"));
-
-        sm.setSAVE_FILE(new File("src/test/resources/saves/users.json"));
-        sm.setSOUNDS_PATH(new File("src/test/resources/data/sounds/").toPath());
-
+        sm.setSAVE_FILE(new File("src/test/resources/saves/sounds.json"));
         pm.setSAVE_FILE(new File("src/test/resources/saves/playlists.json"));
-        pm.setPLAYLIST_COVERS(new File("src/test/resources/data/playlists/").toPath());
     }
 
     @BeforeAll
