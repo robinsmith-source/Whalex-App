@@ -19,8 +19,12 @@
     -fx-font-weight: bold;
 }
 
-#soundCover #playlistCover {
-    -fx-padding: 20;
+#soundCover, #playlistCover, #queueSoundCover, #historySoundCover{
+    -fx-padding: 5;
+}
+
+#queueSoundCover, #historySoundCover {
+    -fx-alignment: center;
 }
 
 .table-view {

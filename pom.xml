@@ -82,8 +82,8 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <launcher>WhalexAppdriver</launcher>
-                    <mainClass>org.example.GuiDriver</mainClass>
+                    <launcher>WhalexApp</launcher>
+                    <mainClass>org.example.WhalexApp</mainClass>
                 </configuration>
             </plugin>
         </plugins>

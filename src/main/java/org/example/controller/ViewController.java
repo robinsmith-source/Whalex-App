@@ -114,7 +114,6 @@ public class ViewController extends ExceptionPopup implements Initializable {
         });
         soundTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
         soundUploadedBy.setCellValueFactory(cellData ->
-
         {
             User user = UserManager.getInstance().getUserByName(cellData.getValue().getUploadedBy().getUsername());
             Label label = new Label(user.getUsername());
@@ -194,8 +193,8 @@ public class ViewController extends ExceptionPopup implements Initializable {
         queueSoundTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
         queueTable.setPlaceholder(new Label("Queue is empty"));
 
-        queueSoundCover.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.4));
-        queueSoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.6));
+        queueSoundCover.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.3));
+        queueSoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.7));
 
         queueTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         queueTable.setItems(queueObjectList);
@@ -216,8 +215,8 @@ public class ViewController extends ExceptionPopup implements Initializable {
         historySoundTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
         historyTable.setPlaceholder(new Label("History is empty"));
 
-        historySoundCover.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.4));
-        historySoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.6));
+        historySoundCover.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.3));
+        historySoundTitle.prefWidthProperty().bind(queueTable.widthProperty().multiply(0.7));
         historyTable.setItems(historyObjectList);
         log.debug("History table initialized");
 
@@ -274,13 +273,11 @@ public class ViewController extends ExceptionPopup implements Initializable {
                 throw new IllegalStateException("Unexpected value: " + view);
         }
 
-        new Thread(() -> Platform.runLater(() -> {
-            soundTable.setItems(soundObjectList);
-            playlistTable.setItems(playlistObjectList);
-            soundTable.refresh();
-            playlistTable.refresh();
-            log.info("View updated to " + view.toString());
-        })).start();
+        soundTable.setItems(soundObjectList);
+        playlistTable.setItems(playlistObjectList);
+        soundTable.refresh();
+        playlistTable.refresh();
+        log.info("View updated to " + view.toString());
 
         soundTable.selectionModelProperty().get().clearSelection();
         playlistTable.selectionModelProperty().get().clearSelection();

@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.media.interfaces.ISound;
 import org.example.player.Player;
 import org.example.profile.UserManager;
 
@@ -42,7 +43,6 @@ public class MainSceneController extends ExceptionPopup implements Initializable
     private ImageView userProfilePicture;
 
     private ViewController viewController;
-
     @FXML
     private Label currentSoundTitle;
     @FXML
@@ -128,8 +128,9 @@ public class MainSceneController extends ExceptionPopup implements Initializable
             currentSoundTitle.setText("");
             currentSoundUploadedBy.setText("");
         } else {
-            currentSoundTitle.setText(Player.getInstance().getSoundQueue().getFirst().getTitle());
-            currentSoundUploadedBy.setText(Player.getInstance().getSoundQueue().getFirst().getUploadedBy().getUsername());
+            ISound currentSound = Player.getInstance().getSoundQueue().getFirst();
+            currentSoundTitle.setText(currentSound.getTitle());
+            currentSoundUploadedBy.setText(currentSound.getUploadedBy().getUsername());
             double progress = Player.getInstance().getCurrentTime() / Player.getInstance().getTotalTime();
             soundProgress.setProgress(progress);
             int totalTimeInt = (int) Player.getInstance().getTotalTime();
