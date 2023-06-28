@@ -63,7 +63,6 @@ public class EditProfileController implements Initializable {
     }
 
     public void handleSubmitButton() {
-
         try {
             UserManager.getInstance().getActiveUser().setProfilePicture(chosenImage);
         } catch (Exception e) {
