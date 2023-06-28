@@ -113,25 +113,23 @@ public class User {
         String extension = profilePicture.getName().substring(profilePicture.getName().lastIndexOf("."));
         Path targetFile = UserManager.getInstance().getPROFILE_PICTURES().resolve(this.getUserID() + extension);
 
-        if (oldProfilePicture != UserManager.getInstance().getDEFAULT_PICTURE().toPath()) {
-            new Thread(() -> {
-                try {
-                    Files.deleteIfExists(oldProfilePicture);
-                    log.info("User profile picture {} of user {} has been deleted.", targetFile, this.getUsername());
-                } catch (IOException e) {
-                    log.error("User profile picture {} couldn't be deleted", targetFile);
-                }
-            }).start();
+        System.out.println(oldProfilePicture.toFile());
+        if (!oldProfilePicture.toFile().toString().contains("profilePictures\\default\\")) {
+            try {
+                Files.deleteIfExists(oldProfilePicture);
+                log.info("User profile picture {} of user {} has been deleted.", targetFile, this.getUsername());
+            } catch (IOException e) {
+                log.error("User profile picture {} couldn't be deleted", targetFile);
+            }
         }
 
-        new Thread(() -> {
-            try {
-                Files.copy(profilePicture.toPath(), targetFile);
-                log.info("User profile picture {} of user {} has been copied.", targetFile, this.getUsername());
-            } catch (IOException e) {
-                log.error("User profile picture {} couldn't be copied", targetFile);
-            }
-        }).start();
+        try {
+            Files.copy(profilePicture.toPath(), targetFile);
+            log.info("User profile picture {} of user {} has been copied.", targetFile, this.getUsername());
+        } catch (IOException e) {
+            log.error("User profile picture {} couldn't be copied", targetFile);
+        }
+
         this.profilePicture = targetFile.toFile();
     }
 
