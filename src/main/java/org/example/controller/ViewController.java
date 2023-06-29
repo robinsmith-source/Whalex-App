@@ -318,9 +318,7 @@ public class ViewController extends ExceptionPopup implements Initializable {
         ISound sound = soundTable.getSelectionModel().getSelectedItem();
         try {
             SoundManager.getInstance().deleteSoundByID(UserManager.getInstance().getActiveUser(), sound.getSoundID());
-            for (Playlist playlist : PlaylistManager.getInstance().getAllPlaylists()) {
-                playlist.removeSound(sound);
-            }
+            PlaylistManager.getInstance().getAllPlaylists().forEach(playlist -> playlist.removeSound(sound));
             Player.getInstance().removeSoundFromQueue(sound);
         } catch (RuntimeException e) {
             showPopup(e);

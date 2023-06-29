@@ -109,7 +109,7 @@ public class SoundManager {
     //Todo: Check if log states are correct -> Should be
     public ISound getSoundByID(String soundID) throws IllegalArgumentException {
         log.debug("Getting sound with ID {}.", soundID);
-        return SOUNDS.stream().filter(sound -> sound.getSoundID().equals(soundID)).findFirst().orElseThrow(() -> {
+        return SOUNDS.parallelStream().filter(sound -> sound.getSoundID().equals(soundID)).findAny().orElseThrow(() -> {
             log.error("Sound with ID {} could not be found.", soundID);
             return new IllegalArgumentException("Sound with ID " + soundID + " could not be found.");
         });
@@ -155,7 +155,7 @@ public class SoundManager {
         } else if (currentUser == null) {
             log.warn("User is null");
             throw new IllegalArgumentException("User cannot be null");
-        } else if (SOUNDS.stream().anyMatch(sound -> sound.getTitle().equals(title))) {
+        } else if (SOUNDS.parallelStream().anyMatch(sound -> sound.getTitle().equals(title))) {
             log.warn("Sound {} already exists.", title);
             throw new IllegalArgumentException("Sound " + title + " already exists.");
         }
@@ -190,7 +190,7 @@ public class SoundManager {
      * @throws IllegalArgumentException if sound with the given ID could not be found or if the sound was not uploaded by the active user
      */
     public void deleteSoundByID(User currentUser, String soundID) throws IllegalArgumentException {
-        ISound matchedSound = this.SOUNDS.parallelStream().filter(sound -> sound.getSoundID().equals(soundID)).findFirst().orElseThrow(() -> {
+        ISound matchedSound = this.SOUNDS.parallelStream().filter(sound -> sound.getSoundID().equals(soundID)).findAny().orElseThrow(() -> {
             log.error("Sound {} could not be found.", soundID);
             return new IllegalArgumentException("Sound " + soundID + " could not be found.");
         });

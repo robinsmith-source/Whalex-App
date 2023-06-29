@@ -92,7 +92,7 @@ public class User {
         if (username == null || username.isEmpty()) {
             log.error("Username is null or empty.");
             throw new IllegalArgumentException("Username is null or empty.");
-        } else if (UserManager.getInstance().getAllUsers().stream().anyMatch(user -> user.getUsername().equals(username))) {
+        } else if (UserManager.getInstance().getAllUsers().parallelStream().anyMatch(user -> user.getUsername().equals(username))) {
             log.error("User {} already exists.", username);
             throw new IllegalArgumentException("User already exists.");
         }

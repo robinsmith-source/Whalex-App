@@ -121,7 +121,7 @@ public class UserManager {
      */
     public User getUserById(String userID) throws IllegalArgumentException {
         log.debug("Getting user with ID {}.", userID);
-        return this.USERS.stream().filter(user -> user.getUserID().equals(userID)).findFirst().orElseThrow(() -> {
+        return this.USERS.parallelStream().filter(user -> user.getUserID().equals(userID)).findAny().orElseThrow(() -> {
             log.error("User with ID {} could not be found.", userID);
             return new IllegalArgumentException("User with ID " + userID + " could not be found.");
         });
@@ -136,7 +136,7 @@ public class UserManager {
      */
     public User getUserByName(String username) throws IllegalArgumentException {
         log.debug("Getting user {}.", username);
-        return this.USERS.stream().filter(user -> user.getUsername().equals(username)).findFirst().orElseThrow(() -> {
+        return this.USERS.parallelStream().filter(user -> user.getUsername().equals(username)).findAny().orElseThrow(() -> {
             log.debug("User {} could not be found.", username);
             return new IllegalArgumentException("User " + username + " could not be found.");
         });
@@ -169,7 +169,7 @@ public class UserManager {
         } else if (!password.equals(passwordConfirmation)) {
             log.error("Password confirmation is incorrect.");
             throw new IllegalArgumentException("Password confirmation is incorrect.");
-        } else if (this.USERS.stream().anyMatch(user -> user.getUsername().equals(username))) {
+        } else if (this.USERS.parallelStream().anyMatch(user -> user.getUsername().equals(username))) {
             log.error("User {} already exists.", username);
             throw new IllegalArgumentException("User already exists.");
         } else if (chosenImage == null) {
@@ -205,7 +205,7 @@ public class UserManager {
      * @throws IllegalArgumentException if the user does not exist or the password is incorrect or the password confirmation is incorrect
      */
     public void deleteUser(String password, String passwordConfirmation) throws IllegalArgumentException {
-        if (this.USERS.stream().noneMatch(user -> user.getUsername().equals(activeUser.getUsername()))) {
+        if (this.USERS.parallelStream().noneMatch(user -> user.getUsername().equals(activeUser.getUsername()))) {
             log.error("User {} does not exist.", activeUser.getUsername());
             throw new IllegalArgumentException("User does not exist.");
         } else if (!activeUser.getPassword().equals(password)) {
@@ -244,7 +244,7 @@ public class UserManager {
      * @throws IllegalArgumentException if the username is null or empty or the password is null or empty or the user does not exist or the password is incorrect
      */
     public void login(String username, String password) throws IllegalArgumentException {
-        User matchedUser = this.USERS.parallelStream().filter(user -> user.getUsername().equals(username)).findFirst().orElseThrow(() -> {
+        User matchedUser = this.USERS.parallelStream().filter(user -> user.getUsername().equals(username)).findAny().orElseThrow(() -> {
                     log.error("User {} does not exist.", username);
                     return new IllegalArgumentException("User does not exist.");
                 });

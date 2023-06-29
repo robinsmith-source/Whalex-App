@@ -116,7 +116,7 @@ public class PlaylistManager {
     //TODO: Check if this method is necessary
     public Playlist getPlaylistByName(String playlistName) {
         log.debug("Getting playlist {}.", playlistName);
-        return this.PLAYLISTS.stream().filter(playlist -> playlist.getName().equals(playlistName)).findFirst().orElseThrow(() -> {
+        return this.PLAYLISTS.parallelStream().filter(playlist -> playlist.getName().equals(playlistName)).findAny().orElseThrow(() -> {
             log.error("Playlist {} could not be found.", playlistName);
             return new IllegalArgumentException("Playlist " + playlistName + " could not be found.");
         });
@@ -129,7 +129,7 @@ public class PlaylistManager {
      * @return ArrayList of all playlists created by the User
      */
     public ArrayList<Playlist> getPlaylistsByUser(User user) {
-        ArrayList<Playlist> playlistsByUser = this.PLAYLISTS.stream().filter(playlist -> playlist.getCreatedBy().equals(user)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        ArrayList<Playlist> playlistsByUser = this.PLAYLISTS.parallelStream().filter(playlist -> playlist.getCreatedBy().equals(user)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
         log.debug("{} Playlists have been found for user {}.", playlistsByUser.size(), user.getUsername());
         return playlistsByUser;
     }
@@ -160,7 +160,7 @@ public class PlaylistManager {
         } else if (currentUser == null) {
             log.warn("User is null");
             throw new IllegalArgumentException("User cannot be null");
-        } else if (this.PLAYLISTS.stream().anyMatch(playlist -> playlist.getName().equals(playlistName))) {
+        } else if (this.PLAYLISTS.parallelStream().anyMatch(playlist -> playlist.getName().equals(playlistName))) {
             log.error("Playlist {} already exists.", playlistName);
             throw new IllegalArgumentException("Playlist " + playlistName + " already exists.");
         } else {
@@ -204,7 +204,7 @@ public class PlaylistManager {
      * @throws IllegalArgumentException if the playlist with the given ID could not be found or if the playlist wasn't created by the active user
      */
     public void deletePlaylistByID(User currentUser, String playlistID) throws IllegalArgumentException {
-        Playlist matchedPlaylist = this.PLAYLISTS.parallelStream().filter(playlist -> playlist.getPlaylistID().equals(playlistID)).findFirst().orElseThrow(() -> {
+        Playlist matchedPlaylist = this.PLAYLISTS.parallelStream().filter(playlist -> playlist.getPlaylistID().equals(playlistID)).findAny().orElseThrow(() -> {
             log.error("Playlist with ID {} could not be found.", playlistID);
             return new IllegalArgumentException("Playlist with ID " + playlistID + " could not be found.");
         });

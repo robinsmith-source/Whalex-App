@@ -174,11 +174,14 @@ public class Playlist {
      */
     public void removeSound(ISound sound) throws IllegalArgumentException {
         if (sound == null) {
-            log.error("Sound cannot be null");
+            log.debug("Sound cannot be null");
             throw new IllegalArgumentException("Sound cannot be null");
+        } else if (!this.SOUNDS.contains(sound)) {
+            log.debug("Sound is not in the playlist");
+        } else {
+            this.SOUNDS.remove(sound);
+            log.info("Sound {} has been removed from playlist {}.", sound.getTitle(), this.name);
         }
-        this.SOUNDS.remove(sound);
-        log.info("Sound {} has been removed from playlist {}.", sound.getTitle(), this.name);
     }
 
     @Override
