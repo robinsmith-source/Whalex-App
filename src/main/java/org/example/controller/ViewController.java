@@ -369,7 +369,7 @@ public class ViewController extends ExceptionPopup implements Initializable {
     }
 
     /**
-     * Removes the selected sound from the queuq
+     * Removes the selected sound from the queue
      */
     //Todo: Sound in queue table isn't clickable
     @FXML

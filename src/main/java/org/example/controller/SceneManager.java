@@ -103,9 +103,7 @@ public enum SceneManager {
                 throw new IllegalStateException("Unexpected value: " + this);
         }
         applicationStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fxml/assets/WhalexLOGO.png"))));
-        new Thread(() -> {
-            Platform.runLater(applicationStage::show);
-        }).start();
+        new Thread(() -> Platform.runLater(applicationStage::show)).start();
         log.info("Showing Scene: {}, from: {}", WhalexApp.getApplicationStage().getTitle(), this.fxmlPath);
     }
 }

@@ -142,14 +142,14 @@ public class SoundManager {
      *
      * @param currentUser User who wants to add the sound
      * @param title       Title of the sound
-     * @param choosenPath Path to the soundfile
+     * @param chosenPath Path to the soundfile
      * @throws IllegalArgumentException if title is null or empty, if path is null, if sound with the same title already exists, if path does not exist, if path is not a file, if path cannot be read
      */
-    public void addSound(User currentUser, String title, File choosenPath) throws IllegalArgumentException {
+    public void addSound(User currentUser, String title, File chosenPath) throws IllegalArgumentException {
         if (title == null || title.isEmpty()) {
             log.warn("Title is null or empty");
             throw new IllegalArgumentException("Title cannot be null or empty");
-        } else if (choosenPath == null) {
+        } else if (chosenPath == null) {
             log.warn("Path is null");
             throw new IllegalArgumentException("Path cannot be null");
         } else if (currentUser == null) {
@@ -166,12 +166,12 @@ public class SoundManager {
             }
 
             String uuid = UUID.randomUUID().toString();
-            String extension = choosenPath.getName().substring(choosenPath.getName().lastIndexOf("."));
+            String extension = chosenPath.getName().substring(chosenPath.getName().lastIndexOf("."));
             Path targetFile = SOUNDS_PATH.resolve(uuid + extension);
             File soundFile = targetFile.toFile();
 
-            Files.copy(choosenPath.toPath(), targetFile);
-            log.info("File {} has been copied to {}", choosenPath, targetFile);
+            Files.copy(chosenPath.toPath(), targetFile);
+            log.info("File {} has been copied to {}", chosenPath, targetFile);
 
             SOUNDS.add(SoundFactory.getInstance().createSound(uuid, title, soundFile, currentUser));
             log.debug("Sound {} has been added.", title);

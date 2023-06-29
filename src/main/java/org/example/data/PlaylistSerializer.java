@@ -1,8 +1,6 @@
 package org.example.data;
 
 import com.google.gson.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.example.media.SoundManager;
 import org.example.media.interfaces.ISound;
 import org.example.playlist.Playlist;
@@ -13,7 +11,6 @@ import java.io.File;
 import java.lang.reflect.Type;
 
 public class PlaylistSerializer implements JsonSerializer<Playlist>, JsonDeserializer<Playlist> {
-    private static final Logger log = LogManager.getLogger(PlaylistSerializer.class);
 
     @Override
     public JsonElement serialize(Playlist src, Type typeOfSrc, JsonSerializationContext context) {

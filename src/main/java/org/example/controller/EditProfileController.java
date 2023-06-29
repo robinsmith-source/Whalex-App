@@ -65,11 +65,13 @@ public class EditProfileController implements Initializable {
     public void handleSubmitButton() {
         try {
             UserManager.getInstance().getActiveUser().setProfilePicture(chosenImage);
+            log.info("Attempting to change profile Picture to {}", chosenImage);
         } catch (Exception e) {
             errorMessageLabel1.setText(e.getMessage());
         }
         try {
             UserManager.getInstance().getActiveUser().changePassword(oldPasswordTextField.getText(), newPasswordTextField.getText(), confirmNewPasswordTextField.getText());
+            log.info("Attempting to change password of user {}", UserManager.getInstance().getActiveUser().getUsername());
         } catch (Exception e) {
             errorMessageLabel2.setText(e.getMessage());
         }
@@ -81,6 +83,7 @@ public class EditProfileController implements Initializable {
                 PlaylistManager.getInstance().deletePlaylistByID(UserManager.getInstance().getActiveUser(), playlist.getPlaylistID());
             }
             UserManager.getInstance().deleteUser(deleteProfilePasswordField.getText(), deleteProfileConfirmPasswordField.getText());
+            log.debug("Attempting to delete user {}.", UserManager.getInstance().getActiveUser().getUsername());
             SceneManager.EDIT_PROFILE.closeSecondaryStage();
             new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.WRITE).start();
             Player.getInstance().clearQueue();
@@ -97,6 +100,7 @@ public class EditProfileController implements Initializable {
 
     public void handleCancelButton() {
         SceneManager.EDIT_PROFILE.closeSecondaryStage();
+        log.trace("Cancel Button pressed.");
     }
 
     public void handleFileChooserButton() {

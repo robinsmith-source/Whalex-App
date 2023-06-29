@@ -145,9 +145,6 @@ public class MainSceneController extends ExceptionPopup implements Initializable
         viewController.handleSearchBarQuery(searchBar.getText());
     }
 
-    public void handleRepeatButton() {
-    }
-
     void updateView() {
         viewController.updateView();
         log.info("View updated access from MainSceneController");

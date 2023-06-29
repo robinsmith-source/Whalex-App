@@ -17,11 +17,11 @@ public abstract class InitializeAdminUsers {
     private static final SoundManager sm = SoundManager.getInstance();
 
     public static void main(String[] args) throws Exception {
-        deleteExisitingFiles();
+        deleteExistingFiles();
         writeData();
     }
 
-    private static void deleteExisitingFiles() {
+    private static void deleteExistingFiles() {
         File file = new File("src/main/resources/data/sounds/");
         File[] files = file.listFiles();
         if (files != null) {

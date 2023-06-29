@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.media.SoundManager;
 import org.example.profile.UserManager;
 
@@ -16,6 +18,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddSoundController implements Initializable {
+    private static final Logger log = LogManager.getLogger(AddSoundController.class);
+
     @FXML
     private TextField soundTitleTextField;
     @FXML
@@ -47,6 +51,7 @@ public class AddSoundController implements Initializable {
     public void handleAddButton() {
         try {
             SoundManager.getInstance().addSound(UserManager.getInstance().getActiveUser(), soundTitleTextField.getText(), choosenSoundfile);
+            log.info("Add Sound Button pressed with title {} and file {}.", soundTitleTextField.getText(), choosenSoundfile);
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());
         }
@@ -56,6 +61,6 @@ public class AddSoundController implements Initializable {
 
     public void handleCancelButton() {
         SceneManager.ADD_SOUND.closeSecondaryStage();
+        log.trace("Cancel Button pressed.");
     }
-
 }

@@ -131,6 +131,7 @@ public class User {
         }
 
         this.profilePicture = targetFile.toFile();
+        log.info("Profile picture successfully changed to {}.", targetFile);
     }
 
 

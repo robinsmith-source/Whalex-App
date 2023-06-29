@@ -46,7 +46,7 @@ public class PlaylistManager {
             .create();
 
 
-    private Path PLAYLIST_COVERS = Path.of("src/main/resources/data/playlistCover/");
+    private final Path PLAYLIST_COVERS = Path.of("src/main/resources/data/playlistCover/");
     /**
      * Path to the file where all playlist data is stored
      */
@@ -79,10 +79,6 @@ public class PlaylistManager {
 
     public void setSAVE_FILE(File SAVE_FILE) {
         this.SAVE_FILE = SAVE_FILE;
-    }
-
-    public void setPLAYLIST_COVERS(Path PLAYLIST_COVERS) {
-        this.PLAYLIST_COVERS = PLAYLIST_COVERS;
     }
 
     /**

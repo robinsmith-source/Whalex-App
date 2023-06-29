@@ -39,11 +39,6 @@
                     <children>
                         <HBox alignment="CENTER" prefHeight="50.0">
                             <children>
-                                <Button mnemonicParsing="false">
-                                    <graphic>
-                                        <MaterialIconView fill="WHITE" glyphName="SHUFFLE" size="30" />
-                                    </graphic>
-                                </Button>
                                 <Button fx:id="previousButton" mnemonicParsing="false" onAction="#handlePreviousButton">
                                     <graphic>
                                         <MaterialIconView fill="WHITE" glyphName="SKIP_PREVIOUS" size="30" />
@@ -57,11 +52,6 @@
                                 <Button fx:id="nextButton" mnemonicParsing="false" onAction="#handleNextButton">
                                     <graphic>
                                         <MaterialIconView fill="WHITE" glyphName="SKIP_NEXT" size="30" />
-                                    </graphic>
-                                </Button>
-                                <Button mnemonicParsing="false" onAction="#handleRepeatButton">
-                                    <graphic>
-                                        <MaterialIconView fill="WHITE" glyphName="REPEAT" size="30" />
                                     </graphic>
                                 </Button>
                             </children>

@@ -1,17 +1,12 @@
 package org.example.data;
 
 import com.google.gson.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.example.profile.User;
 
 import java.io.File;
 import java.lang.reflect.Type;
 
 public class UserSerializer implements JsonSerializer<User>, JsonDeserializer<User> {
-
-    private static final Logger log = LogManager.getLogger(UserSerializer.class);
-
     @Override
     public JsonElement serialize(User src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();

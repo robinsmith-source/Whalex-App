@@ -102,7 +102,7 @@ public class Playlist {
 
     /**
      * Method to get the number of sounds in the playlist
-     *
+     * Used to display number of Sounds in TableView
      * @return Number of sounds in the playlist
      */
     public int getNumberOfSounds() {
