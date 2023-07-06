@@ -52,7 +52,7 @@ public class CreatePlaylistController implements Initializable {
     @FXML
     public void handleAddButton() {
         try {
-            PlaylistManager.getInstance().createPlaylist(UserManager.getInstance().getActiveUser(), chosenImage, playlistNameTextField.getText()); //braucht Playlistname, (braucht Cover)
+            PlaylistManager.getInstance().createPlaylist(UserManager.getInstance().getActiveUser(), chosenImage, playlistNameTextField.getText());
             log.debug("Create Playlist Button pressed with name {} and cover {}.", playlistNameTextField.getText(), chosenImage);
         } catch (Exception e) {
             errorMessageLabel.setText(e.getMessage());

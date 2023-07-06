@@ -40,6 +40,7 @@ public class SoundTest {
         Assertions.assertDoesNotThrow(() -> sm.addSound(Marvin, "test", new File("src/main/resources/data/sounds/example/9750300N.wav")));
     }
 
+    @SuppressWarnings("EmptyMethod")
     @Disabled
     @Test
     @AfterEach

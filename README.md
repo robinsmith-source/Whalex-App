@@ -1,6 +1,7 @@
 
-# Whalex App
+![Whalex Logo](src/main/resources/fxml/assets/WhalexBanner.png)
 
+# Whalex App
 Whalex is an audio library consisting of whale songs that can be used for relaxation and sleep. The library includes a wide variety of whale songs, from humpback whales to blue whales, recorded in different locations and times of the year.
 
 ## Authors

@@ -32,7 +32,7 @@ public class User {
     /**
      * Username of the user
      */
-    private String username;
+    private final String username;
 
     /**
      * Password of the user
@@ -86,17 +86,6 @@ public class User {
      */
     public String getPassword() {
         return this.password;
-    }
-
-    public void setUsername(String username) {
-        if (username == null || username.isEmpty()) {
-            log.error("Username is null or empty.");
-            throw new IllegalArgumentException("Username is null or empty.");
-        } else if (UserManager.getInstance().getAllUsers().parallelStream().anyMatch(user -> user.getUsername().equals(username))) {
-            log.error("User {} already exists.", username);
-            throw new IllegalArgumentException("User already exists.");
-        }
-        this.username = username;
     }
 
     /**

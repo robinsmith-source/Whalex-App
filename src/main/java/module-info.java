@@ -4,8 +4,6 @@ module gui {
     requires javafx.media;
     requires org.apache.logging.log4j;
     requires com.google.gson;
-    requires java.desktop;
-    requires de.jensd.fx.glyphs.commons;
     requires de.jensd.fx.glyphs.materialicons;
 
     opens org.example to javafx.fxml;

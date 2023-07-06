@@ -36,7 +36,6 @@ public class PlaylistTest {
         Assertions.assertDoesNotThrow(() -> sm.addSound(Marvin, "Pottwal Pop", new File("src/main/resources/data/sounds/example/78018003.wav")));
     }
 
-
     @Test
     @Description("Tests the creation of a playlist")
     public void testCreatePlaylist() {
@@ -81,6 +80,7 @@ public class PlaylistTest {
         Assertions.assertDoesNotThrow(() -> pm.getAllPlaylists().forEach(playlist -> pm.deletePlaylistByID(playlist.getCreatedBy(), playlist.getPlaylistID())));
     }
 
+    @SuppressWarnings("EmptyMethod")
     @Disabled
     @AfterAll
     @Description("Deletes the sounds after all tests")

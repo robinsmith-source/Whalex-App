@@ -49,7 +49,7 @@ public class LoadingController implements Initializable {
     /**
      * Task to load sound and playlist data from JSON file while loading animation.
      */
-    Task<Void> loadingTask = new Task<>() {
+    final Task<Void> loadingTask = new Task<>() {
         @Override
         public Void call() {
             new DataThread(DataType.USER_SOUND_PLAYLIST, DataOperation.READ).start();
