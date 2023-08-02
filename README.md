@@ -19,6 +19,24 @@
 - Users can change their profile picture and password through the settings.
 - An option to delete their own profile along with all dependencies is available.
 
+
+## Installation
+- Make sure you have JDK 11 or higher installed.
+- (If necessary) Install the JavaFX SDK and set the JavaFX path.
+- Clone the repository:
+
+```console
+git clone https://github.com/robinsmith-source/Whalex-App.git
+```
+
+## Running the Application
+Navigate to the project directory and execute the following commands:
+
+```console
+cd Whalex-App/out/artifacts/WhalexApp_jar
+java --module-path [/path/to/javafx/lib] --add-modules javafx.controls,javafx.fxml -jar WhalexApp.jar
+```
+
 ## Contributing
 
 We welcome contributions to the Whalex audio library. Please fork the repository and submit a pull request with your changes.
